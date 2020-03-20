@@ -7,11 +7,11 @@
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="《Redis 命令速查表》开放免费下载" href="release-redis-cheatsheet-as-free.html" />
@@ -126,7 +126,7 @@
 <p>在过去，
 Redis 用户通常会因为 RDB 持久化和 AOF 持久化之间不同的优缺点而陷入两难的选择当中：</p>
 <ul class="simple">
-<li><p>RDB 持久化能够快速地储存和回复数据，
+<li><p>RDB 持久化能够快速地储存和恢复数据，
 但是在服务器停机时却会丢失大量数据；</p></li>
 <li><p>AOF 持久化能够有效地提高数据的安全性，
 但是在储存和恢复数据方面却要耗费大量的时间。</p></li>
@@ -251,7 +251,7 @@ $ redis-server redis.conf
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.3.<br/>
     </p>
   </div>
 </footer>
