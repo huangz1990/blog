@@ -2,16 +2,23 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>修改 Ubuntu 软件更新源 &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     'present',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="2019" href="../2019/index.html" />
@@ -25,7 +32,8 @@
 <script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
 
-  </head><body>
+  </head>
+  <body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -132,20 +140,20 @@
 我们可以根据自己的 Ubuntu 版本在 <a class="reference external" href="https://mirror.tuna.tsinghua.edu.cn/help/ubuntu/">https://mirror.tuna.tsinghua.edu.cn/help/ubuntu/</a> 上面找到对应的源地址。</p>
 <div class="section" id="id1">
 <h2>步骤<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
-<p>Ubuntu 的软件源配置文件为 <code class="docutils literal notranslate"><span class="pre">/etc/apt/sources.list</span></code> ，
+<p>Ubuntu 的软件源配置文件为 <code class="docutils literal"><span class="pre">/etc/apt/sources.list</span></code> ，
 我们只需要修改这个文件的内容就能够达到改变更新源的目的，
 以下是具体的步骤。</p>
 <ol class="arabic">
-<li><p>备份原来的源文件：</p>
+<li><p class="first">备份原来的源文件：</p>
 <blockquote>
-<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># cp /etc/apt/sources.list /etc/apt/sources.list.backup</span>
+<div><div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># cp /etc/apt/sources.list /etc/apt/sources.list.backup</span>
 </pre></div>
 </div>
 </div></blockquote>
 </li>
-<li><p>了解系统版本：</p>
+<li><p class="first">了解系统版本：</p>
 <blockquote>
-<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># lsb_release -a</span>
+<div><div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># lsb_release -a</span>
 <span class="n">No</span> <span class="n">LSB</span> <span class="n">modules</span> <span class="n">are</span> <span class="n">available</span><span class="o">.</span>
 <span class="n">Distributor</span> <span class="n">ID</span><span class="p">:</span> <span class="n">Ubuntu</span>
 <span class="n">Description</span><span class="p">:</span>    <span class="n">Ubuntu</span> <span class="mf">19.10</span>
@@ -155,9 +163,9 @@
 </div>
 </div></blockquote>
 </li>
-<li><p>根据版本（19.10）在上述的 TUNA 帮助页面找到相应的源地址，并复制全部内容：</p>
+<li><p class="first">根据版本（19.10）在上述的 TUNA 帮助页面找到相应的源地址，并复制全部内容：</p>
 <blockquote>
-<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># 默认注释了源码镜像以提高 apt update 速度，如有需要可自行取消注释</span>
+<div><div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># 默认注释了源码镜像以提高 apt update 速度，如有需要可自行取消注释</span>
 <span class="n">deb</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">mirrors</span><span class="o">.</span><span class="n">tuna</span><span class="o">.</span><span class="n">tsinghua</span><span class="o">.</span><span class="n">edu</span><span class="o">.</span><span class="n">cn</span><span class="o">/</span><span class="n">ubuntu</span><span class="o">/</span> <span class="n">eoan</span> <span class="n">main</span> <span class="n">restricted</span> <span class="n">universe</span> <span class="n">multiverse</span>
 <span class="c1"># deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ eoan main restricted universe multiverse</span>
 <span class="n">deb</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">mirrors</span><span class="o">.</span><span class="n">tuna</span><span class="o">.</span><span class="n">tsinghua</span><span class="o">.</span><span class="n">edu</span><span class="o">.</span><span class="n">cn</span><span class="o">/</span><span class="n">ubuntu</span><span class="o">/</span> <span class="n">eoan</span><span class="o">-</span><span class="n">updates</span> <span class="n">main</span> <span class="n">restricted</span> <span class="n">universe</span> <span class="n">multiverse</span>
@@ -174,16 +182,16 @@
 </div>
 </div></blockquote>
 </li>
-<li><p>打开文件，将文件内容替换为已复制的内容：</p>
+<li><p class="first">打开文件，将文件内容替换为已复制的内容：</p>
 <blockquote>
-<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># vi /etc/apt/sources.list</span>
+<div><div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># vi /etc/apt/sources.list</span>
 </pre></div>
 </div>
 </div></blockquote>
 </li>
-<li><p>从新的软件源中获取包的更新信息：</p>
+<li><p class="first">从新的软件源中获取包的更新信息：</p>
 <blockquote>
-<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># apt update</span>
+<div><div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># apt update</span>
 <span class="n">Get</span><span class="p">:</span><span class="mi">1</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">mirrors</span><span class="o">.</span><span class="n">tuna</span><span class="o">.</span><span class="n">tsinghua</span><span class="o">.</span><span class="n">edu</span><span class="o">.</span><span class="n">cn</span><span class="o">/</span><span class="n">ubuntu</span> <span class="n">eoan</span> <span class="n">InRelease</span> <span class="p">[</span><span class="mi">255</span> <span class="n">kB</span><span class="p">]</span>
 <span class="n">Get</span><span class="p">:</span><span class="mi">2</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">mirrors</span><span class="o">.</span><span class="n">tuna</span><span class="o">.</span><span class="n">tsinghua</span><span class="o">.</span><span class="n">edu</span><span class="o">.</span><span class="n">cn</span><span class="o">/</span><span class="n">ubuntu</span> <span class="n">eoan</span><span class="o">-</span><span class="n">updates</span> <span class="n">InRelease</span> <span class="p">[</span><span class="mf">97.5</span> <span class="n">kB</span><span class="p">]</span>
 <span class="n">Get</span><span class="p">:</span><span class="mi">3</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">mirrors</span><span class="o">.</span><span class="n">tuna</span><span class="o">.</span><span class="n">tsinghua</span><span class="o">.</span><span class="n">edu</span><span class="o">.</span><span class="n">cn</span><span class="o">/</span><span class="n">ubuntu</span> <span class="n">eoan</span><span class="o">-</span><span class="n">backports</span> <span class="n">InRelease</span> <span class="p">[</span><span class="mf">88.8</span> <span class="n">kB</span><span class="p">]</span>
@@ -201,9 +209,9 @@
 </div>
 </div></blockquote>
 </li>
-<li><p>更新软件包：</p>
+<li><p class="first">更新软件包：</p>
 <blockquote>
-<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># apt upgrade</span>
+<div><div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># apt upgrade</span>
 <span class="n">Reading</span> <span class="n">package</span> <span class="n">lists</span><span class="o">...</span> <span class="n">Done</span>
 <span class="n">Building</span> <span class="n">dependency</span> <span class="n">tree</span>
 <span class="n">Reading</span> <span class="n">state</span> <span class="n">information</span><span class="o">...</span> <span class="n">Done</span>
@@ -234,7 +242,7 @@
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
     </p>
   </div>
 </footer>

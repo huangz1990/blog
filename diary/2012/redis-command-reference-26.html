@@ -2,16 +2,23 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Redis 命令参考 2.6 版本发布 &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     'present',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="prev" title="Redis 2.6 脚本功能(scripting)简介" href="redis-scripting-short-guide.html" />
@@ -24,7 +31,8 @@
 <script type="text/javascript" src="../../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../../_static/bootstrap-sphinx.js "></script>
 
-  </head><body>
+  </head>
+  <body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -116,14 +124,14 @@
 <p>经过两周紧张的工作之后， <a class="reference external" href="http://redis.readthedocs.org">Redis 命令参考</a> 终于完成了 2.6 版本的更新。</p>
 <p>这次更新的内容大部分来自于官方文档对 Redis 2.6 版本的更新，包括：</p>
 <ul class="simple">
-<li><p>Redis 2.6 版本新增的所有命令，比如 <a class="reference external" href="http://redis.readthedocs.org/en/latest/script/eval.html">EVAL</a> 、 <a class="reference external" href="http://redis.readthedocs.org/en/latest/key/pttl.html">PTTL</a> 、 <a class="reference external" href="http://redis.readthedocs.org/en/latest/server/time.html">TIME</a> 等命令的相关文档全部翻译完毕。</p></li>
-<li><p>官方文档新添加的所有命令模式(pattern)，比如 INCR 命令的 <a class="reference external" href="http://redis.readthedocs.org/en/latest/string/incr.html#id2">计数器模式</a> 和 <a class="reference external" href="http://redis.readthedocs.org/en/latest/string/incr.html#id3">限速器模式</a> ， EXPIRE 命令的 <a class="reference external" href="http://redis.readthedocs.org/en/latest/key/expire.html#id2">导航会话模式</a> 等等，全部翻译完毕。</p></li>
-<li><p>Redis 2.6 版本对旧有命令的所有改进，比如为 <code class="docutils literal notranslate"><span class="pre">SHUTDOWN</span></code> 命令添加 <code class="docutils literal notranslate"><span class="pre">SAVE</span></code> 和 <code class="docutils literal notranslate"><span class="pre">NOSAVE</span></code> 修饰符，为 <code class="docutils literal notranslate"><span class="pre">INFO</span></code> 命令设置新输出格式， <code class="docutils literal notranslate"><span class="pre">CONFIG</span> <span class="pre">RESETSTAT</span></code> 命令的变动等，以上这些命令的文档也全部更新完毕。</p></li>
+<li>Redis 2.6 版本新增的所有命令，比如 <a class="reference external" href="http://redis.readthedocs.org/en/latest/script/eval.html">EVAL</a> 、 <a class="reference external" href="http://redis.readthedocs.org/en/latest/key/pttl.html">PTTL</a> 、 <a class="reference external" href="http://redis.readthedocs.org/en/latest/server/time.html">TIME</a> 等命令的相关文档全部翻译完毕。</li>
+<li>官方文档新添加的所有命令模式(pattern)，比如 INCR 命令的 <a class="reference external" href="http://redis.readthedocs.org/en/latest/string/incr.html#id2">计数器模式</a> 和 <a class="reference external" href="http://redis.readthedocs.org/en/latest/string/incr.html#id3">限速器模式</a> ， EXPIRE 命令的 <a class="reference external" href="http://redis.readthedocs.org/en/latest/key/expire.html#id2">导航会话模式</a> 等等，全部翻译完毕。</li>
+<li>Redis 2.6 版本对旧有命令的所有改进，比如为 <code class="docutils literal"><span class="pre">SHUTDOWN</span></code> 命令添加 <code class="docutils literal"><span class="pre">SAVE</span></code> 和 <code class="docutils literal"><span class="pre">NOSAVE</span></code> 修饰符，为 <code class="docutils literal"><span class="pre">INFO</span></code> 命令设置新输出格式， <code class="docutils literal"><span class="pre">CONFIG</span> <span class="pre">RESETSTAT</span></code> 命令的变动等，以上这些命令的文档也全部更新完毕。</li>
 </ul>
 <p>除此之外，命令参考项目本身也进行了不少修改，其中最重要的两个分别是：</p>
 <ul class="simple">
-<li><p>命令不再按类型分页，而是每个命令各自分为一页，加快载入速度。比如在之前的版本，访问 <cite>/string.html</cite> 会显示所有 Redis 字符串操作命令，而现在则是通过 <cite>/string/set.html</cite> 来访问 <cite>set</cite> 命令，通过 <cite>/string/get</cite> 来访问 <cite>get</cite> 命令。</p></li>
-<li><p>添加了 disqus 评论功能。</p></li>
+<li>命令不再按类型分页，而是每个命令各自分为一页，加快载入速度。比如在之前的版本，访问 <cite>/string.html</cite> 会显示所有 Redis 字符串操作命令，而现在则是通过 <cite>/string/set.html</cite> 来访问 <cite>set</cite> 命令，通过 <cite>/string/get</cite> 来访问 <cite>get</cite> 命令。</li>
+<li>添加了 disqus 评论功能。</li>
 </ul>
 <p>以上就是命令参考 2.6 版本的主要更新，更详细的更新细节可以参考 <a class="reference external" href="http://redis.readthedocs.org/en/latest/change_log.html#redis-2-6">项目的更新日志</a> 。</p>
 <p>你也可以通过访问 <a class="reference external" href="http://redis.readthedocs.org">redis.readthedocs.org</a> ，查看新版文档。</p>
@@ -148,7 +156,7 @@
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
     </p>
   </div>
 </footer>

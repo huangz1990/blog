@@ -2,16 +2,23 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>写作笔记之一：写作手法的重要性 &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     'present',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="清远飞来湖湿地公园游记" href="visiting-feilai-lake-park.html" />
@@ -25,7 +32,8 @@
 <script type="text/javascript" src="../../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../../_static/bootstrap-sphinx.js "></script>
 
-  </head><body>
+  </head>
+  <body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -138,14 +146,14 @@
 所以即使是同一个程序，
 在 Redis 里面通常也会有多种写法：</p>
 <ul class="simple">
-<li><p>比如说，
+<li>比如说，
 在 Redis 里面，
-你既可以使用 <code class="docutils literal notranslate"><span class="pre">LPOP</span></code> 命令和 <code class="docutils literal notranslate"><span class="pre">RPUSH</span></code> 命令实现一个先进先出队列，
-也可以使用 <code class="docutils literal notranslate"><span class="pre">RPOP</span></code> 命令和 <code class="docutils literal notranslate"><span class="pre">LPUSH</span></code> 命令实现一个功能完全相同的先进先出队列；</p></li>
-<li><p>又比如说，
+你既可以使用 <code class="docutils literal"><span class="pre">LPOP</span></code> 命令和 <code class="docutils literal"><span class="pre">RPUSH</span></code> 命令实现一个先进先出队列，
+也可以使用 <code class="docutils literal"><span class="pre">RPOP</span></code> 命令和 <code class="docutils literal"><span class="pre">LPUSH</span></code> 命令实现一个功能完全相同的先进先出队列；</li>
+<li>又比如说，
 你即可以使用 Redis 的集合结构去计算网站的唯一用户 IP 数量，
 也可以使用位图去做相同的事情，
-甚至使用 HyperLogLog 也可以实现类似的效果；</p></li>
+甚至使用 HyperLogLog 也可以实现类似的效果；</li>
 </ul>
 <p>诸如此类。</p>
 <p>因为解决同一个问题的方法有很多种，
@@ -157,28 +165,28 @@
 关于这个问题，
 我们可以从两个角度来看：</p>
 <ul class="simple">
-<li><p>从好的角度来说，
+<li>从好的角度来说，
 通过展示同一个问题的不同解法，
 可以给读者更好地展示 Redis 的强大和实用性，
-帮助他们更好地了解 Redis 。</p></li>
-<li><p>但是从坏的角度来说，
+帮助他们更好地了解 Redis 。</li>
+<li>但是从坏的角度来说，
 一直研究同一个问题可能会让读者感到厌烦，
 并且从现实来看，
 介绍同一个问题的多个解法需要占用大量的篇幅，
 这可能会挤压其他内容的篇幅，
-导致另外一些有用的内容无法容纳在书本里面。</p></li>
+导致另外一些有用的内容无法容纳在书本里面。</li>
 </ul>
 <p>这个问题初看上去似乎是一个鱼和熊掌的问题，
 但值得庆幸的是，
 我还是想到了一种办法去解决它：</p>
 <ul class="simple">
-<li><p>我重新审视了书中的所有同类解决方案，
+<li>我重新审视了书中的所有同类解决方案，
 移除了一些不太重要的解决方案，
 只保留同类解决方案中最有代表性也最有学习价值的方案。
 比如说，
 只保留最优解法 A 和次优解法 A+ ，
-而不再保留第三位解法 A++ 以及之后的其他解法。</p></li>
-<li><p>然后，
+而不再保留第三位解法 A++ 以及之后的其他解法。</li>
+<li>然后，
 我仍然会在书本的正文中介绍问题 P 及其最优解法 A ，
 但是却不会再在正文中介绍问题的次优解法 A+ 。
 与此相反，
@@ -189,14 +197,14 @@
 然后要求用户根据自己对问题 P 、解法 A 以及解法 A+ 概念的理解，
 写出解法 A+ 的实现，
 并且每章的最末尾也会给出《编程练习》的参考答案，
-方便读者进行对照和参考。</p></li>
+方便读者进行对照和参考。</li>
 </ul>
 <p>这种做法有几个好处：</p>
 <ol class="arabic simple">
-<li><p>我可以在书本中介绍问题的次优解 A+ ，
+<li>我可以在书本中介绍问题的次优解 A+ ，
 帮助读者扩展他们对于 Redis 的了解，
-而不必将这些内容完全割舍掉。</p></li>
-<li><p>在原来的计划中，
+而不必将这些内容完全割舍掉。</li>
+<li>在原来的计划中，
 书本的正文总是先介绍问题 P ，
 然后介绍最优解法 A ，
 然后介绍次优解法 A+ ，
@@ -206,8 +214,8 @@
 通过在正文中介绍问题 P 及其最优解法 A ，
 然后再在《编程练习》中介绍次优解法 A+ 的做法有效地避免了原来的阅读疲劳问题，
 并且还可以在介绍解法 A+ 的同时，
-引导读者去复习问题 P 和解法 A 。</p></li>
-<li><p>在进行修改之前，
+引导读者去复习问题 P 和解法 A 。</li>
+<li>在进行修改之前，
 书本原来的计划是只有正文而没有编程练习的，
 但是通过增加《编程练习》这个栏目，
 我丰富了书本和读者之间的互动，
@@ -219,7 +227,7 @@
 并以代码的方式将这些知识实际地编写出来。
 我相信当一个读者完成编程练习并自行将书中描述的解法实现出来的时候，
 他一定会非常有成就感，
-这也是我所希望的。</p></li>
+这也是我所希望的。</li>
 </ol>
 <p>虽然引入《编程练习》部分有那么多好处，
 但说到底，
@@ -255,7 +263,7 @@
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
     </p>
   </div>
 </footer>

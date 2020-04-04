@@ -2,16 +2,23 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>对比 Redis 与 Memcached &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     'present',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Redis GEO 源码注释" href="annotated-redis-geo-source.html" />
@@ -25,7 +32,8 @@
 <script type="text/javascript" src="../../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../../_static/bootstrap-sphinx.js "></script>
 
-  </head><body>
+  </head>
+  <body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -135,75 +143,75 @@ Redis 的作者 Antirez 写了<a class="reference external" href="http://antirez
 读者应该能明白 Redis 和 Memcached 之间的区别。</p>
 <div class="section" id="id2">
 <h2>功能对比<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
-<table class="docutils align-default">
+<table border="1" class="docutils">
 <colgroup>
-<col style="width: 14%" />
-<col style="width: 41%" />
-<col style="width: 44%" />
+<col width="14%" />
+<col width="41%" />
+<col width="44%" />
 </colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>对比项目</p></th>
-<th class="head"><p>Memcached</p></th>
-<th class="head"><p>Redis</p></th>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">对比项目</th>
+<th class="head">Memcached</th>
+<th class="head">Redis</th>
 </tr>
 </thead>
-<tbody>
-<tr class="row-even"><td><p>支持的数据结构</p></td>
-<td><ul class="simple">
-<li><p>字符串（二进制安全，可直接储存字节数据）</p></li>
+<tbody valign="top">
+<tr class="row-even"><td>支持的数据结构</td>
+<td><ul class="first last simple">
+<li>字符串（二进制安全，可直接储存字节数据）</li>
 </ul>
 </td>
-<td><ul class="simple">
-<li><p>字符串（二进制安全，可直接储存字节数据）</p></li>
-<li><p>散列</p></li>
-<li><p>列表</p></li>
-<li><p>集合</p></li>
-<li><p>有序集合</p></li>
-<li><p>位图（bitmap）</p></li>
-<li><p>地理位置（GEO）</p></li>
-<li><p>HyperLogLog</p></li>
-</ul>
-</td>
-</tr>
-<tr class="row-odd"><td><p>单机附加功能</p></td>
-<td><ul class="simple">
-<li><p>自动过期</p></li>
-<li><p>流水线</p></li>
-</ul>
-</td>
-<td><ul class="simple">
-<li><p>自动过期</p></li>
-<li><p>流水线</p></li>
-<li><p>事务</p></li>
-<li><p>Lua 脚本</p></li>
-<li><p>发布与订阅</p></li>
-<li><p>键空间通知</p></li>
-<li><p>AOF 持久化</p></li>
-<li><p>RDB 持久化</p></li>
+<td><ul class="first last simple">
+<li>字符串（二进制安全，可直接储存字节数据）</li>
+<li>散列</li>
+<li>列表</li>
+<li>集合</li>
+<li>有序集合</li>
+<li>位图（bitmap）</li>
+<li>地理位置（GEO）</li>
+<li>HyperLogLog</li>
 </ul>
 </td>
 </tr>
-<tr class="row-even"><td><p>多机附加功能</p></td>
-<td><ul class="simple">
-<li><p>由客户端实现的，基于分片的集群（无Sentinel或复制）</p></li>
-<li><p>通过 twemproxy 实现分片</p></li>
+<tr class="row-odd"><td>单机附加功能</td>
+<td><ul class="first last simple">
+<li>自动过期</li>
+<li>流水线</li>
 </ul>
 </td>
-<td><ul class="simple">
-<li><p>由服务器端实现的，基于分片的集群，自带Sentinel和复制</p></li>
-<li><p>复制（无需集群，可独立运作）</p></li>
-<li><p>Sentinel（无需集群，可独立运作）</p></li>
-<li><p>twemproxy、codis、redis-cerberus 等多种第三方代理可选</p></li>
+<td><ul class="first last simple">
+<li>自动过期</li>
+<li>流水线</li>
+<li>事务</li>
+<li>Lua 脚本</li>
+<li>发布与订阅</li>
+<li>键空间通知</li>
+<li>AOF 持久化</li>
+<li>RDB 持久化</li>
 </ul>
 </td>
 </tr>
-<tr class="row-odd"><td><p>内存分配方式</p></td>
-<td><p>slab</p></td>
-<td><p>jemalloc</p></td>
+<tr class="row-even"><td>多机附加功能</td>
+<td><ul class="first last simple">
+<li>由客户端实现的，基于分片的集群（无Sentinel或复制）</li>
+<li>通过 twemproxy 实现分片</li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li>由服务器端实现的，基于分片的集群，自带Sentinel和复制</li>
+<li>复制（无需集群，可独立运作）</li>
+<li>Sentinel（无需集群，可独立运作）</li>
+<li>twemproxy、codis、redis-cerberus 等多种第三方代理可选</li>
+</ul>
+</td>
 </tr>
-<tr class="row-even"><td><p>网络模型</p></td>
-<td><p>使用多个线程处理多个客户端，使用锁对线程进行同步</p></td>
-<td><p>单线程，通过 I/O 多路复用来处理多个客户端</p></td>
+<tr class="row-odd"><td>内存分配方式</td>
+<td>slab</td>
+<td>jemalloc</td>
+</tr>
+<tr class="row-even"><td>网络模型</td>
+<td>使用多个线程处理多个客户端，使用锁对线程进行同步</td>
+<td>单线程，通过 I/O 多路复用来处理多个客户端</td>
 </tr>
 </tbody>
 </table>
@@ -245,7 +253,7 @@ Redis 的作者 Antirez 写了<a class="reference external" href="http://antirez
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
     </p>
   </div>
 </footer>

@@ -2,16 +2,23 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>使用 Redis 构建短网址生成程序 &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     'present',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="读者来信：现在读《Redis设计与实现》和《Redis实战》还有用吗？" href="letter-20190811.html" />
@@ -25,7 +32,8 @@
 <script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
 
-  </head><body>
+  </head>
+  <body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -119,8 +127,8 @@
   <div class="section" id="redis">
 <h1>使用 Redis 构建短网址生成程序<a class="headerlink" href="#redis" title="Permalink to this headline">¶</a></h1>
 <div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>本文摘录自即将出版的《Redis使用手册》， 详情请见： <a class="reference external" href="http://RedisGuide.com">RedisGuide.com</a> 。</p>
+<p class="first admonition-title">Note</p>
+<p class="last">本文摘录自即将出版的《Redis使用手册》， 详情请见： <a class="reference external" href="http://RedisGuide.com">RedisGuide.com</a> 。</p>
 </div>
 <p>为了给用户提供更多发言空间，
 并记录用户在网站上的链接点击行为，
@@ -150,8 +158,8 @@
 所以我们可以基于 Redis 的散列实现一个短网址程序，
 代码清单 3-1 展示了一个这样的例子。</p>
 <hr class="docutils" />
-<p>代码清单 3-1 使用散列实现的短网址程序：<code class="docutils literal notranslate"><span class="pre">/hash/shorty_url.py</span></code></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">base36</span> <span class="kn">import</span> <span class="n">base10_to_base36</span>
+<p>代码清单 3-1 使用散列实现的短网址程序：<code class="docutils literal"><span class="pre">/hash/shorty_url.py</span></code></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">base36</span> <span class="kn">import</span> <span class="n">base10_to_base36</span>
 
 <span class="n">ID_COUNTER</span> <span class="o">=</span> <span class="s2">&quot;ShortyUrl::id_counter&quot;</span>
 <span class="n">URL_HASH</span> <span class="o">=</span> <span class="s2">&quot;ShortyUrl::url_hash&quot;</span> 
@@ -183,8 +191,8 @@
 </pre></div>
 </div>
 <hr class="docutils" />
-<p>代码清单 3-2 将 10 进制数字转换成 36 进制数字的程序：<code class="docutils literal notranslate"><span class="pre">/hash/base36.py</span></code></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">base10_to_base36</span><span class="p">(</span><span class="n">number</span><span class="p">):</span>
+<p>代码清单 3-2 将 10 进制数字转换成 36 进制数字的程序：<code class="docutils literal"><span class="pre">/hash/base36.py</span></code></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">base10_to_base36</span><span class="p">(</span><span class="n">number</span><span class="p">):</span>
     <span class="n">alphabets</span> <span class="o">=</span> <span class="s2">&quot;0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ&quot;</span>
     <span class="n">result</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
@@ -196,24 +204,24 @@
 </pre></div>
 </div>
 <hr class="docutils" />
-<p><code class="docutils literal notranslate"><span class="pre">ShortyUrl</span></code> 类的 <code class="docutils literal notranslate"><span class="pre">shorten()</span></code> 方法负责为输入的网址生成短网址 ID ，
+<p><code class="docutils literal"><span class="pre">ShortyUrl</span></code> 类的 <code class="docutils literal"><span class="pre">shorten()</span></code> 方法负责为输入的网址生成短网址 ID ，
 它的工作包括以下四个步骤：</p>
 <ol class="arabic simple">
-<li><p>为每个给定的网址创建一个 10 进制数字 ID 。</p></li>
-<li><p>将 10 进制数字 ID 转换为 36 进制，
+<li>为每个给定的网址创建一个 10 进制数字 ID 。</li>
+<li>将 10 进制数字 ID 转换为 36 进制，
 并将这个 36 进制数字用作给定网址的短网址 ID ，
 这种方法在数字 ID 长度较大时可以有效地缩短数字 ID 的长度。
-代码清单 3-2 展示了将数字从 10 进制转换成 36 进制的 <code class="docutils literal notranslate"><span class="pre">base10_to_base36</span></code> 函数的具体实现。</p></li>
-<li><p>将短网址 ID 和目标网址之间的映射关系储存到散列里面。</p></li>
-<li><p>向调用者返回刚刚生成的短网址 ID 。</p></li>
+代码清单 3-2 展示了将数字从 10 进制转换成 36 进制的 <code class="docutils literal"><span class="pre">base10_to_base36</span></code> 函数的具体实现。</li>
+<li>将短网址 ID 和目标网址之间的映射关系储存到散列里面。</li>
+<li>向调用者返回刚刚生成的短网址 ID 。</li>
 </ol>
 <p>另一方面，
-<code class="docutils literal notranslate"><span class="pre">restore()</span></code> 方法要做的事情和 <code class="docutils literal notranslate"><span class="pre">shorten()</span></code> 方法正好相反：
+<code class="docutils literal"><span class="pre">restore()</span></code> 方法要做的事情和 <code class="docutils literal"><span class="pre">shorten()</span></code> 方法正好相反：
 它会从储存着映射关系的散列里面取出与给定短网址 ID 相对应的目标网址，
 然后将其返回给调用者。</p>
-<p>以下代码简单地展示了使用 <code class="docutils literal notranslate"><span class="pre">ShortyUrl</span></code> 程序创建短网址 ID 的方法，
+<p>以下代码简单地展示了使用 <code class="docutils literal"><span class="pre">ShortyUrl</span></code> 程序创建短网址 ID 的方法，
 以及根据短网址 ID 获取目标网址的方法：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">redis</span> <span class="kn">import</span> <span class="n">Redis</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">redis</span> <span class="kn">import</span> <span class="n">Redis</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">shorty_url</span> <span class="kn">import</span> <span class="n">ShortyUrl</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">client</span> <span class="o">=</span> <span class="n">Redis</span><span class="p">(</span><span class="n">decode_responses</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">shorty_url</span> <span class="o">=</span> <span class="n">ShortyUrl</span><span class="p">(</span><span class="n">client</span><span class="p">)</span>
@@ -248,7 +256,7 @@
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
     </p>
   </div>
 </footer>

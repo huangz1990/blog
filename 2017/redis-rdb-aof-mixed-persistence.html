@@ -2,16 +2,23 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Redis 4.0 新功能简介：RDB-AOF 混合持久化 &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     'present',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="《Redis 命令速查表》开放免费下载" href="release-redis-cheatsheet-as-free.html" />
@@ -25,7 +32,8 @@
 <script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
 
-  </head><body>
+  </head>
+  <body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -126,10 +134,10 @@
 <p>在过去，
 Redis 用户通常会因为 RDB 持久化和 AOF 持久化之间不同的优缺点而陷入两难的选择当中：</p>
 <ul class="simple">
-<li><p>RDB 持久化能够快速地储存和恢复数据，
-但是在服务器停机时却会丢失大量数据；</p></li>
-<li><p>AOF 持久化能够有效地提高数据的安全性，
-但是在储存和恢复数据方面却要耗费大量的时间。</p></li>
+<li>RDB 持久化能够快速地储存和恢复数据，
+但是在服务器停机时却会丢失大量数据；</li>
+<li>AOF 持久化能够有效地提高数据的安全性，
+但是在储存和恢复数据方面却要耗费大量的时间。</li>
 </ul>
 <p>为了让用户能够同时拥有上述两种持久化的优点，
 Redis 4.0 推出了一个能够“鱼和熊掌兼得”的持久化方案 ——
@@ -144,7 +152,7 @@ RDB-AOF 混合持久化：
 <h2>创建包含混合持久化内容的 AOF 文件<a class="headerlink" href="#aof" title="Permalink to this headline">¶</a></h2>
 <p>在启用了 RDB-AOF 混合持久化功能的情况下，
 如果我们执行以下命令：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">6379</span><span class="o">&gt;</span> <span class="n">SET</span> <span class="n">K1</span> <span class="s2">&quot;V1&quot;</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">6379</span><span class="o">&gt;</span> <span class="n">SET</span> <span class="n">K1</span> <span class="s2">&quot;V1&quot;</span>
 <span class="n">OK</span>
 
 <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">6379</span><span class="o">&gt;</span> <span class="n">SET</span> <span class="n">K2</span> <span class="s2">&quot;V2&quot;</span>
@@ -161,7 +169,7 @@ RDB-AOF 混合持久化：
 </pre></div>
 </div>
 <p>那么 Redis 服务器将创建出包含以下内容的 AOF 文件：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ od -c appendonly.aof
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ od -c appendonly.aof
 0000000    R   E   D   I   S   0   0   0   8 372  \t   r   e   d   i   s
 0000020    -   v   e   r  \v   9   9   9   .   9   9   9   .   9   9   9
 0000040  372  \n   r   e   d   i   s   -   b   i   t   s 300   @ 372 005
@@ -188,9 +196,9 @@ RDB-AOF 混合持久化：
 RDB-AOF 混合持久化功能默认是处于关闭状态的，
 为了启用该功能，
 用户不仅需要开启 AOF 持久化功能，
-还需要将 <code class="docutils literal notranslate"><span class="pre">aof-use-rdb-preamble</span></code> 选项的值设置为真，
+还需要将 <code class="docutils literal"><span class="pre">aof-use-rdb-preamble</span></code> 选项的值设置为真，
 就像这样：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cat redis.conf
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ cat redis.conf
 appendonly yes
 aof-use-rdb-preamble yes
 
@@ -251,7 +259,7 @@ $ redis-server redis.conf
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
     </p>
   </div>
 </footer>

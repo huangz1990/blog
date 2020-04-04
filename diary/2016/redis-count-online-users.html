@@ -2,16 +2,23 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>使用 Redis 统计在线用户人数 &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     'present',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="使用 redis-py 储存地理位置数据" href="redis-py-geo-support.html" />
@@ -25,7 +32,8 @@
 <script type="text/javascript" src="../../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../../_static/bootstrap-sphinx.js "></script>
 
-  </head><body>
+  </head>
+  <body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -139,17 +147,17 @@
 <p>每当一个用户上线时，
 我们就执行 <a class="reference external" href="http://redisdoc.com/sorted_set/zadd.html">ZADD</a> 命令，
 将这个用户以及它的在线时间添加到指定的有序集合中：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ZADD</span> <span class="s2">&quot;online_users&quot;</span> <span class="o">&lt;</span><span class="n">user_id</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">current_timestamp</span><span class="o">&gt;</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ZADD</span> <span class="s2">&quot;online_users&quot;</span> <span class="o">&lt;</span><span class="n">user_id</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">current_timestamp</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 <p>通过使用 <a class="reference external" href="http://redisdoc.com/sorted_set/zscore.html">ZSCORE</a> 命令检查指定的用户 ID 在有序集合中是否有相关联的分值，
 我们可以知道该用户是否在线：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ZSCORE</span> <span class="s2">&quot;online_users&quot;</span> <span class="o">&lt;</span><span class="n">user_id</span><span class="o">&gt;</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ZSCORE</span> <span class="s2">&quot;online_users&quot;</span> <span class="o">&lt;</span><span class="n">user_id</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 <p>而通过执行 <a class="reference external" href="http://redisdoc.com/sorted_set/zcard.html">ZCARD</a> 命令，
 我们可以知道总共有多用户在线：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ZCARD</span> <span class="s2">&quot;online_users&quot;</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ZCARD</span> <span class="s2">&quot;online_users&quot;</span>
 </pre></div>
 </div>
 <p>使用有序集合储存在线用户的强大之处在于，
@@ -161,7 +169,7 @@
 <p>首先，
 通过 <a class="reference external" href="http://redisdoc.com/sorted_set/zinterstore.html">ZINTERSTORE</a> 和 <a class="reference external" href="http://redisdoc.com/sorted_set/zunionstore.html">ZUNIONSTORE</a> 命令，
 我们可以对多个记录了在线用户的有序集合进行聚合计算：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># 计算出 7 天之内都有上线的用户，并将它储存到 7_days_both_online_users 有序集合当中</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># 计算出 7 天之内都有上线的用户，并将它储存到 7_days_both_online_users 有序集合当中</span>
 <span class="n">ZINTERSTORE</span> <span class="mi">7</span><span class="n">_days_both_online_users</span> <span class="mi">7</span> <span class="s2">&quot;day_1_online_users&quot;</span> <span class="s2">&quot;day_2_online_users&quot;</span> <span class="o">...</span> <span class="s2">&quot;day_7_online_users&quot;</span>
 
 <span class="c1"># 计算出 7 天之内总共有多少人上线了</span>
@@ -172,7 +180,7 @@
 通过 <a class="reference external" href="http://redisdoc.com/sorted_set/zcount.html">ZCOUNT</a> 命令，
 我们可以统计出在指定的时间段之内有多少用户在线，
 而 <a class="reference external" href="http://redisdoc.com/sorted_set/zrangebyscore.html">ZRANGEBYSCORE</a> 命令则可以让我们获取到这些用户的名单：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># 统计指定时间段内上线的用户数量</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># 统计指定时间段内上线的用户数量</span>
 <span class="n">ZCOUNT</span> <span class="s2">&quot;online_users&quot;</span> <span class="o">&lt;</span><span class="n">start_timestamp</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">end_timestamp</span><span class="o">&gt;</span>
 
 <span class="c1"># 获取指定时间段内上线的用户名单</span>
@@ -196,16 +204,16 @@
 每当一个用户上线时，
 我们就执行以下 <a class="reference external" href="http://redisdoc.com/set/sadd.html">SADD</a> 命令，
 将它添加到在线用户名单当中：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SADD</span> <span class="s2">&quot;online_users&quot;</span> <span class="o">&lt;</span><span class="n">user_id</span><span class="o">&gt;</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">SADD</span> <span class="s2">&quot;online_users&quot;</span> <span class="o">&lt;</span><span class="n">user_id</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 <p>通过使用 <a class="reference external" href="http://redisdoc.com/set/sismember.html">SISMEMBER</a> 命令，
 我们可以检查一个指定的用户当前是否在线：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SISMEMBER</span> <span class="s2">&quot;online_users&quot;</span> <span class="o">&lt;</span><span class="n">user_id</span><span class="o">&gt;</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">SISMEMBER</span> <span class="s2">&quot;online_users&quot;</span> <span class="o">&lt;</span><span class="n">user_id</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 <p>而统计在线人数的工作则可以通过执行 <a class="reference external" href="http://redisdoc.com/set/scard.html">SCARD</a> 命令来完成：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SCARD</span> <span class="s2">&quot;online_users&quot;</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">SCARD</span> <span class="s2">&quot;online_users&quot;</span>
 </pre></div>
 </div>
 <p>通过集合运算操作，
@@ -214,24 +222,24 @@
 比如说，
 通过 <a class="reference external" href="http://redisdoc.com/set/sinter.html">SINTER</a> 或者 <a class="reference external" href="http://redisdoc.com/set/sinterstore.html">SINTERSTORE</a> 命令，
 我们可以计算出一周都有在线的用户：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SINTER</span> <span class="s2">&quot;day_1_online_users&quot;</span> <span class="s2">&quot;day_2_online_users&quot;</span> <span class="o">...</span> <span class="s2">&quot;day_7_online_users&quot;</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">SINTER</span> <span class="s2">&quot;day_1_online_users&quot;</span> <span class="s2">&quot;day_2_online_users&quot;</span> <span class="o">...</span> <span class="s2">&quot;day_7_online_users&quot;</span>
 </pre></div>
 </div>
 <p>此外，
 通过 <a class="reference external" href="http://redisdoc.com/set/sunion.html">SUNION</a> 命令或者 <a class="reference external" href="http://redisdoc.com/set/sunionstore.html">SUNIONSTORE</a> 命令，
 我们可以计算出一周内在线用户的总数量：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SUNION</span> <span class="s2">&quot;day_1_online_users&quot;</span> <span class="s2">&quot;day_2_online_users&quot;</span> <span class="o">...</span> <span class="s2">&quot;day_7_online_users&quot;</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">SUNION</span> <span class="s2">&quot;day_1_online_users&quot;</span> <span class="s2">&quot;day_2_online_users&quot;</span> <span class="o">...</span> <span class="s2">&quot;day_7_online_users&quot;</span>
 </pre></div>
 </div>
 <p>而通过执行 <a class="reference external" href="http://redisdoc.com/set/sdiff.html">SDIFF</a> 命令或者 <a class="reference external" href="http://redisdoc.com/set/sdiffstore.html">SDIFFSTORE</a> 命令，
 我们可以知道哪些用户今天上线了，
 但是昨天没有上线：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SDIFF</span> <span class="s2">&quot;today_online_users&quot;</span> <span class="s2">&quot;yesterday_online_users&quot;</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">SDIFF</span> <span class="s2">&quot;today_online_users&quot;</span> <span class="s2">&quot;yesterday_online_users&quot;</span>
 </pre></div>
 </div>
 <p>又或者工作日上线了，
 但是假日没有上线：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># 计算工作日上线名单</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># 计算工作日上线名单</span>
 <span class="n">SINTERSTORE</span> <span class="s2">&quot;weekday_online_users&quot;</span> <span class="s2">&quot;monday_online_users&quot;</span> <span class="s2">&quot;tuesday_online_users&quot;</span> <span class="o">...</span> <span class="s2">&quot;friday_online_users&quot;</span>
 <span class="c1"># 计算假日上线名单</span>
 <span class="n">SINTERSTORE</span> <span class="s2">&quot;holiday_online_users&quot;</span> <span class="s2">&quot;saturday_online_users&quot;</span> <span class="s2">&quot;sunday_online_users&quot;</span>
@@ -264,17 +272,17 @@ HyperLogLog 是一个概率算法，
 这一方案无疑是最佳之选。</p>
 <p>在这一方案下，
 我们使用 <a class="reference external" href="http://redisdoc.com/hyperloglog/pfadd.html">PFADD</a> 命令去记录在线的用户：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">PFADD</span> <span class="s2">&quot;online_users&quot;</span> <span class="o">&lt;</span><span class="n">user_id</span><span class="o">&gt;</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">PFADD</span> <span class="s2">&quot;online_users&quot;</span> <span class="o">&lt;</span><span class="n">user_id</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 <p>使用 <a class="reference external" href="http://redisdoc.com/hyperloglog/pfcount.html">PFCOUNT</a> 命令获取在线人数：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">PFCOUNT</span> <span class="s2">&quot;online_users&quot;</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">PFCOUNT</span> <span class="s2">&quot;online_users&quot;</span>
 </pre></div>
 </div>
 <p>因为 HyperLogLog 也提供了计算交集的 <a class="reference external" href="http://redisdoc.com/hyperloglog/pfmerge.html">PFMERGE</a> 命令，
 所以我们也可以用这个命令计算出多个给定时间段或日期之内，
 上线的总人数：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># 统计 7 天之内总共有多少人上线了</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># 统计 7 天之内总共有多少人上线了</span>
 <span class="n">PFMERGE</span> <span class="s2">&quot;7_days_both_online_users&quot;</span> <span class="s2">&quot;day_1_online_users&quot;</span> <span class="s2">&quot;day_2_online_users&quot;</span> <span class="o">...</span> <span class="s2">&quot;day_7_online_users&quot;</span>
 <span class="n">PFCOUNT</span> <span class="s2">&quot;7_days_both_online_users&quot;</span>
 </pre></div>
@@ -285,10 +293,10 @@ HyperLogLog 是一个概率算法，
 <p>回顾上面介绍的三个方案，
 我们可以得出以上结论：</p>
 <ul class="simple">
-<li><p>使用有序集合或者集合能够储存具体的在线用户名单，
-但是却需要消耗大量的内存；</p></li>
-<li><p>而使用 HyperLogLog 虽然能够有效地减少统计在线用户所需的内存，
-但是它却没办法准确地记录具体的在线用户名单。</p></li>
+<li>使用有序集合或者集合能够储存具体的在线用户名单，
+但是却需要消耗大量的内存；</li>
+<li>而使用 HyperLogLog 虽然能够有效地减少统计在线用户所需的内存，
+但是它却没办法准确地记录具体的在线用户名单。</li>
 </ul>
 <p>那么是否存在一种既能够获得在线用户名单，
 又可以尽量减少内存消耗的方法存在呢？
@@ -300,26 +308,26 @@ HyperLogLog 是一个概率算法，
 <p>当一个用户上线时，
 我们就使用 <a class="reference external" href="http://redisdoc.com/string/setbit.html">SETBIT</a> 命令，
 将这个用户对应的二进制位设置为 1 ：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># 此处的 user_id 必须为数字，因为它会被用作索引</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># 此处的 user_id 必须为数字，因为它会被用作索引</span>
 <span class="n">SETBIT</span> <span class="s2">&quot;online_users&quot;</span> <span class="o">&lt;</span><span class="n">user_id</span><span class="o">&gt;</span> <span class="mi">1</span>
 </pre></div>
 </div>
 <p>通过使用 <a class="reference external" href="http://redisdoc.com/string/getbit.html">GETBIT</a> 命令去检查一个二进制位的值是否为 1 ，
 我们可以知道指定的用户是否在线：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GETBIT</span> <span class="s2">&quot;online_users&quot;</span> <span class="o">&lt;</span><span class="n">user_id</span><span class="o">&gt;</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">GETBIT</span> <span class="s2">&quot;online_users&quot;</span> <span class="o">&lt;</span><span class="n">user_id</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 <p>而通过 <a class="reference external" href="http://redisdoc.com/string/bitcount.html">BITCOUNT</a> 命令，
 我们可以统计出位图中有多少个二进制位被设置成了 1 ，
 也即是有多少个用户在线：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">BITCOUNT</span> <span class="s2">&quot;online_users&quot;</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">BITCOUNT</span> <span class="s2">&quot;online_users&quot;</span>
 </pre></div>
 </div>
 <p>跟集合一样，
 用户也能够对多个位图进行聚合计算 ——
 通过 <a class="reference external" href="http://redisdoc.com/string/bitop.html">BITOP</a> 命令，
 用户可以对一个或多个位图执行逻辑并、逻辑或、逻辑异或或者逻辑非操作：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># 计算出 7 天都在线的用户</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># 计算出 7 天都在线的用户</span>
 <span class="n">BITOP</span> <span class="s2">&quot;AND&quot;</span> <span class="s2">&quot;7_days_both_online_users&quot;</span> <span class="s2">&quot;day_1_online_users&quot;</span> <span class="s2">&quot;day_2_online_users&quot;</span> <span class="o">...</span> <span class="s2">&quot;day_7_online_users&quot;</span>
 
 <span class="c1"># 计算出 7 在的在线用户总人数</span>
@@ -346,28 +354,28 @@ HyperLogLog 是一个概率算法，
 <div class="section" id="id3">
 <h2>总结<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
 <p>以下表格总结了以上四个方案的特点：</p>
-<table class="docutils align-default">
+<table border="1" class="docutils">
 <colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>方案</p></th>
-<th class="head"><p>特点</p></th>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">方案</th>
+<th class="head">特点</th>
 </tr>
 </thead>
-<tbody>
-<tr class="row-even"><td><p>有序集合</p></td>
-<td><p>能够同时储存在线用户的名单以及用户的上线时间，能够执行非常多的聚合计算操作，但是耗费的内存也非常多。</p></td>
+<tbody valign="top">
+<tr class="row-even"><td>有序集合</td>
+<td>能够同时储存在线用户的名单以及用户的上线时间，能够执行非常多的聚合计算操作，但是耗费的内存也非常多。</td>
 </tr>
-<tr class="row-odd"><td><p>集合</p></td>
-<td><p>能够储存在线用户的名单，也能够执行聚合计算，消耗的内存比有序集合少，但是跟有序集合一样，这个方案消耗的内存也会随着用户数量的增多而增多。</p></td>
+<tr class="row-odd"><td>集合</td>
+<td>能够储存在线用户的名单，也能够执行聚合计算，消耗的内存比有序集合少，但是跟有序集合一样，这个方案消耗的内存也会随着用户数量的增多而增多。</td>
 </tr>
-<tr class="row-even"><td><p>HyperLogLog</p></td>
-<td><p>无论需要统计的用户有多少，只需要耗费 12 KB 内存，但由于概率算法的特性，只能给出在线人数的估算值，并且也无法获取准确的在线用户名单。</p></td>
+<tr class="row-even"><td>HyperLogLog</td>
+<td>无论需要统计的用户有多少，只需要耗费 12 KB 内存，但由于概率算法的特性，只能给出在线人数的估算值，并且也无法获取准确的在线用户名单。</td>
 </tr>
-<tr class="row-odd"><td><p>位图</p></td>
-<td><p>在尽可能节约内存的情况下，记录在线用户的名单，并且能够对这些名单执行聚合操作。</p></td>
+<tr class="row-odd"><td>位图</td>
+<td>在尽可能节约内存的情况下，记录在线用户的名单，并且能够对这些名单执行聚合操作。</td>
 </tr>
 </tbody>
 </table>
@@ -399,7 +407,7 @@ HyperLogLog 是一个概率算法，
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
     </p>
   </div>
 </footer>

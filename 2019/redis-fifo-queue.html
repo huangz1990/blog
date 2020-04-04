@@ -2,16 +2,23 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>使用 Redis 构建先进先出队列解决秒杀问题 &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     'present',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="使用 Redis 列表构建分页程序" href="redis-paging.html" />
@@ -25,7 +32,8 @@
 <script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
 
-  </head><body>
+  </head>
+  <body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -119,8 +127,8 @@
   <div class="section" id="redis">
 <h1>使用 Redis 构建先进先出队列解决秒杀问题<a class="headerlink" href="#redis" title="Permalink to this headline">¶</a></h1>
 <div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>本文摘录自即将出版的《Redis使用手册》，
+<p class="first admonition-title">Note</p>
+<p class="last">本文摘录自即将出版的《Redis使用手册》，
 详情请见： <a class="reference external" href="http://RedisGuide.com">RedisGuide.com</a> 。</p>
 </div>
 <p>先进先出队列（first in first out queue）是一种非常常见的数据结构，
@@ -146,8 +154,8 @@
 因此它是公平的。</p>
 <p>代码清单 4-1 展示了一个使用 Redis 列表实现先进先出队列的方法。</p>
 <hr class="docutils" />
-<p>代码清单 4-1 使用列表实现的先进先出队列：<code class="docutils literal notranslate"><span class="pre">/list/fifo_queue.py</span></code></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">FIFOqueue</span><span class="p">:</span>
+<p>代码清单 4-1 使用列表实现的先进先出队列：<code class="docutils literal"><span class="pre">/list/fifo_queue.py</span></code></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">FIFOqueue</span><span class="p">:</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">client</span> <span class="o">=</span> <span class="n">client</span>
@@ -170,7 +178,7 @@
 <p>作为例子，
 我们可以通过执行以下代码，
 载入并创建一个先进先出队列：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">redis</span> <span class="kn">import</span> <span class="n">Redis</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">redis</span> <span class="kn">import</span> <span class="n">Redis</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fifo_queue</span> <span class="kn">import</span> <span class="n">FIFOqueue</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">client</span> <span class="o">=</span> <span class="n">Redis</span><span class="p">(</span><span class="n">decode_responses</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">q</span> <span class="o">=</span> <span class="n">FIFOqueue</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="s2">&quot;buy-request&quot;</span><span class="p">)</span>
@@ -178,7 +186,7 @@
 </div>
 <p>然后通过执行以下代码，
 将三个用户的购买请求依次放入到队列里面：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">q</span><span class="o">.</span><span class="n">enqueue</span><span class="p">(</span><span class="s2">&quot;peter-buy-milk&quot;</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">q</span><span class="o">.</span><span class="n">enqueue</span><span class="p">(</span><span class="s2">&quot;peter-buy-milk&quot;</span><span class="p">)</span>
 <span class="go">1</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">q</span><span class="o">.</span><span class="n">enqueue</span><span class="p">(</span><span class="s2">&quot;john-buy-rice&quot;</span><span class="p">)</span>
 <span class="go">2</span>
@@ -189,7 +197,7 @@
 <p>最后，
 按照先进先出顺序，
 依次从队列中弹出相应的购买请求：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">q</span><span class="o">.</span><span class="n">dequeue</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">q</span><span class="o">.</span><span class="n">dequeue</span><span class="p">()</span>
 <span class="go">&#39;peter-buy-milk&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">q</span><span class="o">.</span><span class="n">dequeue</span><span class="p">()</span>
 <span class="go">&#39;john-buy-rice&#39;</span>
@@ -199,9 +207,9 @@
 </div>
 <p>可以看到，
 队列弹出元素的顺序跟元素入队时的顺序是完全相同的：
-最先是 <code class="docutils literal notranslate"><span class="pre">&quot;peter-buy-milk&quot;</span></code> 元素，
-接着是 <code class="docutils literal notranslate"><span class="pre">&quot;john-buy-rice&quot;</span></code> 元素，
-最后是 <code class="docutils literal notranslate"><span class="pre">&quot;david-buy-keyboard&quot;</span></code> 元素。</p>
+最先是 <code class="docutils literal"><span class="pre">&quot;peter-buy-milk&quot;</span></code> 元素，
+接着是 <code class="docutils literal"><span class="pre">&quot;john-buy-rice&quot;</span></code> 元素，
+最后是 <code class="docutils literal"><span class="pre">&quot;david-buy-keyboard&quot;</span></code> 元素。</p>
 </div>
 
 
@@ -217,7 +225,7 @@
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
     </p>
   </div>
 </footer>

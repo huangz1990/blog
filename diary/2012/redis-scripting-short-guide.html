@@ -2,16 +2,23 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Redis 2.6 脚本功能(scripting)简介 &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     'present',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Redis 命令参考 2.6 版本发布" href="redis-command-reference-26.html" />
@@ -25,7 +32,8 @@
 <script type="text/javascript" src="../../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../../_static/bootstrap-sphinx.js "></script>
 
-  </head><body>
+  </head>
+  <body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -130,14 +138,14 @@
 <h1>Redis 2.6 脚本功能(scripting)简介<a class="headerlink" href="#redis-2-6-scripting" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="id1">
 <h2>导读<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
-<p>对 Lua 脚本的支持无疑是 Redis 2.6 版本的最大亮点，本文通过一个 <code class="docutils literal notranslate"><span class="pre">LPOPRPUSH</span></code> 操作为例子，介绍如何使用 <code class="docutils literal notranslate"><span class="pre">EVAL</span></code> 命令对 Lua 脚本进行求值，以及如何在 Lua 脚本中执行 Redis 命令，并说明这些新特性又是怎样漂亮地解决一些 Redis 在 2.6 版本前很难解决的问题的。</p>
+<p>对 Lua 脚本的支持无疑是 Redis 2.6 版本的最大亮点，本文通过一个 <code class="docutils literal"><span class="pre">LPOPRPUSH</span></code> 操作为例子，介绍如何使用 <code class="docutils literal"><span class="pre">EVAL</span></code> 命令对 Lua 脚本进行求值，以及如何在 Lua 脚本中执行 Redis 命令，并说明这些新特性又是怎样漂亮地解决一些 Redis 在 2.6 版本前很难解决的问题的。</p>
 </div>
 <div class="section" id="lpoprpush">
 <h2>LPOPRPUSH<a class="headerlink" href="#lpoprpush" title="Permalink to this headline">¶</a></h2>
-<p>Redis 的 <code class="docutils literal notranslate"><span class="pre">RPOPLPUSH</span></code> 命令有一个特点：它是 Redis 列表结构的众多命令里，唯一一个左右不对称的命令 —— 在 Redis 里，只有 <code class="docutils literal notranslate"><span class="pre">RPOPLPUSH</span></code> ，却没有 <code class="docutils literal notranslate"><span class="pre">LPOPRPUSH</span></code> ，而其他列表结构的命令，比如 <code class="docutils literal notranslate"><span class="pre">LPUSH</span></code> 和 <code class="docutils literal notranslate"><span class="pre">RPUSH</span></code> 、 <code class="docutils literal notranslate"><span class="pre">LPUSHX</span></code> 和 <code class="docutils literal notranslate"><span class="pre">RPUSHX</span></code> ，全都是左右对称的。</p>
-<p>如果仅仅将 Redis 的列表结构用作单向列表，只在列表的其中一边对元素进行处理的话，那么有没有 <code class="docutils literal notranslate"><span class="pre">LPOPRPUSH</span></code> 是无所谓的：因为你总可以将新元素添加到列表的最左边，然后用 <code class="docutils literal notranslate"><span class="pre">RPOPLPUSH</span></code> 来对列表进行处理 —— 常见的消息队列和事件处理在 Redis 中通常都是这样实现的。</p>
-<p>但是，缺少 <code class="docutils literal notranslate"><span class="pre">LPOPRPUSH</span></code> 在一些情况下也会造成不便，其中一个例子就是，没有 <code class="docutils literal notranslate"><span class="pre">LPOPRPUSH</span></code> ，你就没办法用很自然的方法实现循环列表，这种列表既可以向后旋转(<code class="docutils literal notranslate"><span class="pre">LPOPRPUSH</span> <span class="pre">list</span> <span class="pre">list</span></code> ，并返回当前列表的尾节点)，也可以向前旋转(<code class="docutils literal notranslate"><span class="pre">RPOPLPUSH</span> <span class="pre">list</span> <span class="pre">list</span></code> ，并返回列表的头节点)，以下是一个虚构的 <code class="docutils literal notranslate"><span class="pre">LPOPRPUSH</span></code> 例子：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">LRANGE</span> <span class="n">seq</span> <span class="mi">0</span> <span class="o">-</span><span class="mi">1</span>
+<p>Redis 的 <code class="docutils literal"><span class="pre">RPOPLPUSH</span></code> 命令有一个特点：它是 Redis 列表结构的众多命令里，唯一一个左右不对称的命令 —— 在 Redis 里，只有 <code class="docutils literal"><span class="pre">RPOPLPUSH</span></code> ，却没有 <code class="docutils literal"><span class="pre">LPOPRPUSH</span></code> ，而其他列表结构的命令，比如 <code class="docutils literal"><span class="pre">LPUSH</span></code> 和 <code class="docutils literal"><span class="pre">RPUSH</span></code> 、 <code class="docutils literal"><span class="pre">LPUSHX</span></code> 和 <code class="docutils literal"><span class="pre">RPUSHX</span></code> ，全都是左右对称的。</p>
+<p>如果仅仅将 Redis 的列表结构用作单向列表，只在列表的其中一边对元素进行处理的话，那么有没有 <code class="docutils literal"><span class="pre">LPOPRPUSH</span></code> 是无所谓的：因为你总可以将新元素添加到列表的最左边，然后用 <code class="docutils literal"><span class="pre">RPOPLPUSH</span></code> 来对列表进行处理 —— 常见的消息队列和事件处理在 Redis 中通常都是这样实现的。</p>
+<p>但是，缺少 <code class="docutils literal"><span class="pre">LPOPRPUSH</span></code> 在一些情况下也会造成不便，其中一个例子就是，没有 <code class="docutils literal"><span class="pre">LPOPRPUSH</span></code> ，你就没办法用很自然的方法实现循环列表，这种列表既可以向后旋转(<code class="docutils literal"><span class="pre">LPOPRPUSH</span> <span class="pre">list</span> <span class="pre">list</span></code> ，并返回当前列表的尾节点)，也可以向前旋转(<code class="docutils literal"><span class="pre">RPOPLPUSH</span> <span class="pre">list</span> <span class="pre">list</span></code> ，并返回列表的头节点)，以下是一个虚构的 <code class="docutils literal"><span class="pre">LPOPRPUSH</span></code> 例子：</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">LRANGE</span> <span class="n">seq</span> <span class="mi">0</span> <span class="o">-</span><span class="mi">1</span>
 <span class="mi">1</span><span class="p">)</span> <span class="s2">&quot;1&quot;</span>
 <span class="mi">2</span><span class="p">)</span> <span class="s2">&quot;2&quot;</span>
 <span class="mi">3</span><span class="p">)</span> <span class="s2">&quot;3&quot;</span>
@@ -174,16 +182,16 @@
 </div>
 <div class="section" id="id2">
 <h2>LPOPRPUSH 的简单实现<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
-<p>既然已经将 <code class="docutils literal notranslate"><span class="pre">LPOPRPUSH</span></code> 的前世今生都了解了一遍，现在，是时候亲自实现这个命令了。</p>
-<p>可以确定的是， <code class="docutils literal notranslate"><span class="pre">LPOPRPUSH</span></code> 的调用方式应该和 <code class="docutils literal notranslate"><span class="pre">RPOPLPUSH</span></code> 一样，但是弹出元素和添加元素的位置正好相反，也就是说，执行命令 <code class="docutils literal notranslate"><span class="pre">LPOPRPUSH</span> <span class="pre">source</span> <span class="pre">destination</span></code> ，它应该原子性地完成以下三个操作：</p>
+<p>既然已经将 <code class="docutils literal"><span class="pre">LPOPRPUSH</span></code> 的前世今生都了解了一遍，现在，是时候亲自实现这个命令了。</p>
+<p>可以确定的是， <code class="docutils literal"><span class="pre">LPOPRPUSH</span></code> 的调用方式应该和 <code class="docutils literal"><span class="pre">RPOPLPUSH</span></code> 一样，但是弹出元素和添加元素的位置正好相反，也就是说，执行命令 <code class="docutils literal"><span class="pre">LPOPRPUSH</span> <span class="pre">source</span> <span class="pre">destination</span></code> ，它应该原子性地完成以下三个操作：</p>
 <ol class="arabic simple">
-<li><p>弹出 <code class="docutils literal notranslate"><span class="pre">source</span></code> 的表头元素(为了方便起见，我们将这个元素称为 <code class="docutils literal notranslate"><span class="pre">item</span></code>)</p></li>
-<li><p>将 <code class="docutils literal notranslate"><span class="pre">item</span></code> 添加到 <code class="docutils literal notranslate"><span class="pre">destination</span></code> 的最右边，成为 <code class="docutils literal notranslate"><span class="pre">destination</span></code> 列表的表尾元素</p></li>
-<li><p>将 <code class="docutils literal notranslate"><span class="pre">item</span></code> 返回给客户端</p></li>
+<li>弹出 <code class="docutils literal"><span class="pre">source</span></code> 的表头元素(为了方便起见，我们将这个元素称为 <code class="docutils literal"><span class="pre">item</span></code>)</li>
+<li>将 <code class="docutils literal"><span class="pre">item</span></code> 添加到 <code class="docutils literal"><span class="pre">destination</span></code> 的最右边，成为 <code class="docutils literal"><span class="pre">destination</span></code> 列表的表尾元素</li>
+<li>将 <code class="docutils literal"><span class="pre">item</span></code> 返回给客户端</li>
 </ol>
-<p>并且 <code class="docutils literal notranslate"><span class="pre">LPOPRPUSH</span></code> 的 <code class="docutils literal notranslate"><span class="pre">source</span></code> 和 <code class="docutils literal notranslate"><span class="pre">destination</span></code> 参数的值可以是同一个列表，从而制造一种(向后)旋转操作。</p>
-<p>一个最简单的 <code class="docutils literal notranslate"><span class="pre">LPOPRPUSH</span></code> 实现可能是这样的：</p>
-<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="c1">-- unsafe_lpoprpush.lua</span>
+<p>并且 <code class="docutils literal"><span class="pre">LPOPRPUSH</span></code> 的 <code class="docutils literal"><span class="pre">source</span></code> 和 <code class="docutils literal"><span class="pre">destination</span></code> 参数的值可以是同一个列表，从而制造一种(向后)旋转操作。</p>
+<p>一个最简单的 <code class="docutils literal"><span class="pre">LPOPRPUSH</span></code> 实现可能是这样的：</p>
+<div class="highlight-lua"><div class="highlight"><pre><span></span><span class="c1">-- unsafe_lpoprpush.lua</span>
 
 <span class="kd">local</span> <span class="n">redis</span> <span class="o">=</span> <span class="nb">require</span> <span class="s1">&#39;redis&#39;</span>
 <span class="kd">local</span> <span class="n">client</span> <span class="o">=</span> <span class="n">redis</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">6379</span><span class="p">)</span>
@@ -200,11 +208,11 @@
 </div>
 <div class="section" id="multi-exec-watch-lpoprpush">
 <h2>使用 MULTI 、 EXEC 和 WATCH 实现安全的 LPOPRPUSH 函数<a class="headerlink" href="#multi-exec-watch-lpoprpush" title="Permalink to this headline">¶</a></h2>
-<p>上一节的 <code class="docutils literal notranslate"><span class="pre">LPOPRPUSH</span></code> 实现在通常情况下可以达到我们想要的效果，但是它并不是一个原子性操作，没有提供安全性方面的保证。</p>
-<p>举个例子，假如客户端在执行 <code class="docutils literal notranslate"><span class="pre">client:lpop(source)</span></code> 之后失败，那么被弹出的 <code class="docutils literal notranslate"><span class="pre">item</span></code> 元素就会白白丢失，无法被 <code class="docutils literal notranslate"><span class="pre">RPUSH</span></code> 命令推入到 <code class="docutils literal notranslate"><span class="pre">destination</span></code> 列表。</p>
-<p>为了将 <code class="docutils literal notranslate"><span class="pre">LPOPRPUSH</span></code> 函数修改成一个原子性操作，我们不仅需要 <code class="docutils literal notranslate"><span class="pre">MULTI</span></code> 和 <code class="docutils literal notranslate"><span class="pre">EXEC</span></code> ，而且因为 <code class="docutils literal notranslate"><span class="pre">LPOPRPUSH</span></code> 是一个 CAS (check-and-set, 检查并修改)类型的操作，我们还需要用上 <code class="docutils literal notranslate"><span class="pre">WATCH</span></code> 来监视 <code class="docutils literal notranslate"><span class="pre">source</span></code> 和 <code class="docutils literal notranslate"><span class="pre">destination</span></code> 列表。</p>
-<p>以下是新的 <code class="docutils literal notranslate"><span class="pre">LPOPRPUSH</span></code> 实现，它保证了 <code class="docutils literal notranslate"><span class="pre">LPOP</span></code> 和 <code class="docutils literal notranslate"><span class="pre">RPUSH</span></code> 两个操作的原子性，可以在任何情况下正确地执行工作：</p>
-<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="c1">-- safe_lpoprpush.lua</span>
+<p>上一节的 <code class="docutils literal"><span class="pre">LPOPRPUSH</span></code> 实现在通常情况下可以达到我们想要的效果，但是它并不是一个原子性操作，没有提供安全性方面的保证。</p>
+<p>举个例子，假如客户端在执行 <code class="docutils literal"><span class="pre">client:lpop(source)</span></code> 之后失败，那么被弹出的 <code class="docutils literal"><span class="pre">item</span></code> 元素就会白白丢失，无法被 <code class="docutils literal"><span class="pre">RPUSH</span></code> 命令推入到 <code class="docutils literal"><span class="pre">destination</span></code> 列表。</p>
+<p>为了将 <code class="docutils literal"><span class="pre">LPOPRPUSH</span></code> 函数修改成一个原子性操作，我们不仅需要 <code class="docutils literal"><span class="pre">MULTI</span></code> 和 <code class="docutils literal"><span class="pre">EXEC</span></code> ，而且因为 <code class="docutils literal"><span class="pre">LPOPRPUSH</span></code> 是一个 CAS (check-and-set, 检查并修改)类型的操作，我们还需要用上 <code class="docutils literal"><span class="pre">WATCH</span></code> 来监视 <code class="docutils literal"><span class="pre">source</span></code> 和 <code class="docutils literal"><span class="pre">destination</span></code> 列表。</p>
+<p>以下是新的 <code class="docutils literal"><span class="pre">LPOPRPUSH</span></code> 实现，它保证了 <code class="docutils literal"><span class="pre">LPOP</span></code> 和 <code class="docutils literal"><span class="pre">RPUSH</span></code> 两个操作的原子性，可以在任何情况下正确地执行工作：</p>
+<div class="highlight-lua"><div class="highlight"><pre><span></span><span class="c1">-- safe_lpoprpush.lua</span>
 
 <span class="kd">local</span> <span class="n">redis</span> <span class="o">=</span> <span class="nb">require</span> <span class="s1">&#39;redis&#39;</span>
 <span class="kd">local</span> <span class="n">client</span> <span class="o">=</span> <span class="n">redis</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">6379</span><span class="p">)</span>
@@ -233,37 +241,37 @@
 </div>
 <div class="section" id="redis-2-6">
 <h2>Redis 在 2.6 版本以前的问题<a class="headerlink" href="#redis-2-6" title="Permalink to this headline">¶</a></h2>
-<p>将前面的第一版(不安全的) <code class="docutils literal notranslate"><span class="pre">LPOPRPUSH</span></code> 和第二版(安全的) <code class="docutils literal notranslate"><span class="pre">LPOPRPUSH</span></code> 放在一起进行对比是一个很有教益的练习，我们可以从中提炼出两个版本之间的一些共性和问题，比如说：</p>
+<p>将前面的第一版(不安全的) <code class="docutils literal"><span class="pre">LPOPRPUSH</span></code> 和第二版(安全的) <code class="docutils literal"><span class="pre">LPOPRPUSH</span></code> 放在一起进行对比是一个很有教益的练习，我们可以从中提炼出两个版本之间的一些共性和问题，比如说：</p>
 <ol class="arabic simple">
-<li><p>两个版本使用的核心命令是完全一样的(不包括事务方面的命令)</p></li>
-<li><p>因为第一版没办法保证原子性，所以就有了第二版</p></li>
-<li><p>第二版使用 <code class="docutils literal notranslate"><span class="pre">WATCH</span></code> 、 <code class="docutils literal notranslate"><span class="pre">MULTI</span></code> 和 <code class="docutils literal notranslate"><span class="pre">EXEC</span></code> 保证了原子性，并成功将代码量上升了一倍！</p></li>
+<li>两个版本使用的核心命令是完全一样的(不包括事务方面的命令)</li>
+<li>因为第一版没办法保证原子性，所以就有了第二版</li>
+<li>第二版使用 <code class="docutils literal"><span class="pre">WATCH</span></code> 、 <code class="docutils literal"><span class="pre">MULTI</span></code> 和 <code class="docutils literal"><span class="pre">EXEC</span></code> 保证了原子性，并成功将代码量上升了一倍！</li>
 </ol>
-<p>另一方面，当涉及到 <code class="docutils literal notranslate"><span class="pre">WATCH</span></code> 命令的使用时，又牵扯出了以下问题：</p>
+<p>另一方面，当涉及到 <code class="docutils literal"><span class="pre">WATCH</span></code> 命令的使用时，又牵扯出了以下问题：</p>
 <ol class="arabic simple" start="4">
-<li><p>多条命令在客户端和服务器之间跑来跑去，非常浪费带宽和时间</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">WATCH</span></code> 在业务高峰时期，会对吞吐量产生很大影响，因为失败的情况可能会发生得很频繁</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">WATCH</span></code> 的使用很容易出错(因为 Lua 的 <code class="docutils literal notranslate"><span class="pre">transaction</span></code> 函数可以指定要监视的键，所以出错的可能比较少，但是在另外一些语言，比如 Ruby 和 Python 中，如果不小心将 <code class="docutils literal notranslate"><span class="pre">WATCH</span></code> 放错了地方，就会引入很隐晦的竞争条件)</p></li>
+<li>多条命令在客户端和服务器之间跑来跑去，非常浪费带宽和时间</li>
+<li><code class="docutils literal"><span class="pre">WATCH</span></code> 在业务高峰时期，会对吞吐量产生很大影响，因为失败的情况可能会发生得很频繁</li>
+<li><code class="docutils literal"><span class="pre">WATCH</span></code> 的使用很容易出错(因为 Lua 的 <code class="docutils literal"><span class="pre">transaction</span></code> 函数可以指定要监视的键，所以出错的可能比较少，但是在另外一些语言，比如 Ruby 和 Python 中，如果不小心将 <code class="docutils literal"><span class="pre">WATCH</span></code> 放错了地方，就会引入很隐晦的竞争条件)</li>
 </ol>
-<p>需要注意的是，以上的这些问题并不是一个特例，它们是一大类 CAS 操作的共同难题，在一些(稍微)比较复杂的 Redis 模式中，这些问题并不罕见，究其原因，是因为在 2.6 版本以前， Redis 缺少一种自己的内嵌语言，因此即使像条件判断这样的简单操作，也要交由客户端去完成，而一旦命令需要在服务器和客户端两边来回处理的话，原子性又成了一个严峻的问题：在旧版 Redis 中， <code class="docutils literal notranslate"><span class="pre">WATCH</span></code> 和事务常常被用在很多不该用的地方，而初衷仅仅是为了保证原子性(上面的 <code class="docutils literal notranslate"><span class="pre">LPOPRPUSH</span></code> 实现就是一个很好的例子)。</p>
-<p>幸运的是，随着 Redis 2.6 版本的出现，这种对 <code class="docutils literal notranslate"><span class="pre">WATCH</span></code> 和事务的滥用即将走向终点，因为在 Redis 2.6 版本中，新添加了对 Lua 脚本的支持，从而让我们可以将条件判断这类简单的操作和对 Redis 命令的调用都放到 Redis 服务器里完成，而这一切，仅仅需要一个 <code class="docutils literal notranslate"><span class="pre">EVAL</span></code> 命令。</p>
+<p>需要注意的是，以上的这些问题并不是一个特例，它们是一大类 CAS 操作的共同难题，在一些(稍微)比较复杂的 Redis 模式中，这些问题并不罕见，究其原因，是因为在 2.6 版本以前， Redis 缺少一种自己的内嵌语言，因此即使像条件判断这样的简单操作，也要交由客户端去完成，而一旦命令需要在服务器和客户端两边来回处理的话，原子性又成了一个严峻的问题：在旧版 Redis 中， <code class="docutils literal"><span class="pre">WATCH</span></code> 和事务常常被用在很多不该用的地方，而初衷仅仅是为了保证原子性(上面的 <code class="docutils literal"><span class="pre">LPOPRPUSH</span></code> 实现就是一个很好的例子)。</p>
+<p>幸运的是，随着 Redis 2.6 版本的出现，这种对 <code class="docutils literal"><span class="pre">WATCH</span></code> 和事务的滥用即将走向终点，因为在 Redis 2.6 版本中，新添加了对 Lua 脚本的支持，从而让我们可以将条件判断这类简单的操作和对 Redis 命令的调用都放到 Redis 服务器里完成，而这一切，仅仅需要一个 <code class="docutils literal"><span class="pre">EVAL</span></code> 命令。</p>
 </div>
 <div class="section" id="eval">
 <h2>EVAL<a class="headerlink" href="#eval" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference external" href="http://redis.readthedocs.org/en/latest/script/eval.html">EVAL</a> 是 Redis 2.6 版本新增命令的其中一个，同时也是最重要的一个，通过这个命令，可以直观、优雅且高效地解决像 <code class="docutils literal notranslate"><span class="pre">LPOPRPUSH</span></code> 这类 CAS 问题，文章稍后就会给出用脚本实现 <code class="docutils literal notranslate"><span class="pre">LPOPRPUSH</span></code> 的代码，但在此之前，不妨先来简单认识一下 <code class="docutils literal notranslate"><span class="pre">EVAL</span></code> 命令。</p>
-<p><code class="docutils literal notranslate"><span class="pre">EVAL</span></code> 命令的调用形式是 <code class="docutils literal notranslate"><span class="pre">EVAL</span> <span class="pre">script</span> <span class="pre">numkeys</span> <span class="pre">key</span> <span class="pre">[key</span> <span class="pre">...]</span> <span class="pre">arg</span> <span class="pre">[arg</span> <span class="pre">..]</span></code> ，它的参数分别是：</p>
-<p><code class="docutils literal notranslate"><span class="pre">script</span></code> ：一段 Lua 脚本代码(Lua 5.1版本)
-<code class="docutils literal notranslate"><span class="pre">numkeys</span></code> ：用于指定键名参数(key name args)的个数
-<code class="docutils literal notranslate"><span class="pre">key</span> <span class="pre">[key</span> <span class="pre">...]</span></code> ：键名参数，在 Lua 中调用 Redis 命令时，那些被执行命令的键，可以在 Lua 脚本中通过全局数组 <code class="docutils literal notranslate"><span class="pre">KEYS</span></code> 来访问这些键名参数(数组下标以 <code class="docutils literal notranslate"><span class="pre">1</span></code> 为起始值)
-<code class="docutils literal notranslate"><span class="pre">arg</span> <span class="pre">[arg</span> <span class="pre">...]</span></code> ：附加参数，当在 Lua 中执行 Redis 命令时，用作命令的参数，可以在 Lua 脚本中通过全局数组 <code class="docutils literal notranslate"><span class="pre">ARGV</span></code> 来访问这些附加参数(数组下标以 <code class="docutils literal notranslate"><span class="pre">1</span></code> 为起始值)</p>
-<p><code class="docutils literal notranslate"><span class="pre">script</span></code> 参数和 <code class="docutils literal notranslate"><span class="pre">numkeys</span></code> 参数是必须的，通过给定一个脚本，并且将 <code class="docutils literal notranslate"><span class="pre">numkeys</span></code> 设为 <code class="docutils literal notranslate"><span class="pre">0</span></code> ，我们就可以用 <code class="docutils literal notranslate"><span class="pre">EVAL</span></code> 命令来执行简单的 Lua 求值了：</p>
-<p>先用 <code class="docutils literal notranslate"><span class="pre">EVAL</span></code> 来个传统问候吧：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">EVAL</span> <span class="s2">&quot;return &#39;hello world&#39;&quot;</span> <span class="mi">0</span>
+<p><a class="reference external" href="http://redis.readthedocs.org/en/latest/script/eval.html">EVAL</a> 是 Redis 2.6 版本新增命令的其中一个，同时也是最重要的一个，通过这个命令，可以直观、优雅且高效地解决像 <code class="docutils literal"><span class="pre">LPOPRPUSH</span></code> 这类 CAS 问题，文章稍后就会给出用脚本实现 <code class="docutils literal"><span class="pre">LPOPRPUSH</span></code> 的代码，但在此之前，不妨先来简单认识一下 <code class="docutils literal"><span class="pre">EVAL</span></code> 命令。</p>
+<p><code class="docutils literal"><span class="pre">EVAL</span></code> 命令的调用形式是 <code class="docutils literal"><span class="pre">EVAL</span> <span class="pre">script</span> <span class="pre">numkeys</span> <span class="pre">key</span> <span class="pre">[key</span> <span class="pre">...]</span> <span class="pre">arg</span> <span class="pre">[arg</span> <span class="pre">..]</span></code> ，它的参数分别是：</p>
+<p><code class="docutils literal"><span class="pre">script</span></code> ：一段 Lua 脚本代码(Lua 5.1版本)
+<code class="docutils literal"><span class="pre">numkeys</span></code> ：用于指定键名参数(key name args)的个数
+<code class="docutils literal"><span class="pre">key</span> <span class="pre">[key</span> <span class="pre">...]</span></code> ：键名参数，在 Lua 中调用 Redis 命令时，那些被执行命令的键，可以在 Lua 脚本中通过全局数组 <code class="docutils literal"><span class="pre">KEYS</span></code> 来访问这些键名参数(数组下标以 <code class="docutils literal"><span class="pre">1</span></code> 为起始值)
+<code class="docutils literal"><span class="pre">arg</span> <span class="pre">[arg</span> <span class="pre">...]</span></code> ：附加参数，当在 Lua 中执行 Redis 命令时，用作命令的参数，可以在 Lua 脚本中通过全局数组 <code class="docutils literal"><span class="pre">ARGV</span></code> 来访问这些附加参数(数组下标以 <code class="docutils literal"><span class="pre">1</span></code> 为起始值)</p>
+<p><code class="docutils literal"><span class="pre">script</span></code> 参数和 <code class="docutils literal"><span class="pre">numkeys</span></code> 参数是必须的，通过给定一个脚本，并且将 <code class="docutils literal"><span class="pre">numkeys</span></code> 设为 <code class="docutils literal"><span class="pre">0</span></code> ，我们就可以用 <code class="docutils literal"><span class="pre">EVAL</span></code> 命令来执行简单的 Lua 求值了：</p>
+<p>先用 <code class="docutils literal"><span class="pre">EVAL</span></code> 来个传统问候吧：</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">EVAL</span> <span class="s2">&quot;return &#39;hello world&#39;&quot;</span> <span class="mi">0</span>
 <span class="s2">&quot;hello world&quot;</span>
 </pre></div>
 </div>
 <p>然后做做初等数学计算：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">EVAL</span> <span class="s2">&quot;return 1 + 1&quot;</span> <span class="mi">0</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">EVAL</span> <span class="s2">&quot;return 1 + 1&quot;</span> <span class="mi">0</span>
 <span class="p">(</span><span class="n">integer</span><span class="p">)</span> <span class="mi">2</span>
 
 <span class="n">redis</span><span class="o">&gt;</span> <span class="n">EVAL</span> <span class="s2">&quot;return 10/2&quot;</span> <span class="mi">0</span>
@@ -271,13 +279,13 @@
 </pre></div>
 </div>
 <p>又或者，来点儿条件判断式：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">EVAL</span> <span class="s2">&quot;if 1 == 1 then return &#39;good&#39; else return &#39;bad&#39; end&quot;</span> <span class="mi">0</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">EVAL</span> <span class="s2">&quot;if 1 == 1 then return &#39;good&#39; else return &#39;bad&#39; end&quot;</span> <span class="mi">0</span>
 <span class="s2">&quot;good&quot;</span>
 </pre></div>
 </div>
-<p>当然， <code class="docutils literal notranslate"><span class="pre">EVAL</span></code> 的真正威力不仅仅是写写 Lua 表达式那么简单，更关键的是，你可以使用 <code class="docutils literal notranslate"><span class="pre">redis.call</span></code> 函数，在 Lua 环境中执行 Redis 命令。</p>
-<p>以下是两个 <code class="docutils literal notranslate"><span class="pre">SET</span></code> 和 <code class="docutils literal notranslate"><span class="pre">GET</span></code> 的例子：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">EVAL</span> <span class="s2">&quot;return redis.call(&#39;set&#39;, KEYS[1], ARGV[1])&quot;</span> <span class="mi">1</span> <span class="n">message</span> <span class="s2">&quot;hello, moto&quot;</span>
+<p>当然， <code class="docutils literal"><span class="pre">EVAL</span></code> 的真正威力不仅仅是写写 Lua 表达式那么简单，更关键的是，你可以使用 <code class="docutils literal"><span class="pre">redis.call</span></code> 函数，在 Lua 环境中执行 Redis 命令。</p>
+<p>以下是两个 <code class="docutils literal"><span class="pre">SET</span></code> 和 <code class="docutils literal"><span class="pre">GET</span></code> 的例子：</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">EVAL</span> <span class="s2">&quot;return redis.call(&#39;set&#39;, KEYS[1], ARGV[1])&quot;</span> <span class="mi">1</span> <span class="n">message</span> <span class="s2">&quot;hello, moto&quot;</span>
 <span class="n">OK</span>
 
 <span class="n">redis</span><span class="o">&gt;</span> <span class="n">EVAL</span> <span class="s2">&quot;return redis.call(&#39;get&#39;, KEYS[1])&quot;</span> <span class="mi">1</span> <span class="n">message</span>
@@ -285,7 +293,7 @@
 </pre></div>
 </div>
 <p>这两个脚本和以下的 Redis 命令等价：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">SET</span> <span class="n">message</span> <span class="s2">&quot;hello, moto&quot;</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">SET</span> <span class="n">message</span> <span class="s2">&quot;hello, moto&quot;</span>
 <span class="n">OK</span>
 
 <span class="n">redis</span><span class="o">&gt;</span> <span class="n">GET</span> <span class="n">message</span>
@@ -293,7 +301,7 @@
 </pre></div>
 </div>
 <p>以下是另外一个集合的例子：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">EVAL</span> <span class="s2">&quot;return redis.call(&#39;sadd&#39;, KEYS[1], ARGV[1])&quot;</span> <span class="mi">1</span> <span class="n">animal</span> <span class="n">snake</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">EVAL</span> <span class="s2">&quot;return redis.call(&#39;sadd&#39;, KEYS[1], ARGV[1])&quot;</span> <span class="mi">1</span> <span class="n">animal</span> <span class="n">snake</span>
 <span class="p">(</span><span class="n">integer</span><span class="p">)</span> <span class="mi">1</span>
 
 <span class="n">redis</span><span class="o">&gt;</span> <span class="n">EVAL</span> <span class="s2">&quot;return redis.call(&#39;sadd&#39;, KEYS[1], unpack(ARGV))&quot;</span> <span class="mi">1</span> <span class="n">animal</span> <span class="n">wolf</span> <span class="n">lion</span> <span class="n">tiger</span>
@@ -301,7 +309,7 @@
 </pre></div>
 </div>
 <p>它和以下这两个命令等价：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">SADD</span> <span class="n">animal</span> <span class="n">snake</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">SADD</span> <span class="n">animal</span> <span class="n">snake</span>
 <span class="p">(</span><span class="n">integer</span><span class="p">)</span> <span class="mi">1</span>
 
 <span class="n">redis</span><span class="o">&gt;</span> <span class="n">SADD</span> <span class="n">animal</span> <span class="n">wolf</span> <span class="n">lion</span> <span class="n">tiger</span>
@@ -309,44 +317,44 @@
 </pre></div>
 </div>
 <p>键名参数并不一定总是只能有一个，比如说，在执行 [RENAME](<a class="reference external" href="http://redis.readthedocs.org/en/latest/key/rename.html">http://redis.readthedocs.org/en/latest/key/rename.html</a>) 命令的时候，就需要两个键名参数：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">EVAL</span> <span class="s2">&quot;return redis.call(&#39;rename&#39;, KEYS[1], KEYS[2])&quot;</span> <span class="mi">2</span> <span class="n">old_name</span> <span class="n">new_name</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">EVAL</span> <span class="s2">&quot;return redis.call(&#39;rename&#39;, KEYS[1], KEYS[2])&quot;</span> <span class="mi">2</span> <span class="n">old_name</span> <span class="n">new_name</span>
 <span class="n">OK</span>
 </pre></div>
 </div>
 <p>这个脚本和以下命令等价：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">rename</span> <span class="n">old_name</span> <span class="n">new_name</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">rename</span> <span class="n">old_name</span> <span class="n">new_name</span>
 <span class="n">OK</span>
 </pre></div>
 </div>
-<p>关于 <code class="docutils literal notranslate"><span class="pre">EVAL</span></code> 命令的使用，最后要提醒的一点是，应该总是通过 <code class="docutils literal notranslate"><span class="pre">KEYS</span></code> 和 <code class="docutils literal notranslate"><span class="pre">ARGV</span></code> 两个变量来访问相应的键和参数，不要将键名和命令参数硬写到脚本里面，这会导致脚本无法使用 <code class="docutils literal notranslate"><span class="pre">EVALSHA</span></code> 命令来优化，也没有办法被 Redis 集群所执行。</p>
+<p>关于 <code class="docutils literal"><span class="pre">EVAL</span></code> 命令的使用，最后要提醒的一点是，应该总是通过 <code class="docutils literal"><span class="pre">KEYS</span></code> 和 <code class="docutils literal"><span class="pre">ARGV</span></code> 两个变量来访问相应的键和参数，不要将键名和命令参数硬写到脚本里面，这会导致脚本无法使用 <code class="docutils literal"><span class="pre">EVALSHA</span></code> 命令来优化，也没有办法被 Redis 集群所执行。</p>
 <p>这是一个典型的坏例子，不要这样做(尽管它可能暂时是可用的)：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">EVAL</span> <span class="s2">&quot;return redis.call(&#39;rpush&#39;, &#39;language&#39;, &#39;ruby&#39;, &#39;python&#39;, &#39;lua&#39;)&quot;</span> <span class="mi">0</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">EVAL</span> <span class="s2">&quot;return redis.call(&#39;rpush&#39;, &#39;language&#39;, &#39;ruby&#39;, &#39;python&#39;, &#39;lua&#39;)&quot;</span> <span class="mi">0</span>
 <span class="p">(</span><span class="n">integer</span><span class="p">)</span> <span class="mi">3</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="id4">
 <h2>LPOPRPUSH 的脚本实现<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
-<p>在上一节，我们介绍了 <code class="docutils literal notranslate"><span class="pre">EVAL</span></code> 的两个特性：</p>
+<p>在上一节，我们介绍了 <code class="docutils literal"><span class="pre">EVAL</span></code> 的两个特性：</p>
 <ol class="arabic simple">
-<li><p>可以使用 <code class="docutils literal notranslate"><span class="pre">EVAL</span></code> 命令对 Lua 脚本进行求值</p></li>
-<li><p>可以在 Lua 脚本里面使用 <code class="docutils literal notranslate"><span class="pre">redis.call</span></code> 执行 Redis 命令</p></li>
+<li>可以使用 <code class="docutils literal"><span class="pre">EVAL</span></code> 命令对 Lua 脚本进行求值</li>
+<li>可以在 Lua 脚本里面使用 <code class="docutils literal"><span class="pre">redis.call</span></code> 执行 Redis 命令</li>
 </ol>
-<p>如果将这两个特性组合起来使用，就可以实现一些有趣的操作，比如说，我们可以写一个脚本，它只在键不存在的情况下对键执行 <code class="docutils literal notranslate"><span class="pre">SET</span></code> 命令，就像 Redis 的 <code class="docutils literal notranslate"><span class="pre">SETNX</span></code> 命令一样：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">EVAL</span> <span class="s2">&quot;if redis.call(&#39;exists&#39;, KEYS[1]) == 0 then return redis.call(&#39;set&#39;, KEYS[1], ARGV[1]) end&quot;</span> <span class="mi">1</span> <span class="n">date</span> <span class="mf">2012.4</span><span class="o">.</span><span class="mi">4</span>
+<p>如果将这两个特性组合起来使用，就可以实现一些有趣的操作，比如说，我们可以写一个脚本，它只在键不存在的情况下对键执行 <code class="docutils literal"><span class="pre">SET</span></code> 命令，就像 Redis 的 <code class="docutils literal"><span class="pre">SETNX</span></code> 命令一样：</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">EVAL</span> <span class="s2">&quot;if redis.call(&#39;exists&#39;, KEYS[1]) == 0 then return redis.call(&#39;set&#39;, KEYS[1], ARGV[1]) end&quot;</span> <span class="mi">1</span> <span class="n">date</span> <span class="mf">2012.4</span><span class="o">.</span><span class="mi">4</span>
 <span class="n">OK</span>
 
 <span class="n">redis</span><span class="o">&gt;</span> <span class="n">EVAL</span> <span class="s2">&quot;if redis.call(&#39;exists&#39;, KEYS[1]) == 0 then return redis.call(&#39;set&#39;, KEYS[1], ARGV[1]) end&quot;</span> <span class="mi">1</span> <span class="n">date</span> <span class="mf">2012.4</span><span class="o">.</span><span class="mi">4</span>
 <span class="p">(</span><span class="n">nil</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>上面执行的脚本也是一个典型的 CAS 操作，它先检查一个键是否存在，然后根据反馈决定该怎么处理给定的键。如果在客户端执行 <code class="docutils literal notranslate"><span class="pre">EVAL</span></code> 里面的那一段代码，那可以肯定它是不是原子性操作，但是，在 <code class="docutils literal notranslate"><span class="pre">EVAL</span></code> 命令中，这个脚本并不会产生安全问题 —— 这是因为， <code class="docutils literal notranslate"><span class="pre">EVAL</span></code> 的执行是原子性的，这也是你需要知道的，关于 <code class="docutils literal notranslate"><span class="pre">EVAL</span></code> 的，第三个特性：</p>
+<p>上面执行的脚本也是一个典型的 CAS 操作，它先检查一个键是否存在，然后根据反馈决定该怎么处理给定的键。如果在客户端执行 <code class="docutils literal"><span class="pre">EVAL</span></code> 里面的那一段代码，那可以肯定它是不是原子性操作，但是，在 <code class="docutils literal"><span class="pre">EVAL</span></code> 命令中，这个脚本并不会产生安全问题 —— 这是因为， <code class="docutils literal"><span class="pre">EVAL</span></code> 的执行是原子性的，这也是你需要知道的，关于 <code class="docutils literal"><span class="pre">EVAL</span></code> 的，第三个特性：</p>
 <ol class="arabic simple" start="3">
-<li><p>Redis 保证被 <code class="docutils literal notranslate"><span class="pre">EVAL</span></code> 命令所执行的脚本的原子性：当一个脚本正在运行的时候，不会有别的脚本或者别的 Redis 命令被执行。而当前所运行脚本的作用(effect)要么是不可见的(not visible)，要么就是已完成的(completed)。</p></li>
+<li>Redis 保证被 <code class="docutils literal"><span class="pre">EVAL</span></code> 命令所执行的脚本的原子性：当一个脚本正在运行的时候，不会有别的脚本或者别的 Redis 命令被执行。而当前所运行脚本的作用(effect)要么是不可见的(not visible)，要么就是已完成的(completed)。</li>
 </ol>
-<p>这样一来，在 Redis 2.6 版本以前一直困扰我们的很多 CAS 类型的问题，一下子就不复存在了：因为只要简单地将操作写成脚本，然后放到 <code class="docutils literal notranslate"><span class="pre">EVAL</span></code> 命令里运行，这样就再也不必担心原子性的问题了，也可以从此跟麻烦的 <code class="docutils literal notranslate"><span class="pre">WATCH</span></code> 命令说再见了。</p>
-<p>作为一个演示 <code class="docutils literal notranslate"><span class="pre">EVAL</span></code> 真正威力的例子，我们回过头来，使用脚本实现之前讨论的 <code class="docutils literal notranslate"><span class="pre">LPOPRPUSH</span></code> 操作：</p>
-<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="c1">-- script_lpoprpush.lua</span>
+<p>这样一来，在 Redis 2.6 版本以前一直困扰我们的很多 CAS 类型的问题，一下子就不复存在了：因为只要简单地将操作写成脚本，然后放到 <code class="docutils literal"><span class="pre">EVAL</span></code> 命令里运行，这样就再也不必担心原子性的问题了，也可以从此跟麻烦的 <code class="docutils literal"><span class="pre">WATCH</span></code> 命令说再见了。</p>
+<p>作为一个演示 <code class="docutils literal"><span class="pre">EVAL</span></code> 真正威力的例子，我们回过头来，使用脚本实现之前讨论的 <code class="docutils literal"><span class="pre">LPOPRPUSH</span></code> 操作：</p>
+<div class="highlight-lua"><div class="highlight"><pre><span></span><span class="c1">-- script_lpoprpush.lua</span>
 
 <span class="kd">local</span> <span class="n">redis</span> <span class="o">=</span> <span class="nb">require</span> <span class="s1">&#39;redis&#39;</span>
 <span class="kd">local</span> <span class="n">client</span> <span class="o">=</span> <span class="n">redis</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">6379</span><span class="p">)</span>
@@ -364,15 +372,15 @@
 <span class="kr">end</span>
 </pre></div>
 </div>
-<p>我们可以将三个版本的 <code class="docutils literal notranslate"><span class="pre">LPOPRPUSH</span></code> 放在一起进行对比：</p>
+<p>我们可以将三个版本的 <code class="docutils literal"><span class="pre">LPOPRPUSH</span></code> 放在一起进行对比：</p>
 <p>第一个版本是最简单的，但是它保证不了原子性。</p>
-<p>第二个版本通过使用事务和 <code class="docutils literal notranslate"><span class="pre">WATCH</span></code> 保证了操作的原子性，但是也因此引入了很多不必要的复杂性。</p>
-<p>第三个版本既保持了第一个版本的简单性(几乎就是客户端代码到 <code class="docutils literal notranslate"><span class="pre">redis.call</span></code> 函数的翻译)，在兼顾原子性的同时，又没有像第二版那样的不必要的复杂性，毫无疑问， <code class="docutils literal notranslate"><span class="pre">LPOPRPUSH</span></code> 的这个脚本实现是简单、高效而且优美的。</p>
-<p>更重要的是，除了 <code class="docutils literal notranslate"><span class="pre">LPOPRPUSH</span></code> 之外，一大类 CAS 操作也可以用脚本的方式来解决，随着 Redis 2.6 版本的普及，可以预见的是，越来越多以前使用 <code class="docutils literal notranslate"><span class="pre">WATCH</span></code> 和事务来保证原子性的模式会逐渐被脚本实现所代替，更多有趣的新脚本模式也会陆续出现，这毫无疑问是非常让人期待的。</p>
+<p>第二个版本通过使用事务和 <code class="docutils literal"><span class="pre">WATCH</span></code> 保证了操作的原子性，但是也因此引入了很多不必要的复杂性。</p>
+<p>第三个版本既保持了第一个版本的简单性(几乎就是客户端代码到 <code class="docutils literal"><span class="pre">redis.call</span></code> 函数的翻译)，在兼顾原子性的同时，又没有像第二版那样的不必要的复杂性，毫无疑问， <code class="docutils literal"><span class="pre">LPOPRPUSH</span></code> 的这个脚本实现是简单、高效而且优美的。</p>
+<p>更重要的是，除了 <code class="docutils literal"><span class="pre">LPOPRPUSH</span></code> 之外，一大类 CAS 操作也可以用脚本的方式来解决，随着 Redis 2.6 版本的普及，可以预见的是，越来越多以前使用 <code class="docutils literal"><span class="pre">WATCH</span></code> 和事务来保证原子性的模式会逐渐被脚本实现所代替，更多有趣的新脚本模式也会陆续出现，这毫无疑问是非常让人期待的。</p>
 </div>
 <div class="section" id="id5">
 <h2>更多<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
-<p>关于 Redis 2.6 版本新增的脚本功能，这篇文章只是谈了其中的一小部分，很多有趣的特性因为篇幅关系都未能在文章里提及：比如使用 <code class="docutils literal notranslate"><span class="pre">EVALSHA</span></code> 优化带宽、使用 <code class="docutils literal notranslate"><span class="pre">SCRIPT</span> <span class="pre">*</span></code> 命令控制脚本缓存、脚本的沙箱和最大执行时间等等，关于这些特性，可以参考 Redis 的官方文档。</p>
+<p>关于 Redis 2.6 版本新增的脚本功能，这篇文章只是谈了其中的一小部分，很多有趣的特性因为篇幅关系都未能在文章里提及：比如使用 <code class="docutils literal"><span class="pre">EVALSHA</span></code> 优化带宽、使用 <code class="docutils literal"><span class="pre">SCRIPT</span> <span class="pre">*</span></code> 命令控制脚本缓存、脚本的沙箱和最大执行时间等等，关于这些特性，可以参考 Redis 的官方文档。</p>
 <div class="line-block">
 <div class="line">huangz</div>
 <div class="line">2012.4.4</div>
@@ -393,7 +401,7 @@
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
     </p>
   </div>
 </footer>

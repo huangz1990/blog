@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Go 语言简述 &#8212; blog.huangz.me</title>
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     'present',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="《Go语言趣学指南》适合你吗？" href="gpwg-target-reader.html" />
+    <link rel="prev" title="2020" href="index.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js "></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          blog.huangz.me</a>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">全站 <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">2020</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../2019/index.html">2019</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../2018/index.html">2018</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../2017/index.html">2017</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../diary/2016/index.html">2016</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../diary/2015/index.html">2015</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../diary/2014/index.html">2014</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../diary/2013/index.html">2013</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../diary/2012/index.html">2012</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">分页 <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Go 语言简述</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="index.html" title="Previous Chapter: 2020"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; 2020</span>
+    </a>
+  </li>
+  <li>
+    <a href="gpwg-target-reader.html" title="Next Chapter: 《Go语言趣学指南》适合你吗？"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">《Go语言趣学指南》适合你吗？ &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <div class="section" id="go">
+<h1>Go 语言简述<a class="headerlink" href="#go" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>本文摘录自《Go语言趣学指南》的第 1 章《各就各位，预备，Go！》，
+请访问 <a class="reference external" href="http://gpwgcn.com">gpwgcn.com</a>  以获取更多相关信息。</p>
+<a class="last reference internal image-reference" href="../_images/gpwgcn1.jpg"><img alt="../_images/gpwgcn1.jpg" src="../_images/gpwgcn1.jpg" style="width: 149.6px; height: 188.0px;" /></a>
+</div>
+<p>Go 是一门<em>编译</em>语言。 在运行程序之前，Go
+首先需要使用<em>编译器</em>将用户编写的代码转化为计算机能够理解的 0 和 1 。
+为了便于执行和分发，编译器还会把所有代码整合并编译成一个单独的<em>可执行文件</em>。
+在编译的过程中，Go
+编译器能够捕捉到程序中包括拼写错误在内的一些人为失误。</p>
+<p>并非所有编程语言都需要编译才能运行，比如 Python 、 Ruby
+和其他一些流行语言就选择了在程序运行的时候，通过<em>解释器</em>一条接一条地转化代码中的声明，但这也意味着
+bug 可能会隐藏在测试尚未尝触及到的代码当中。</p>
+<p>不过换个角度来看，解释器不仅能够让开发过程变得迅速且具有交互性，还能够让语言本身变得灵活、轻松和令人愉快。
+相反地，编译语言却常常因为像机器人一样顽固不化、墨守成规而广为人知，并且缓慢的编译速度也常常为人所诟病，然而实际上并非所有编译语言都是如此。</p>
+<blockquote>
+<div>我们想要构造出这样一种语言， 它不仅可以像 C++ 和 Java
+这类静态编译语言一样安全、高效， 并且还可以像 Python
+这类动态类型解释语言一样身轻如燕并且充满乐趣。 —— Rob
+Pike，《极客周刊》（详情请见 <a class="reference external" href="mng.bz/jr8y">mng.bz/jr8y</a>）</div></blockquote>
+<p>Go 在考虑软件开发的<em>体验</em>方面可谓煞费苦心。
+首先，即使是大型程序的编译也可以在极短的时间内完成，并且只需要用到一条命令。
+其次，语言排除了那些可能会导致歧义的特性，鼓励可预测和简明易懂的代码。
+最后，Go 为 Java 等传统语言死板的数据结构提供了轻量级的替代品。</p>
+<blockquote>
+<div>Java 避免了 C++ 当中许多不常见、难懂和令人迷惑的特性，
+根据我们的经验， 这些特性带来的麻烦要比好处多得多。 —— James
+Gosling，《Java：概述》</div></blockquote>
+<p>每一种新编程语言都会对以往想法进行改良。 与早期语言相比，在 Go
+里面高效地使用内存将变得更为容易，出错的可能性也更低，并且 Go
+还能利用多核机器上的每个核心获得额外的性能优势。
+很多成功案例都会把性能提升列举为转向 Go 的其中一个原因。 比如根据
+<a class="reference external" href="http://mng.bz/Wevx">mng.bz/Wevx</a> 和
+<a class="reference external" href="http://mng.bz/8yo2">mng.bz/8yo2</a>
+的记载，<a class="reference external" href="http://Iron.io">Iron.io</a> 只用了 2 台 Go
+服务器就替换掉了他们原来使用的 30 台 Ruby 服务器； 而根据
+<a class="reference external" href="http://mng.bz/EnYl">mng.bz/EnYl</a>
+的记载，<a class="reference external" href="https://bitly.com/">Bitly</a> 在使用 Go 重写原有的 Python
+应用之后也获得了持续、可测量的性能提升，这导致他们在之后把自己的 C
+应用也“更新换代”成了相应的 Go 版本（详情请见
+<a class="reference external" href="https://mng.bz/EnYl">mng.bz/EnYl</a>）。</p>
+<p>Go
+不仅像解释语言一样简单和有趣，它还拥有编译语言快如闪电的性能优势以及坚如磐石的可靠性，并且由于
+Go 是一门只包含几种简单概念的小型语言，所以它学习起来也相对比较快。
+终上所述，我们就得出了以下 Go 箴言：</p>
+<blockquote>
+<div>Go 是一门开源编程语言，
+它可以大规模地生产出<strong>简单</strong>、<strong>高效</strong>并且<strong>可信赖</strong>的软件。
+—— 《Go 品牌手册》（Go Brand Book）</div></blockquote>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">当你在互联网上搜索 Go 的相关话题时， 可以使用关键字 golang
+来代表 Go 语言。 这种将 -lang
+后缀添加到语言名字之后的做法也适用于其他编程语言， 比如 Ruby 、 Rust
+等。</p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2020, 黄健宏.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

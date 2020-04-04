@@ -2,16 +2,23 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>使用 Redis 列表构建分页程序 &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     'present',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="对比 Redis 的字符串和散列" href="compare-string-and-hash.html" />
@@ -25,7 +32,8 @@
 <script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
 
-  </head><body>
+  </head>
+  <body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -119,8 +127,8 @@
   <div class="section" id="redis">
 <h1>使用 Redis 列表构建分页程序<a class="headerlink" href="#redis" title="Permalink to this headline">¶</a></h1>
 <div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>本文摘录自即将出版的《Redis使用手册》，
+<p class="first admonition-title">Note</p>
+<p class="last">本文摘录自即将出版的《Redis使用手册》，
 详情请见： <a class="reference external" href="http://RedisGuide.com">RedisGuide.com</a> 。</p>
 </div>
 <p>对于互联网上每一个具有一定规模的网站来说，
@@ -136,11 +144,11 @@
 <hr class="docutils" />
 <p>代码清单 4-2 展示了一个使用列表实现分页程序的方法，
 这个程序可以将给定的元素有序地放入到一个列表里面，
-然后使用 <code class="docutils literal notranslate"><span class="pre">LRANGE</span></code> 命令从列表中取出指定数量的元素，
+然后使用 <code class="docutils literal"><span class="pre">LRANGE</span></code> 命令从列表中取出指定数量的元素，
 从而实现分页这一概念。</p>
 <hr class="docutils" />
-<p>代码清单 4-2 使用列表实现的分页程序：<code class="docutils literal notranslate"><span class="pre">/list/paging.py</span></code></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Paging</span><span class="p">:</span>
+<p>代码清单 4-2 使用列表实现的分页程序：<code class="docutils literal"><span class="pre">/list/paging.py</span></code></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Paging</span><span class="p">:</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">client</span> <span class="o">=</span> <span class="n">client</span>
@@ -176,22 +184,22 @@
 <p>作为例子，
 我们可以通过执行以下代码，
 载入并创建出一个针对用户帖子的分页对象：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">redis</span> <span class="kn">import</span> <span class="n">Redis</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">redis</span> <span class="kn">import</span> <span class="n">Redis</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">paging</span> <span class="kn">import</span> <span class="n">Paging</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">client</span> <span class="o">=</span> <span class="n">Redis</span><span class="p">(</span><span class="n">decode_responses</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">topics</span> <span class="o">=</span> <span class="n">Paging</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="s2">&quot;user-topics&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>并使用数字 <code class="docutils literal notranslate"><span class="pre">1</span></code> 至 <code class="docutils literal notranslate"><span class="pre">19</span></code> 作为用户帖子的 ID ，
+<p>并使用数字 <code class="docutils literal"><span class="pre">1</span></code> 至 <code class="docutils literal"><span class="pre">19</span></code> 作为用户帖子的 ID ，
 将它们添加到分页列表里面：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">):</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">):</span>
 <span class="gp">... </span>  <span class="n">topics</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 <span class="gp">...</span>
 </pre></div>
 </div>
 <p>然后我们就可以使用分页程序，
 对这些帖子进行分页了：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">topics</span><span class="o">.</span><span class="n">get_page</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>   <span class="c1"># 以每页 5 个帖子的方式，取出第 1 页的帖子</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">topics</span><span class="o">.</span><span class="n">get_page</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>   <span class="c1"># 以每页 5 个帖子的方式，取出第 1 页的帖子</span>
 <span class="go">[&#39;19&#39;, &#39;18&#39;, &#39;17&#39;, &#39;16&#39;, &#39;15&#39;]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">topics</span><span class="o">.</span><span class="n">get_page</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>   <span class="c1"># 以每页 5 个帖子的方式，取出第 2 页的帖子</span>
 <span class="go">[&#39;14&#39;, &#39;13&#39;, &#39;12&#39;, &#39;11&#39;, &#39;10&#39;]</span>
@@ -202,7 +210,7 @@
 <p>最后，
 我们可以通过执行以下代码，
 取得分页列表目前包含的元素数量：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">topics</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">topics</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
 <span class="go">19</span>
 </pre></div>
 </div>
@@ -221,7 +229,7 @@
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
     </p>
   </div>
 </footer>

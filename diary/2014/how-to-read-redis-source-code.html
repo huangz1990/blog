@@ -2,16 +2,23 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>如何阅读 Redis 源码？ &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     'present',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="我进行翻译的方法" href="translation-method.html" />
@@ -25,7 +32,8 @@
 <script type="text/javascript" src="../../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../../_static/bootstrap-sphinx.js "></script>
 
-  </head><body>
+  </head>
+  <body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -139,34 +147,34 @@
 所以从这些文件开始读是最轻松的、难度也是最低的。</p>
 <p>下表列出了 Redis 源码中，
 各个数据结构的实现文件：</p>
-<table class="docutils align-default">
+<table border="1" class="docutils">
 <colgroup>
-<col style="width: 68%" />
-<col style="width: 32%" />
+<col width="68%" />
+<col width="32%" />
 </colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>文件</p></th>
-<th class="head"><p>内容</p></th>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">文件</th>
+<th class="head">内容</th>
 </tr>
 </thead>
-<tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sds.h</span></code> 和 <code class="docutils literal notranslate"><span class="pre">sds.c</span></code></p></td>
-<td><p>Redis 的动态字符串实现。</p></td>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">sds.h</span></code> 和 <code class="docutils literal"><span class="pre">sds.c</span></code></td>
+<td>Redis 的动态字符串实现。</td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">adlist.h</span></code> 和 <code class="docutils literal notranslate"><span class="pre">adlist.c</span></code></p></td>
-<td><p>Redis 的双端链表实现。</p></td>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">adlist.h</span></code> 和 <code class="docutils literal"><span class="pre">adlist.c</span></code></td>
+<td>Redis 的双端链表实现。</td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">dict.h</span></code> 和 <code class="docutils literal notranslate"><span class="pre">dict.c</span></code></p></td>
-<td><p>Redis 的字典实现。</p></td>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">dict.h</span></code> 和 <code class="docutils literal"><span class="pre">dict.c</span></code></td>
+<td>Redis 的字典实现。</td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">redis.h</span></code> 中的 <code class="docutils literal notranslate"><span class="pre">zskiplist</span></code> 结构和 <code class="docutils literal notranslate"><span class="pre">zskiplistNode</span></code> 结构，
-以及 <code class="docutils literal notranslate"><span class="pre">t_zset.c</span></code> 中所有以 <code class="docutils literal notranslate"><span class="pre">zsl</span></code> 开头的函数，
-比如 <code class="docutils literal notranslate"><span class="pre">zslCreate</span></code> 、 <code class="docutils literal notranslate"><span class="pre">zslInsert</span></code> 、 <code class="docutils literal notranslate"><span class="pre">zslDeleteNode</span></code> ，等等。</p></td>
-<td><p>Redis 的跳跃表实现。</p></td>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">redis.h</span></code> 中的 <code class="docutils literal"><span class="pre">zskiplist</span></code> 结构和 <code class="docutils literal"><span class="pre">zskiplistNode</span></code> 结构，
+以及 <code class="docutils literal"><span class="pre">t_zset.c</span></code> 中所有以 <code class="docutils literal"><span class="pre">zsl</span></code> 开头的函数，
+比如 <code class="docutils literal"><span class="pre">zslCreate</span></code> 、 <code class="docutils literal"><span class="pre">zslInsert</span></code> 、 <code class="docutils literal"><span class="pre">zslDeleteNode</span></code> ，等等。</td>
+<td>Redis 的跳跃表实现。</td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">hyperloglog.c</span></code> 中的 <code class="docutils literal notranslate"><span class="pre">hllhdr</span></code> 结构，
-以及所有以 <code class="docutils literal notranslate"><span class="pre">hll</span></code> 开头的函数。</p></td>
-<td><p>Redis 的 HyperLogLog 实现。</p></td>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">hyperloglog.c</span></code> 中的 <code class="docutils literal"><span class="pre">hllhdr</span></code> 结构，
+以及所有以 <code class="docutils literal"><span class="pre">hll</span></code> 开头的函数。</td>
+<td>Redis 的 HyperLogLog 实现。</td>
 </tr>
 </tbody>
 </table>
@@ -180,15 +188,15 @@
 不和其他模块耦合，
 但是区别在于：</p>
 <ul class="simple">
-<li><p>上一步要读的数据结构，
+<li>上一步要读的数据结构，
 比如双端链表、字典、HyperLogLog，
-在算法书上或者相关的论文上都可以找到资料介绍。</p></li>
-<li><p>而内存编码数据结构却不容易找到相关的资料，
+在算法书上或者相关的论文上都可以找到资料介绍。</li>
+<li>而内存编码数据结构却不容易找到相关的资料，
 因为这些数据结构都是 Redis 为了节约内存而专门开发出来的，
 换句话说，
 这些数据结构都是特制（adhoc）的，
 除了 Redis 源码中的文档之外，
-基本上找不到其他资料来了解这些特制的数据结构。</p></li>
+基本上找不到其他资料来了解这些特制的数据结构。</li>
 </ul>
 <p>不过话又说回来，
 虽然内存编码数据结构是 Redis 特制的，
@@ -200,22 +208,22 @@
 当然这需要花一些功夫。</p>
 <p>下表展示了 Redis 源码中，
 各个内存编码数据结构的实现文件：</p>
-<table class="docutils align-default">
+<table border="1" class="docutils">
 <colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
+<col width="50%" />
+<col width="50%" />
 </colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>文件</p></th>
-<th class="head"><p>内容</p></th>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">文件</th>
+<th class="head">内容</th>
 </tr>
 </thead>
-<tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">intset.h</span></code> 和 <code class="docutils literal notranslate"><span class="pre">intset.c</span></code></p></td>
-<td><p>整数集合（intset）数据结构。</p></td>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">intset.h</span></code> 和 <code class="docutils literal"><span class="pre">intset.c</span></code></td>
+<td>整数集合（intset）数据结构。</td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ziplist.h</span></code> 和 <code class="docutils literal notranslate"><span class="pre">ziplist.c</span></code></p></td>
-<td><p>压缩列表（zip list）数据结构。</p></td>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">ziplist.h</span></code> 和 <code class="docutils literal"><span class="pre">ziplist.c</span></code></td>
+<td>压缩列表（zip list）数据结构。</td>
 </tr>
 </tbody>
 </table>
@@ -229,37 +237,37 @@
 我们需要阅读实现各个数据类型的文件，
 以及 Redis 的对象系统文件，
 这些文件包括：</p>
-<table class="docutils align-default">
+<table border="1" class="docutils">
 <colgroup>
-<col style="width: 56%" />
-<col style="width: 44%" />
+<col width="56%" />
+<col width="44%" />
 </colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>文件</p></th>
-<th class="head"><p>内容</p></th>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">文件</th>
+<th class="head">内容</th>
 </tr>
 </thead>
-<tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">object.c</span></code></p></td>
-<td><p>Redis 的对象（类型）系统实现。</p></td>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">object.c</span></code></td>
+<td>Redis 的对象（类型）系统实现。</td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">t_string.c</span></code></p></td>
-<td><p>字符串键的实现。</p></td>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">t_string.c</span></code></td>
+<td>字符串键的实现。</td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">t_list.c</span></code></p></td>
-<td><p>列表键的实现。</p></td>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">t_list.c</span></code></td>
+<td>列表键的实现。</td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">t_hash.c</span></code></p></td>
-<td><p>散列键的实现。</p></td>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">t_hash.c</span></code></td>
+<td>散列键的实现。</td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">t_set.c</span></code></p></td>
-<td><p>集合键的实现。</p></td>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">t_set.c</span></code></td>
+<td>集合键的实现。</td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">t_zset.c</span></code> 中除 <code class="docutils literal notranslate"><span class="pre">zsl</span></code> 开头的函数之外的所有函数。</p></td>
-<td><p>有序集合键的实现。</p></td>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">t_zset.c</span></code> 中除 <code class="docutils literal"><span class="pre">zsl</span></code> 开头的函数之外的所有函数。</td>
+<td>有序集合键的实现。</td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">hyperloglog.c</span></code> 中所有以 <code class="docutils literal notranslate"><span class="pre">pf</span></code> 开头的函数。</p></td>
-<td><p>HyperLogLog 键的实现。</p></td>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">hyperloglog.c</span></code> 中所有以 <code class="docutils literal"><span class="pre">pf</span></code> 开头的函数。</td>
+<td>HyperLogLog 键的实现。</td>
 </tr>
 </tbody>
 </table>
@@ -270,60 +278,60 @@
 以及 Redis 是如何使用这些数据结构来实现不同类型的键之后，
 我们就可以开始阅读 Redis 里面和数据库有关的代码了，
 它们分别是：</p>
-<table class="docutils align-default">
+<table border="1" class="docutils">
 <colgroup>
-<col style="width: 55%" />
-<col style="width: 45%" />
+<col width="55%" />
+<col width="45%" />
 </colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>文件</p></th>
-<th class="head"><p>内容</p></th>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">文件</th>
+<th class="head">内容</th>
 </tr>
 </thead>
-<tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">redis.h</span></code> 文件中的 <code class="docutils literal notranslate"><span class="pre">redisDb</span></code> 结构，
-以及 <code class="docutils literal notranslate"><span class="pre">db.c</span></code> 文件。</p></td>
-<td><p>Redis 的数据库实现。</p></td>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">redis.h</span></code> 文件中的 <code class="docutils literal"><span class="pre">redisDb</span></code> 结构，
+以及 <code class="docutils literal"><span class="pre">db.c</span></code> 文件。</td>
+<td>Redis 的数据库实现。</td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">notify.c</span></code></p></td>
-<td><p>Redis 的数据库通知功能实现代码。</p></td>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">notify.c</span></code></td>
+<td>Redis 的数据库通知功能实现代码。</td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rdb.h</span></code> 和 <code class="docutils literal notranslate"><span class="pre">rdb.c</span></code></p></td>
-<td><p>Redis 的 RDB 持久化实现代码。</p></td>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">rdb.h</span></code> 和 <code class="docutils literal"><span class="pre">rdb.c</span></code></td>
+<td>Redis 的 RDB 持久化实现代码。</td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">aof.c</span></code></p></td>
-<td><p>Redis 的 AOF 持久化实现代码。</p></td>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">aof.c</span></code></td>
+<td>Redis 的 AOF 持久化实现代码。</td>
 </tr>
 </tbody>
 </table>
 <div class="topic">
-<p class="topic-title first">选读</p>
+<p class="topic-title">选读</p>
 <p>Redis 有一些独立的功能模块，
 这些模块可以在完成第 4 步之后阅读，
 它们包括：</p>
-<table class="docutils align-default">
+<table border="1" class="docutils">
 <colgroup>
-<col style="width: 56%" />
-<col style="width: 44%" />
+<col width="56%" />
+<col width="44%" />
 </colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>文件</p></th>
-<th class="head"><p>内容</p></th>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">文件</th>
+<th class="head">内容</th>
 </tr>
 </thead>
-<tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">redis.h</span></code> 文件的 <code class="docutils literal notranslate"><span class="pre">pubsubPattern</span></code> 结构，以及 <code class="docutils literal notranslate"><span class="pre">pubsub.c</span></code> 文件。</p></td>
-<td><p>发布与订阅功能的实现。</p></td>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">redis.h</span></code> 文件的 <code class="docutils literal"><span class="pre">pubsubPattern</span></code> 结构，以及 <code class="docutils literal"><span class="pre">pubsub.c</span></code> 文件。</td>
+<td>发布与订阅功能的实现。</td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">redis.h</span></code> 文件的 <code class="docutils literal notranslate"><span class="pre">multiState</span></code> 结构以及 <code class="docutils literal notranslate"><span class="pre">multiCmd</span></code> 结构，
-<code class="docutils literal notranslate"><span class="pre">multi.c</span></code> 文件。</p></td>
-<td><p>事务功能的实现。</p></td>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">redis.h</span></code> 文件的 <code class="docutils literal"><span class="pre">multiState</span></code> 结构以及 <code class="docutils literal"><span class="pre">multiCmd</span></code> 结构，
+<code class="docutils literal"><span class="pre">multi.c</span></code> 文件。</td>
+<td>事务功能的实现。</td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sort.c</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">SORT</span></code> 命令的实现。</p></td>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">sort.c</span></code></td>
+<td><code class="docutils literal"><span class="pre">SORT</span></code> 命令的实现。</td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">bitops.c</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">GETBIT</span></code> 、 <code class="docutils literal notranslate"><span class="pre">SETBIT</span></code> 等二进制位操作命令的实现。</p></td>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">bitops.c</span></code></td>
+<td><code class="docutils literal"><span class="pre">GETBIT</span></code> 、 <code class="docutils literal"><span class="pre">SETBIT</span></code> 等二进制位操作命令的实现。</td>
 </tr>
 </tbody>
 </table>
@@ -335,27 +343,27 @@
 以及 RDB 和 AOF 两种持久化的代码之后，
 我们可以开始阅读客户端和 Redis 服务器本身的实现代码，
 和这些代码有关的文件是：</p>
-<table class="docutils align-default">
+<table border="1" class="docutils">
 <colgroup>
-<col style="width: 58%" />
-<col style="width: 42%" />
+<col width="58%" />
+<col width="42%" />
 </colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>文件</p></th>
-<th class="head"><p>内容</p></th>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">文件</th>
+<th class="head">内容</th>
 </tr>
 </thead>
-<tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ae.c</span></code> ，以及任意一个 <code class="docutils literal notranslate"><span class="pre">ae_*.c</span></code> 文件（取决于你所使用的多路复用库）。</p></td>
-<td><p>Redis 的事件处理器实现（基于 Reactor 模式）。</p></td>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">ae.c</span></code> ，以及任意一个 <code class="docutils literal"><span class="pre">ae_*.c</span></code> 文件（取决于你所使用的多路复用库）。</td>
+<td>Redis 的事件处理器实现（基于 Reactor 模式）。</td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">networking.c</span></code></p></td>
-<td><p>Redis 的网络连接库，负责发送命令回复和接受命令请求，
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">networking.c</span></code></td>
+<td>Redis 的网络连接库，负责发送命令回复和接受命令请求，
 同时也负责创建/销毁客户端，
-以及通信协议分析等工作。</p></td>
+以及通信协议分析等工作。</td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">redis.h</span></code> 和 <code class="docutils literal notranslate"><span class="pre">redis.c</span></code> 中和单机 Redis 服务器有关的部分。</p></td>
-<td><p>单机 Redis 服务器的实现。</p></td>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">redis.h</span></code> 和 <code class="docutils literal"><span class="pre">redis.c</span></code> 中和单机 Redis 服务器有关的部分。</td>
+<td>单机 Redis 服务器的实现。</td>
 </tr>
 </tbody>
 </table>
@@ -366,29 +374,29 @@
 这是 Redis 最重要的部分，
 也是之后继续阅读多机功能的基础。</p>
 <div class="topic">
-<p class="topic-title first">选读</p>
+<p class="topic-title">选读</p>
 <p>Redis 有一些独立的功能模块，
 这些模块可以在完成第 5 步之后阅读，
 它们包括：</p>
-<table class="docutils align-default">
+<table border="1" class="docutils">
 <colgroup>
-<col style="width: 29%" />
-<col style="width: 71%" />
+<col width="29%" />
+<col width="71%" />
 </colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>文件</p></th>
-<th class="head"><p>内容</p></th>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">文件</th>
+<th class="head">内容</th>
 </tr>
 </thead>
-<tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">scripting.c</span></code></p></td>
-<td><p>Lua 脚本功能的实现。</p></td>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">scripting.c</span></code></td>
+<td>Lua 脚本功能的实现。</td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">slowlog.c</span></code></p></td>
-<td><p>慢查询功能的实现。</p></td>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">slowlog.c</span></code></td>
+<td>慢查询功能的实现。</td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">monitor.c</span></code></p></td>
-<td><p>监视器功能的实现。</p></td>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">monitor.c</span></code></td>
+<td>监视器功能的实现。</td>
 </tr>
 </tbody>
 </table>
@@ -399,25 +407,25 @@
 <p>在弄懂了 Redis 的单机服务器是怎样运作的之后，
 就可以开始阅读 Redis 多机功能的实现代码了，
 和这些功能有关的文件为：</p>
-<table class="docutils align-default">
+<table border="1" class="docutils">
 <colgroup>
-<col style="width: 26%" />
-<col style="width: 74%" />
+<col width="26%" />
+<col width="74%" />
 </colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>文件</p></th>
-<th class="head"><p>内容</p></th>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">文件</th>
+<th class="head">内容</th>
 </tr>
 </thead>
-<tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">replication.c</span></code></p></td>
-<td><p>复制功能的实现代码。</p></td>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">replication.c</span></code></td>
+<td>复制功能的实现代码。</td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">sentinel.c</span></code></p></td>
-<td><p>Redis Sentinel 的实现代码。</p></td>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">sentinel.c</span></code></td>
+<td>Redis Sentinel 的实现代码。</td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">cluster.c</span></code></p></td>
-<td><p>Redis 集群的实现代码。</p></td>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">cluster.c</span></code></td>
+<td>Redis 集群的实现代码。</td>
 </tr>
 </tbody>
 </table>
@@ -484,7 +492,7 @@ digraph {
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
     </p>
   </div>
 </footer>

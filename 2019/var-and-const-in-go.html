@@ -2,16 +2,23 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Go 的变量与常量 &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     'present',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="使用 SWAPDB 命令在线替换 Redis 数据库" href="redis-online-swap-db.html" />
@@ -25,7 +32,8 @@
 <script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
 
-  </head><body>
+  </head>
+  <body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -119,14 +127,14 @@
   <div class="section" id="go">
 <h1>Go 的变量与常量<a class="headerlink" href="#go" title="Permalink to this headline">¶</a></h1>
 <div class="admonition note">
-<p class="admonition-title">Note</p>
+<p class="first admonition-title">Note</p>
 <p>本文摘录自即将出版的《Go语言趣学指南》，
 请访问 <a class="reference external" href="http://gpwgcn.com">gpwgcn.com</a>  以获取更多相关信息。</p>
-<a class="reference internal image-reference" href="../_images/gpwgcn.jpg"><img alt="../_images/gpwgcn.jpg" src="../_images/gpwgcn.jpg" style="width: 149.6px; height: 188.0px;" /></a>
+<a class="last reference internal image-reference" href="../_images/gpwgcn.jpg"><img alt="../_images/gpwgcn.jpg" src="../_images/gpwgcn.jpg" style="width: 149.6px; height: 188.0px;" /></a>
 </div>
 <hr class="docutils" />
-<p>代码清单 2-1 你好，火星： <code class="docutils literal notranslate"><span class="pre">mars.go</span></code></p>
-<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="c1">// My weight loss program.                              // 为人类读者提供的注释</span>
+<p>代码清单 2-1 你好，火星： <code class="docutils literal"><span class="pre">mars.go</span></code></p>
+<div class="highlight-go"><div class="highlight"><pre><span></span><span class="c1">// My weight loss program.                              // 为人类读者提供的注释</span>
 <span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="s">&quot;fmt&quot;</span>
@@ -150,11 +158,11 @@
 对于我们的旅程来说，光速旅行是最为理想的。
 因为光在太空的真空环境中会以<em>固定</em>速度传播，所以相应的计算将会变得较为简单。
 与此相反的是，根据行星在太阳轨道上所处的位置不同，地球和火星之间的距离将会产生相当大的<em>变化</em>。</p>
-<p>代码清单 2-3 引入了两个新的关键字 <code class="docutils literal notranslate"><span class="pre">const</span></code> 和 <code class="docutils literal notranslate"><span class="pre">var</span></code>
+<p>代码清单 2-3 引入了两个新的关键字 <code class="docutils literal"><span class="pre">const</span></code> 和 <code class="docutils literal"><span class="pre">var</span></code>
 ，它们分别用于声明常量和变量。</p>
 <hr class="docutils" />
-<p>代码清单 2-3 实现光速旅行： <code class="docutils literal notranslate"><span class="pre">lightspeed.go</span></code></p>
-<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="c1">// How long does it take to get to Mars?</span>
+<p>代码清单 2-3 实现光速旅行： <code class="docutils literal"><span class="pre">lightspeed.go</span></code></p>
+<div class="highlight-go"><div class="highlight"><pre><span></span><span class="c1">// How long does it take to get to Mars?</span>
 <span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="s">&quot;fmt&quot;</span>
@@ -174,52 +182,53 @@
 <p>只要将代码清单 2-3 中的代码输入至 Go
 游乐场然后点击运行按钮，我们就可以计算出从地球出发到火星所需的时间了。
 能够以光速前进是一件非常便捷的事情，不消一会儿工夫你就到达了目的地，你甚至都不会听到有人抱怨说“我们怎么还没到？”。</p>
-<p>这段代码的第一次计算通过声明 <code class="docutils literal notranslate"><span class="pre">distance</span></code> 变量并为其赋予初始值
+<p>这段代码的第一次计算通过声明 <code class="docutils literal"><span class="pre">distance</span></code> 变量并为其赋予初始值
 56,000,000
 公里来模拟火星与地球相邻时的情形，而在进行第二次计算的时候，则通过为
-<code class="docutils literal notranslate"><span class="pre">distance</span></code> 变量赋予新值 401,000,000
+<code class="docutils literal"><span class="pre">distance</span></code> 变量赋予新值 401,000,000
 公里来模拟火星和地球分列太阳两侧时的情形（其中 401,000,000
 公里代表的是火星和地球之间的直线距离）。</p>
 <blockquote>
 <div><p>{注意}</p>
-<p><code class="docutils literal notranslate"><span class="pre">lightSpeed</span></code> 常量是不能被修改的， 尝试为其赋予新值将导致 Go
-编译器报告错误：“无法对 <code class="docutils literal notranslate"><span class="pre">lightSpeed</span></code> 进行赋值”。</p>
+<p><code class="docutils literal"><span class="pre">lightSpeed</span></code> 常量是不能被修改的， 尝试为其赋予新值将导致 Go
+编译器报告错误：“无法对 <code class="docutils literal"><span class="pre">lightSpeed</span></code> 进行赋值”。</p>
 </div></blockquote>
 <blockquote>
 <div><p>{注意}</p>
-<p>变量必须先声明后使用。 如果变量尚未使用 <code class="docutils literal notranslate"><span class="pre">var</span></code> 关键字进行声明，
+<p>变量必须先声明后使用。 如果变量尚未使用 <code class="docutils literal"><span class="pre">var</span></code> 关键字进行声明，
 那么尝试向它赋值将导致 Go 报告错误， 比如在前面的代码中执行
-<code class="docutils literal notranslate"><span class="pre">speed</span> <span class="pre">=</span> <span class="pre">16</span></code> 就会这样。 这一限制有助于发现类似“想要向 <code class="docutils literal notranslate"><span class="pre">distance</span></code>
-赋值结果却键入了 <code class="docutils literal notranslate"><span class="pre">distence</span></code>”这样的问题。</p>
+<code class="docutils literal"><span class="pre">speed</span> <span class="pre">=</span> <span class="pre">16</span></code> 就会这样。 这一限制有助于发现类似“想要向 <code class="docutils literal"><span class="pre">distance</span></code>
+赋值结果却键入了 <code class="docutils literal"><span class="pre">distence</span></code>”这样的问题。</p>
 </div></blockquote>
 <blockquote>
 <div><p>{速查 2-3}</p>
 <ol class="arabic simple">
-<li><p>尽管 SpaceX 公司的星际运输系统因为缺少曲速引擎而无法以光速行进，
+<li>尽管 SpaceX 公司的星际运输系统因为缺少曲速引擎而无法以光速行进，
 但它仍然能够以每小时 100,800 公里这一可观的速度驶向火星。
 如果这个雄心勃勃的公司在 2025 年的一月份，
 也即是地球和火星之间相距 96,300,000 公里远的时候发射宇宙飞船，
 那么它需要用多少天才能够到达火星？ 请修改代码清单 2-3
-来计算并回答这一问题。</p></li>
-<li><p>在地球上， 一天总共有 24 个小时。 如果要在程序中为数字 24
-指定一个描述性的名字， 你会用什么关键字？</p></li>
+来计算并回答这一问题。</li>
+<li>在地球上， 一天总共有 24 个小时。 如果要在程序中为数字 24
+指定一个描述性的名字， 你会用什么关键字？</li>
 </ol>
 </div></blockquote>
 <blockquote>
 <div><p>{速查 2-3 答案}</p>
 <ol class="arabic">
-<li><p>虽然宇宙飞船在实际中不可能只沿着直线行进， 但作为一个粗略的估计，
+<li><p class="first">虽然宇宙飞船在实际中不可能只沿着直线行进， 但作为一个粗略的估计，
 它从地球飞行至火星大约需要用 39 天。
 以下是进行计算所需修改的代码：</p>
-<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span> <span class="nx">hoursPerDay</span> <span class="p">=</span> <span class="mi">24</span>
-<span class="kd">var</span> <span class="nx">speed</span> <span class="p">=</span> <span class="mi">100800</span>      <span class="c1">// 公里/小时</span>
-<span class="kd">var</span> <span class="nx">distance</span> <span class="p">=</span> <span class="mi">96300000</span> <span class="c1">// 公里</span>
-<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">distance</span><span class="o">/</span><span class="nx">speed</span><span class="o">/</span><span class="nx">hoursPerDay</span><span class="p">,</span> <span class="s">&quot;days&quot;</span><span class="p">)</span>
+<div class="code go highlight-default"><div class="highlight"><pre><span></span><span class="n">const</span> <span class="n">hoursPerDay</span> <span class="o">=</span> <span class="mi">24</span>
+<span class="n">var</span> <span class="n">speed</span> <span class="o">=</span> <span class="mi">100800</span>      <span class="o">//</span> <span class="n">公里</span><span class="o">/</span><span class="n">小时</span>
+<span class="n">var</span> <span class="n">distance</span> <span class="o">=</span> <span class="mi">96300000</span> <span class="o">//</span> <span class="n">公里</span>
+<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">distance</span><span class="o">/</span><span class="n">speed</span><span class="o">/</span><span class="n">hoursPerDay</span><span class="p">,</span> <span class="s2">&quot;days&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </li>
-<li><p>因为地球一天拥有的小时数不太可能在程序运行的过程中发生变化，
-所以我们可以使用 <code class="docutils literal notranslate"><span class="pre">const</span></code> 关键字来定义它。</p></li>
+<li><p class="first">因为地球一天拥有的小时数不太可能在程序运行的过程中发生变化，
+所以我们可以使用 <code class="docutils literal"><span class="pre">const</span></code> 关键字来定义它。</p>
+</li>
 </ol>
 </div></blockquote>
 </div>
@@ -237,7 +246,7 @@
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
     </p>
   </div>
 </footer>
