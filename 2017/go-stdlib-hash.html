@@ -2,23 +2,16 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Go 标准库文档翻译：hash 包 &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     'present',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Go 标准库文档翻译：path 包" href="go-stdlib-path.html" />
@@ -32,8 +25,7 @@
 <script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -143,7 +135,7 @@
 <div class="section" id="hash">
 <h2>Hash 类型<a class="headerlink" href="#hash" title="Permalink to this headline">¶</a></h2>
 <p>Hash 是实现散列函数所需的公共接口。</p>
-<div class="highlight-go"><div class="highlight"><pre><span></span><span class="kd">type</span> <span class="nx">Hash</span> <span class="kd">interface</span> <span class="p">{</span>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="kd">type</span> <span class="nx">Hash</span> <span class="kd">interface</span> <span class="p">{</span>
     <span class="c1">// 通过 Write 方法将更多数据添加到正在运行的散列当中。</span>
     <span class="c1">// 这个方法不会返回错误。</span>
     <span class="c1">// Write 方法通过嵌入 io.Writer 接口来实现。</span>
@@ -171,7 +163,7 @@
 <div class="section" id="hash32">
 <h2>Hash32 类型<a class="headerlink" href="#hash32" title="Permalink to this headline">¶</a></h2>
 <p>Hash32 是实现 32 位散列函数所需的公共接口。</p>
-<div class="highlight-go"><div class="highlight"><pre><span></span><span class="kd">type</span> <span class="nx">Hash32</span> <span class="kd">interface</span> <span class="p">{</span>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="kd">type</span> <span class="nx">Hash32</span> <span class="kd">interface</span> <span class="p">{</span>
     <span class="nx">Hash</span>
     <span class="nx">Sum32</span><span class="p">()</span> <span class="kt">uint32</span>
 <span class="p">}</span>
@@ -181,7 +173,7 @@
 <div class="section" id="hash64">
 <h2>Hash64 类型<a class="headerlink" href="#hash64" title="Permalink to this headline">¶</a></h2>
 <p>Hash64 是实现 64 位散列函数所需的公共接口。</p>
-<div class="highlight-go"><div class="highlight"><pre><span></span><span class="kd">type</span> <span class="nx">Hash64</span> <span class="kd">interface</span> <span class="p">{</span>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="kd">type</span> <span class="nx">Hash64</span> <span class="kd">interface</span> <span class="p">{</span>
     <span class="nx">Hash</span>
     <span class="nx">Sum64</span><span class="p">()</span> <span class="kt">uint64</span>
 <span class="p">}</span>
@@ -207,7 +199,7 @@
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.0.<br/>
     </p>
   </div>
 </footer>

@@ -2,23 +2,16 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Go 标准库文档翻译：path 包 &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     'present',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Go 标准库文档翻译：io/ioutil 包" href="go-stdlib-io-ioutil.html" />
@@ -32,8 +25,7 @@
 <script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -155,7 +147,7 @@
 </div>
 <div class="section" id="base">
 <h2>Base 函数<a class="headerlink" href="#base" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-go"><div class="highlight"><pre><span></span><span class="kd">func</span> <span class="nx">Base</span><span class="p">(</span><span class="nx">path</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">string</span>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="kd">func</span> <span class="nx">Base</span><span class="p">(</span><span class="nx">path</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">string</span>
 </pre></div>
 </div>
 <p>返回路径的最后一个元素。</p>
@@ -166,7 +158,7 @@
 如果路径只由斜杠组成，
 那么返回 “/” 。</p>
 <p>示例：</p>
-<div class="highlight-go"><div class="highlight"><pre><span></span><span class="kn">package</span> <span class="nx">main</span>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="p">(</span>
 	<span class="s">&quot;fmt&quot;</span>
@@ -179,13 +171,13 @@
 </pre></div>
 </div>
 <p>示例执行结果：</p>
-<div class="highlight-go"><div class="highlight"><pre><span></span><span class="nx">b</span>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="nx">b</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="clean">
 <h2>Clean 函数<a class="headerlink" href="#clean" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-go"><div class="highlight"><pre><span></span><span class="kd">func</span> <span class="nx">Clean</span><span class="p">(</span><span class="nx">path</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">string</span>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="kd">func</span> <span class="nx">Clean</span><span class="p">(</span><span class="nx">path</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">string</span>
 </pre></div>
 </div>
 <p>通过纯粹的词法处理，
@@ -193,10 +185,10 @@
 Clean 函数会根据以下规则进行迭代，
 直到没有任何规则可以应用为止：</p>
 <ol class="arabic simple">
-<li>使用单个斜杠代替多个斜杠。</li>
-<li>移除所有 . 路径名元素（当前目录）</li>
-<li>移除所有内含的 .. 路径名元素（父目录），以及先于它的非 .. 元素。</li>
-<li>移除所有以根路径方式存在的 .. 元素，也即是，使用 “/” 去替换路径开头的 “/..”</li>
+<li><p>使用单个斜杠代替多个斜杠。</p></li>
+<li><p>移除所有 . 路径名元素（当前目录）</p></li>
+<li><p>移除所有内含的 .. 路径名元素（父目录），以及先于它的非 .. 元素。</p></li>
+<li><p>移除所有以根路径方式存在的 .. 元素，也即是，使用 “/” 去替换路径开头的 “/..”</p></li>
 </ol>
 <p>只有在 path 为根目录 “/” 的时候，
 函数才会返回 “/” 。</p>
@@ -204,7 +196,7 @@ Clean 函数会根据以下规则进行迭代，
 那么它将返回字符串 “.” 作为结果。</p>
 <p>更多信息请参考 Rob Pike 的 <a class="reference external" href="https://9p.io/sys/doc/lexnames.html">《Lexical File Names in Plan 9 or Getting Dot-Dot Right》</a> 一文。</p>
 <p>示例：</p>
-<div class="highlight-go"><div class="highlight"><pre><span></span><span class="kn">package</span> <span class="nx">main</span>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="p">(</span>
 	<span class="s">&quot;fmt&quot;</span>
@@ -229,7 +221,7 @@ Clean 函数会根据以下规则进行迭代，
 </pre></div>
 </div>
 <p>示例执行结果：</p>
-<div class="highlight-go"><div class="highlight"><pre><span></span><span class="nx">lean</span><span class="p">(</span><span class="s">&quot;a/c&quot;</span><span class="p">)</span> <span class="p">=</span> <span class="s">&quot;a/c&quot;</span>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="nx">lean</span><span class="p">(</span><span class="s">&quot;a/c&quot;</span><span class="p">)</span> <span class="p">=</span> <span class="s">&quot;a/c&quot;</span>
 <span class="nx">Clean</span><span class="p">(</span><span class="s">&quot;a//c&quot;</span><span class="p">)</span> <span class="p">=</span> <span class="s">&quot;a/c&quot;</span>
 <span class="nx">Clean</span><span class="p">(</span><span class="s">&quot;a/c/.&quot;</span><span class="p">)</span> <span class="p">=</span> <span class="s">&quot;a/c&quot;</span>
 <span class="nx">Clean</span><span class="p">(</span><span class="s">&quot;a/c/b/..&quot;</span><span class="p">)</span> <span class="p">=</span> <span class="s">&quot;a/c&quot;</span>
@@ -240,7 +232,7 @@ Clean 函数会根据以下规则进行迭代，
 </div>
 <div class="section" id="dir">
 <h2>Dir 函数<a class="headerlink" href="#dir" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-go"><div class="highlight"><pre><span></span><span class="kd">func</span> <span class="nx">Dir</span><span class="p">(</span><span class="nx">path</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">string</span>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="kd">func</span> <span class="nx">Dir</span><span class="p">(</span><span class="nx">path</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">string</span>
 </pre></div>
 </div>
 <p>返回路径里面除最后一个元素之外的其他所有元素，
@@ -255,7 +247,7 @@ Clean 函数会根据以下规则进行迭代，
 在其他情况下，
 函数返回的路径都不会以斜杠结束。</p>
 <p>示例：</p>
-<div class="highlight-go"><div class="highlight"><pre><span></span><span class="kn">package</span> <span class="nx">main</span>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="p">(</span>
 	<span class="s">&quot;fmt&quot;</span>
@@ -268,13 +260,13 @@ Clean 函数会根据以下规则进行迭代，
 </pre></div>
 </div>
 <p>示例执行结果：</p>
-<div class="highlight-go"><div class="highlight"><pre><span></span><span class="o">/</span><span class="nx">a</span><span class="o">/</span><span class="nx">b</span>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="nx">a</span><span class="o">/</span><span class="nx">b</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="ext">
 <h2>Ext 函数<a class="headerlink" href="#ext" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-go"><div class="highlight"><pre><span></span><span class="kd">func</span> <span class="nx">Ext</span><span class="p">(</span><span class="nx">path</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">string</span>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="kd">func</span> <span class="nx">Ext</span><span class="p">(</span><span class="nx">path</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">string</span>
 </pre></div>
 </div>
 <p>返回路径使用的文件扩展名。</p>
@@ -282,7 +274,7 @@ Clean 函数会根据以下规则进行迭代，
 如果路径的这个部分没有点，
 那么它的扩展名为空。</p>
 <p>示例：</p>
-<div class="highlight-go"><div class="highlight"><pre><span></span><span class="kn">package</span> <span class="nx">main</span>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="p">(</span>
 	<span class="s">&quot;fmt&quot;</span>
@@ -295,18 +287,18 @@ Clean 函数会根据以下规则进行迭代，
 </pre></div>
 </div>
 <p>示例执行结果：</p>
-<div class="highlight-go"><div class="highlight"><pre><span></span><span class="p">.</span><span class="nx">css</span>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="p">.</span><span class="nx">css</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="isabs">
 <h2>IsAbs 函数<a class="headerlink" href="#isabs" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-go"><div class="highlight"><pre><span></span><span class="kd">func</span> <span class="nx">IsAbs</span><span class="p">(</span><span class="nx">path</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">bool</span>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="kd">func</span> <span class="nx">IsAbs</span><span class="p">(</span><span class="nx">path</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">bool</span>
 </pre></div>
 </div>
 <p>检查路径是否为绝对路径。</p>
 <p>示例：</p>
-<div class="highlight-go"><div class="highlight"><pre><span></span><span class="kn">package</span> <span class="nx">main</span>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="p">(</span>
 	<span class="s">&quot;fmt&quot;</span>
@@ -319,13 +311,13 @@ Clean 函数会根据以下规则进行迭代，
 </pre></div>
 </div>
 <p>示例执行结果：</p>
-<div class="highlight-go"><div class="highlight"><pre><span></span><span class="kc">true</span>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="kc">true</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="join">
 <h2>Join 函数<a class="headerlink" href="#join" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-go"><div class="highlight"><pre><span></span><span class="kd">func</span> <span class="nx">Join</span><span class="p">(</span><span class="nx">elem</span> <span class="o">...</span><span class="kt">string</span><span class="p">)</span> <span class="kt">string</span>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="kd">func</span> <span class="nx">Join</span><span class="p">(</span><span class="nx">elem</span> <span class="o">...</span><span class="kt">string</span><span class="p">)</span> <span class="kt">string</span>
 </pre></div>
 </div>
 <p>将任意数量的路径元素拼接为单个路径，
@@ -334,7 +326,7 @@ Clean 函数会根据以下规则进行迭代，
 特别地，
 所有空字符串都将被忽略。</p>
 <p>示例：</p>
-<div class="highlight-go"><div class="highlight"><pre><span></span><span class="kn">package</span> <span class="nx">main</span>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="p">(</span>
 	<span class="s">&quot;fmt&quot;</span>
@@ -350,7 +342,7 @@ Clean 函数会根据以下规则进行迭代，
 </pre></div>
 </div>
 <p>示例执行结果：</p>
-<div class="highlight-go"><div class="highlight"><pre><span></span><span class="nx">a</span><span class="o">/</span><span class="nx">b</span><span class="o">/</span><span class="nx">c</span>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="nx">a</span><span class="o">/</span><span class="nx">b</span><span class="o">/</span><span class="nx">c</span>
 <span class="nx">a</span><span class="o">/</span><span class="nx">b</span><span class="o">/</span><span class="nx">c</span>
 <span class="nx">a</span><span class="o">/</span><span class="nx">b</span><span class="o">/</span><span class="nx">c</span>
 <span class="nx">a</span><span class="o">/</span><span class="nx">b</span><span class="o">/</span><span class="nx">c</span>
@@ -359,12 +351,12 @@ Clean 函数会根据以下规则进行迭代，
 </div>
 <div class="section" id="match">
 <h2>Match 函数<a class="headerlink" href="#match" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-go"><div class="highlight"><pre><span></span><span class="kd">func</span> <span class="nx">Match</span><span class="p">(</span><span class="nx">pattern</span><span class="p">,</span> <span class="nx">name</span> <span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="nx">matched</span> <span class="kt">bool</span><span class="p">,</span> <span class="nx">err</span> <span class="kt">error</span><span class="p">)</span>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="kd">func</span> <span class="nx">Match</span><span class="p">(</span><span class="nx">pattern</span><span class="p">,</span> <span class="nx">name</span> <span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="nx">matched</span> <span class="kt">bool</span><span class="p">,</span> <span class="nx">err</span> <span class="kt">error</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>报告文件名是否与给定的 shell 文件名模式相匹配。
 模式的语法为：</p>
-<div class="highlight-go"><div class="highlight"><pre><span></span>模式:
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span>模式:
     { 匹配项 }
 
 匹配项:
@@ -388,7 +380,7 @@ Clean 函数会根据以下规则进行迭代，
 </div>
 <div class="section" id="split">
 <h2>Split 函数<a class="headerlink" href="#split" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-go"><div class="highlight"><pre><span></span><span class="kd">func</span> <span class="nx">Split</span><span class="p">(</span><span class="nx">path</span> <span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="nx">dir</span><span class="p">,</span> <span class="nx">file</span> <span class="kt">string</span><span class="p">)</span>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="kd">func</span> <span class="nx">Split</span><span class="p">(</span><span class="nx">path</span> <span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="nx">dir</span><span class="p">,</span> <span class="nx">file</span> <span class="kt">string</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>根据路径的最后一个斜杠，
@@ -400,7 +392,7 @@ Clean 函数会根据以下规则进行迭代，
 也即是，
 path = dir + file 。</p>
 <p>示例：</p>
-<div class="highlight-go"><div class="highlight"><pre><span></span><span class="kn">package</span> <span class="nx">main</span>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="p">(</span>
 	<span class="s">&quot;fmt&quot;</span>
@@ -413,7 +405,7 @@ path = dir + file 。</p>
 </pre></div>
 </div>
 <p>示例执行结果：</p>
-<div class="highlight-go"><div class="highlight"><pre><span></span><span class="nx">static</span><span class="o">/</span> <span class="nx">myfile</span><span class="p">.</span><span class="nx">css</span>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="nx">static</span><span class="o">/</span> <span class="nx">myfile</span><span class="p">.</span><span class="nx">css</span>
 </pre></div>
 </div>
 </div>
@@ -436,7 +428,7 @@ path = dir + file 。</p>
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.0.<br/>
     </p>
   </div>
 </footer>

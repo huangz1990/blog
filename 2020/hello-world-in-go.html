@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Go Playground 与 Hello World &#8212; blog.huangz.me</title>
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Go 语言简述" href="what-is-golang.html" />
+    <link rel="prev" title="2020" href="index.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js "></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          blog.huangz.me</a>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">全站 <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">2020</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../2019/index.html">2019</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../2018/index.html">2018</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../2017/index.html">2017</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../diary/2016/index.html">2016</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../diary/2015/index.html">2015</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../diary/2014/index.html">2014</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../diary/2013/index.html">2013</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../diary/2012/index.html">2012</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">分页 <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Go Playground 与 Hello World</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="index.html" title="Previous Chapter: 2020"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; 2020</span>
+    </a>
+  </li>
+  <li>
+    <a href="what-is-golang.html" title="Next Chapter: Go 语言简述"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Go 语言简述 &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <div class="section" id="go-playground-hello-world">
+<h1>Go Playground 与 Hello World<a class="headerlink" href="#go-playground-hello-world" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>本文摘录自《Go语言趣学指南》第 1 章，
+请访问 <a class="reference external" href="http://gpwgcn.com">gpwgcn.com</a>  以获取更多相关信息。</p>
+<a class="reference internal image-reference" href="../_images/gpwgcn1.jpg"><img alt="../_images/gpwgcn1.jpg" src="../_images/gpwgcn1.jpg" style="width: 149.6px; height: 188.0px;" /></a>
+</div>
+<p>上手学习 Go 语言最快捷的方式就是使用 Go 游乐场
+<a class="reference external" href="https://play.golang.org/">play.golang.org</a> ，
+这个工具可以让你在无需安装任何软件的情况下直接编辑、运行和试验 Go 程序。
+当你点击游乐场的运行按钮（Run）的时候， 游乐场就会在 Google
+的服务器上编译并运行你输入的代码， 然后在屏幕上打印出代码的执行结果。</p>
+<hr class="docutils" />
+<p>图 1-2 Go 游乐场</p>
+<img alt="../_images/go-plg.jpg" src="../_images/go-plg.jpg" />
+<hr class="docutils" />
+<p>当我们访问 Go 游乐场的时候将会看到以下代码，它作为学习 Go
+语言的起点真的再合适不过了。</p>
+<hr class="docutils" />
+<p>代码清单 1-1 与游乐场的初次见面： <code class="docutils literal notranslate"><span class="pre">playground.go</span></code></p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span> <span class="nx">main</span>                            <span class="c1">// 声明本代码所属的包</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+    <span class="s">&quot;fmt&quot;</span>                               <span class="c1">// 导入 fmt 包，使其可用（fmt是format的缩写）</span>
+<span class="p">)</span>
+
+<span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>                           <span class="c1">// 声明一个名为 main 的函数</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Hello, playground&quot;</span><span class="p">)</span>    <span class="c1">// 在屏幕上打印出“Hello, playground”</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<hr class="docutils" />
+<p>尽管这段代码非常简短，但它却引入了 <code class="docutils literal notranslate"><span class="pre">package</span></code> 、 <code class="docutils literal notranslate"><span class="pre">import</span></code> 和 <code class="docutils literal notranslate"><span class="pre">func</span></code>
+这三个非常重要的关键字，这些保留关键字都有它们各自的特殊目的。</p>
+<p><code class="docutils literal notranslate"><span class="pre">package</span></code> 关键字声明了代码所属的包，在本例中这个包的名字就是 <code class="docutils literal notranslate"><span class="pre">main</span></code>
+。 所有用 Go
+编写的代码都会被组织成<em>各式各样的包</em>，并且每个包都对应一个单独的构想。
+比如 Go
+语言本身就提供了一个面向数学、压缩、加密、图像处理等领域的标准库。</p>
+<p>在 <code class="docutils literal notranslate"><span class="pre">package</span></code> 关键字之后， 代码使用了 <code class="docutils literal notranslate"><span class="pre">import</span></code>
+关键字来导入自己将要用到的包。 一个包可以包含任意数量的<em>函数</em>。 比如
+<code class="docutils literal notranslate"><span class="pre">math</span></code> 包就提供了诸如 <code class="docutils literal notranslate"><span class="pre">Sin</span></code> 、 <code class="docutils literal notranslate"><span class="pre">Cos</span></code> 、 <code class="docutils literal notranslate"><span class="pre">Tan</span></code> 和 <code class="docutils literal notranslate"><span class="pre">Sqrt</span></code>
+（平方根）等函数，而此处用到的 <code class="docutils literal notranslate"><span class="pre">fmt</span></code>
+包则提供了用于格式化输入和输出的函数。
+因为在屏幕上显示文本是一个非常常用的操作，所以 Go 使用了缩写 <code class="docutils literal notranslate"><span class="pre">fmt</span></code>
+作为包名。 Gopher
+们通常把这个包的名字读作“FŌŌMT!”，给人的感觉仿佛就像这个库是使用漫画书上的大爆炸字体撰写的一样。</p>
+<p><code class="docutils literal notranslate"><span class="pre">func</span></code> 关键字用于声明函数，在本例中这个函数的名字就是 <code class="docutils literal notranslate"><span class="pre">main</span></code> 。
+每个函数的<em>体</em>（body）都需要使用大括号 <code class="docutils literal notranslate"><span class="pre">{}</span></code> 实施包围，这样 Go
+才能知道每个函数从何处开始，又在何处结束。</p>
+<p><code class="docutils literal notranslate"><span class="pre">main</span></code> 这一<em>标识符</em>（identifier）具有特殊意义。 当我们运行一个 Go
+程序的时候，它总是从 <code class="docutils literal notranslate"><span class="pre">main</span></code> 包的 <code class="docutils literal notranslate"><span class="pre">main</span></code> 函数开始运行。 如果 <code class="docutils literal notranslate"><span class="pre">main</span></code>
+不存在，那么 Go
+编译器将报告一个错误，因为它无法得知程序应该从何处开始执行。</p>
+<img alt="../_images/go-game.jpg" src="../_images/go-game.jpg" />
+<p>为了打印出一个由文本组成的<em>行</em>，例子中的代码使用了 <code class="docutils literal notranslate"><span class="pre">Println</span></code>
+函数（其中 <code class="docutils literal notranslate"><span class="pre">ln</span></code> 为行的英文字母 line 的缩写）。
+每次用到被导入包中的某个函数时，我们都需要在函数的名字前面加上包的名字以及一个点号作为前缀。
+比如代码清单中的 <code class="docutils literal notranslate"><span class="pre">Println</span></code> 函数前面就带有 <code class="docutils literal notranslate"><span class="pre">fmt</span></code>
+以及一个点号作为前缀，这是因为 <code class="docutils literal notranslate"><span class="pre">Println</span></code> 函数就是由被导入的 <code class="docutils literal notranslate"><span class="pre">fmt</span></code>
+包提供的。 Go
+的这一特性可以让用户在阅读代码的时候立即弄清楚各个函数分别来源于哪个包。</p>
+<p>当我们按下 Go
+游乐场中的运行按钮时，代码中被引号包围的文本将输出至屏幕，最终使得文本“Hello,
+playground”出现在游乐场的输出区域中。
+对于英语来说，即使是缺少一个逗号也有可能会让整个句子的意义变得完全不同。
+同样地，标点符号对于编程语言来说也是至关重要的：比如 Go
+就需要依靠引号、圆括号和大括号等符号来理解用户输入的代码。</p>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2020, 黄健宏.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.0.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

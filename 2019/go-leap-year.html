@@ -2,23 +2,16 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>使用 Go 的逻辑运算符判断是否闰年 &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     'present',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Go 的变量与常量" href="var-and-const-in-go.html" />
@@ -32,8 +25,7 @@
 <script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -127,38 +119,38 @@
   <div class="section" id="go">
 <h1>使用 Go 的逻辑运算符判断是否闰年<a class="headerlink" href="#go" title="Permalink to this headline">¶</a></h1>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
+<p class="admonition-title">Note</p>
 <p>本文摘录自即将出版的《Go语言趣学指南》，
 请访问 <a class="reference external" href="http://gpwgcn.com">gpwgcn.com</a>  以获取更多相关信息。</p>
-<a class="last reference internal image-reference" href="../_images/gpwgcn.jpg"><img alt="../_images/gpwgcn.jpg" src="../_images/gpwgcn.jpg" style="width: 149.6px; height: 188.0px;" /></a>
+<a class="reference internal image-reference" href="../_images/gpwgcn.jpg"><img alt="../_images/gpwgcn.jpg" src="../_images/gpwgcn.jpg" style="width: 149.6px; height: 188.0px;" /></a>
 </div>
-<p>在 Go 中，逻辑运算符 <code class="docutils literal"><span class="pre">||</span></code> 代表“<em>逻辑或</em>”，而逻辑运算符 <code class="docutils literal"><span class="pre">&amp;&amp;</span></code>
+<p>在 Go 中，逻辑运算符 <code class="docutils literal notranslate"><span class="pre">||</span></code> 代表“<em>逻辑或</em>”，而逻辑运算符 <code class="docutils literal notranslate"><span class="pre">&amp;&amp;</span></code>
 则代表“<em>逻辑与</em>”。 这些逻辑运算符可以一次检查多个条件，图 3-1 和 3-2
 展示了它们的求值方式。</p>
 <hr class="docutils" />
-<p>图 3-1 逻辑或：当 <code class="docutils literal"><span class="pre">a</span></code> 、 <code class="docutils literal"><span class="pre">b</span></code> 两值中至少有一个为真时， <code class="docutils literal"><span class="pre">a</span> <span class="pre">||</span> <span class="pre">b</span></code> 为真</p>
+<p>图 3-1 逻辑或：当 <code class="docutils literal notranslate"><span class="pre">a</span></code> 、 <code class="docutils literal notranslate"><span class="pre">b</span></code> 两值中至少有一个为真时， <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">||</span> <span class="pre">b</span></code> 为真</p>
 <img alt="../_images/3-1.jpg" src="../_images/3-1.jpg" />
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
-<p>图 3-2 逻辑与：当且仅当 <code class="docutils literal"><span class="pre">a</span></code> 、 <code class="docutils literal"><span class="pre">b</span></code> 两值都为真时， <code class="docutils literal"><span class="pre">a</span> <span class="pre">&amp;&amp;</span> <span class="pre">b</span></code> 为真</p>
+<p>图 3-2 逻辑与：当且仅当 <code class="docutils literal notranslate"><span class="pre">a</span></code> 、 <code class="docutils literal notranslate"><span class="pre">b</span></code> 两值都为真时， <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">&amp;&amp;</span> <span class="pre">b</span></code> 为真</p>
 <img alt="../_images/3-2.jpg" src="../_images/3-2.jpg" />
 <hr class="docutils" />
 <p>代码清单 3-4 展示的是一段判断 2100
 年是否为闰年的程序，其中用到的判断指定年份是否为闰年的规则如下：</p>
 <ul class="simple">
-<li>能够被 4 整除但是不能被 100 整除的年份为闰年</li>
-<li>可以被 400 整除的年份也是闰年</li>
+<li><p>能够被 4 整除但是不能被 100 整除的年份为闰年</p></li>
+<li><p>可以被 400 整除的年份也是闰年</p></li>
 </ul>
 <blockquote>
 <div><p>{注意}</p>
-<p>正如之前所说， 取模运算符 <code class="docutils literal"><span class="pre">%</span></code> 可以计算出两个整数相除时所得的余数，
+<p>正如之前所说， 取模运算符 <code class="docutils literal notranslate"><span class="pre">%</span></code> 可以计算出两个整数相除时所得的余数，
 而余数为零则表示一个数被另一个数整除了。</p>
 </div></blockquote>
 <img alt="../_images/gopher.jpg" class="align-right" src="../_images/gopher.jpg" />
 <hr class="docutils" />
-<p>代码清单 3-4 闰年识别器： <code class="docutils literal"><span class="pre">leap.go</span></code></p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s2">&quot;The year is 2100, should you leap?&quot;</span><span class="p">)</span>
+<p>代码清单 3-4 闰年识别器： <code class="docutils literal notranslate"><span class="pre">leap.go</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s2">&quot;The year is 2100, should you leap?&quot;</span><span class="p">)</span>
 
 <span class="n">var</span> <span class="n">year</span> <span class="o">=</span> <span class="mi">2100</span>
 <span class="n">var</span> <span class="n">leap</span> <span class="o">=</span> <span class="n">year</span><span class="o">%</span><span class="mi">400</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="p">(</span><span class="n">year</span><span class="o">%</span><span class="mi">4</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">year</span><span class="o">%</span><span class="mi">100</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
@@ -172,23 +164,23 @@
 </div>
 <hr class="docutils" />
 <p>执行代码清单 3-4 中的程序将得到以下输出：</p>
-<div class="highlight-text"><div class="highlight"><pre><span></span>The year is 2100, should you leap?
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>The year is 2100, should you leap?
 Keep your feet on the ground.
 </pre></div>
 </div>
-<p>跟大多数编程语言一样，Go 也采用了<em>短路逻辑</em>： 如果位于 <code class="docutils literal"><span class="pre">||</span></code>
+<p>跟大多数编程语言一样，Go 也采用了<em>短路逻辑</em>： 如果位于 <code class="docutils literal notranslate"><span class="pre">||</span></code>
 运算符之前的第一个条件为真，那么位于运算符之后的条件就可以被忽略，没有必要再对其进行求值。
 具体到代码清单 3-4 中的例子，当给定年份可以被 400
 整除时，程序就不必再进行后续的判断了。</p>
-<p><code class="docutils literal"><span class="pre">&amp;&amp;</span></code> 运算符的行为跟 <code class="docutils literal"><span class="pre">||</span></code> 运算符正好相反：
+<p><code class="docutils literal notranslate"><span class="pre">&amp;&amp;</span></code> 运算符的行为跟 <code class="docutils literal notranslate"><span class="pre">||</span></code> 运算符正好相反：
 只有在两个条件都为真的情况下，运算结果才会为真。 对于代码清单 3-4
 中的例子，如果给定年份无法被 4 整除，那么程序就不会求值后续条件。</p>
-<p><em>逻辑非</em>运算符 <code class="docutils literal"><span class="pre">!</span></code> 可以将一个布尔值从 <code class="docutils literal"><span class="pre">false</span></code> 转变为 <code class="docutils literal"><span class="pre">true</span></code>
-，又或者将 <code class="docutils literal"><span class="pre">true</span></code> 转变为 <code class="docutils literal"><span class="pre">false</span></code> 。 作为例子，代码清单 3-5
+<p><em>逻辑非</em>运算符 <code class="docutils literal notranslate"><span class="pre">!</span></code> 可以将一个布尔值从 <code class="docutils literal notranslate"><span class="pre">false</span></code> 转变为 <code class="docutils literal notranslate"><span class="pre">true</span></code>
+，又或者将 <code class="docutils literal notranslate"><span class="pre">true</span></code> 转变为 <code class="docutils literal notranslate"><span class="pre">false</span></code> 。 作为例子，代码清单 3-5
 将在玩家没有火把或者未点燃火把时打印出一条信息。</p>
 <hr class="docutils" />
-<p>代码清单 3-5 逻辑非运算符： <code class="docutils literal"><span class="pre">torch.go</span></code></p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>var haveTorch = true
+<p>代码清单 3-5 逻辑非运算符： <code class="docutils literal notranslate"><span class="pre">torch.go</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>var haveTorch = true
 var litTorch = false
 
 if !haveTorch || !litTorch {
@@ -200,31 +192,30 @@ if !haveTorch || !litTorch {
 <blockquote>
 <div><p>{速查 3-4}</p>
 <ol class="arabic simple">
-<li>首先请使用纸和笔， 将代码清单 3-4 中闰年表达式的年份替换为
-<code class="docutils literal"><span class="pre">2000</span></code> ； 接着求值所有取模运算，
+<li><p>首先请使用纸和笔， 将代码清单 3-4 中闰年表达式的年份替换为
+<code class="docutils literal notranslate"><span class="pre">2000</span></code> ； 接着求值所有取模运算，
 计算出它们的余数（如果有需要可以使用计算器）； 在此之后， 求值
-<code class="docutils literal"><span class="pre">==</span></code> 和 <code class="docutils literal"><span class="pre">!=</span></code> 条件以得出 <code class="docutils literal"><span class="pre">true</span></code> 或者 <code class="docutils literal"><span class="pre">false</span></code> ； 最后，
-求值逻辑运算符 <code class="docutils literal"><span class="pre">&amp;&amp;</span></code> 和 <code class="docutils literal"><span class="pre">||</span></code> ， 并最终判断出 2000
-年是否为闰年。</li>
-<li>如果我们在求值 <code class="docutils literal"><span class="pre">2000%400</span> <span class="pre">==</span> <span class="pre">0</span></code> 为 <code class="docutils literal"><span class="pre">true</span></code> 时使用短路逻辑，
-是不是就可以节省一些时间了？ —</li>
+<code class="docutils literal notranslate"><span class="pre">==</span></code> 和 <code class="docutils literal notranslate"><span class="pre">!=</span></code> 条件以得出 <code class="docutils literal notranslate"><span class="pre">true</span></code> 或者 <code class="docutils literal notranslate"><span class="pre">false</span></code> ； 最后，
+求值逻辑运算符 <code class="docutils literal notranslate"><span class="pre">&amp;&amp;</span></code> 和 <code class="docutils literal notranslate"><span class="pre">||</span></code> ， 并最终判断出 2000
+年是否为闰年。</p></li>
+<li><p>如果我们在求值 <code class="docutils literal notranslate"><span class="pre">2000%400</span> <span class="pre">==</span> <span class="pre">0</span></code> 为 <code class="docutils literal notranslate"><span class="pre">true</span></code> 时使用短路逻辑，
+是不是就可以节省一些时间了？ —</p></li>
 </ol>
 </div></blockquote>
 <blockquote>
 <div><p>{速查 3-4 答案}</p>
 <ol class="arabic">
-<li><p class="first">是的， 2000 年的确是闰年：</p>
-<div class="code go highlight-default"><div class="highlight"><pre><span></span><span class="mi">2000</span><span class="o">%</span><span class="mi">400</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="p">(</span><span class="mi">2000</span><span class="o">%</span><span class="mi">4</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="mi">2000</span><span class="o">%</span><span class="mi">100</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="mi">0</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="p">(</span><span class="mi">0</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="mi">0</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
-<span class="n">true</span> <span class="o">||</span> <span class="p">(</span><span class="n">true</span> <span class="o">&amp;&amp;</span> <span class="n">false</span><span class="p">)</span>
-<span class="n">true</span> <span class="o">||</span> <span class="p">(</span><span class="n">false</span><span class="p">)</span>
-<span class="n">true</span>
+<li><p>是的， 2000 年的确是闰年：</p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="mi">2000</span><span class="o">%</span><span class="mi">400</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="p">(</span><span class="mi">2000</span><span class="o">%</span><span class="mi">4</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="mi">2000</span><span class="o">%</span><span class="mi">100</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="mi">0</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="p">(</span><span class="mi">0</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="mi">0</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+<span class="kc">true</span> <span class="o">||</span> <span class="p">(</span><span class="kc">true</span> <span class="o">&amp;&amp;</span> <span class="kc">false</span><span class="p">)</span>
+<span class="kc">true</span> <span class="o">||</span> <span class="p">(</span><span class="kc">false</span><span class="p">)</span>
+<span class="kc">true</span>
 </pre></div>
 </div>
 </li>
-<li><p class="first">是的， 计算并写下等式的后半部分需要花费额外的时间。
+<li><p>是的， 计算并写下等式的后半部分需要花费额外的时间。
 虽然计算机执行相同计算的速度要快得多，
-但短路逻辑仍然能够起到节约时间的作用。</p>
-</li>
+但短路逻辑仍然能够起到节约时间的作用。</p></li>
 </ol>
 </div></blockquote>
 </div>
@@ -242,7 +233,7 @@ if !haveTorch || !litTorch {
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.0.<br/>
     </p>
   </div>
 </footer>

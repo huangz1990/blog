@@ -2,23 +2,16 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>使用 redis-py 储存地理位置数据 &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     'present',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="翻译笔记之十：不要强求一致" href="notes-about-translation-10.html" />
@@ -32,8 +25,7 @@
 <script type="text/javascript" src="../../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../../_static/bootstrap-sphinx.js "></script>
 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -152,13 +144,13 @@
 所以它无法通过 pypi 取得。
 为此，
 我们需要从 <a class="reference external" href="https://github.com/andymccurdy/redis-py">redis-py 的 github 页面</a>手动克隆最新版本的 redis-py ：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ git clone git@github.com:andymccurdy/redis-py.git
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git clone git@github.com:andymccurdy/redis-py.git
 </pre></div>
 </div>
 <p>在克隆操作执行完毕之后，
-我们进入到 <code class="docutils literal"><span class="pre">redis-py</span></code> 文件夹中，
+我们进入到 <code class="docutils literal notranslate"><span class="pre">redis-py</span></code> 文件夹中，
 然后将这个新版本安装到系统中：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$cd redis-py
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$cd redis-py
 $sudo setup.py install
 </pre></div>
 </div>
@@ -166,14 +158,14 @@ $sudo setup.py install
 那么记得在安装新版之前，
 先将旧版本卸载掉。</p>
 <p>在安装操作执行完毕之后，
-我们在解释器中载入 <code class="docutils literal"><span class="pre">redis-py</span></code> 库：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">redis</span> <span class="kn">import</span> <span class="n">Redis</span>
+我们在解释器中载入 <code class="docutils literal notranslate"><span class="pre">redis-py</span></code> 库：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">redis</span> <span class="kn">import</span> <span class="n">Redis</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">Redis</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>通过对 <code class="docutils literal"><span class="pre">Redis()</span></code> 对象的属性进行访问，
+<p>通过对 <code class="docutils literal notranslate"><span class="pre">Redis()</span></code> 对象的属性进行访问，
 我们可以确认各个 GEO 命令在 redis-py 中都有了相应的方法：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
 <span class="gp">... </span>  <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;geo&quot;</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 <span class="gp">...</span>
@@ -190,10 +182,10 @@ $sudo setup.py install
 </div>
 <div class="section" id="id2">
 <h2>添加地理位置<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
-<p>首先要测试的是 <code class="docutils literal"><span class="pre">geoadd()</span></code> 方法，
+<p>首先要测试的是 <code class="docutils literal notranslate"><span class="pre">geoadd()</span></code> 方法，
 这个方法调用的是 Redis 的 <a class="reference external" href="http://redisdoc.com/geo/geoadd.html">GEOADD</a> 命令，
 它的文档如下：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>geoadd(self, name, *values) method of redis.client.Redis instance
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>geoadd(self, name, *values) method of redis.client.Redis instance
     Add the specified geospatial items to the specified key identified
     by the ``name`` argument. The Geospatial items are given as ordered
     members of the ``values`` argument, each item or place is formed b
@@ -201,9 +193,9 @@ $sudo setup.py install
 </pre></div>
 </div>
 <p>作为例子，
-以下代码展示了如何使用 <code class="docutils literal"><span class="pre">geoadd()</span></code> 方法，
-将清远、广州和佛山这三个城市的坐标添加到 <code class="docutils literal"><span class="pre">&quot;Guangdong&quot;</span></code> 这个键里面：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">geoadd</span><span class="p">(</span><span class="s2">&quot;Guangdong&quot;</span><span class="p">,</span> <span class="s2">&quot;113.2099647&quot;</span><span class="p">,</span> <span class="s2">&quot;23.593675&quot;</span><span class="p">,</span> <span class="s2">&quot;Qingyuan&quot;</span><span class="p">,</span> <span class="mf">113.2278442</span><span class="p">,</span> <span class="mf">23.1255978</span><span class="p">,</span> <span class="s2">&quot;Guangzhou&quot;</span><span class="p">,</span> <span class="mf">113.106308</span><span class="p">,</span> <span class="mf">23.0088312</span><span class="p">,</span> <span class="s2">&quot;Foshan&quot;</span><span class="p">)</span>
+以下代码展示了如何使用 <code class="docutils literal notranslate"><span class="pre">geoadd()</span></code> 方法，
+将清远、广州和佛山这三个城市的坐标添加到 <code class="docutils literal notranslate"><span class="pre">&quot;Guangdong&quot;</span></code> 这个键里面：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">geoadd</span><span class="p">(</span><span class="s2">&quot;Guangdong&quot;</span><span class="p">,</span> <span class="s2">&quot;113.2099647&quot;</span><span class="p">,</span> <span class="s2">&quot;23.593675&quot;</span><span class="p">,</span> <span class="s2">&quot;Qingyuan&quot;</span><span class="p">,</span> <span class="mf">113.2278442</span><span class="p">,</span> <span class="mf">23.1255978</span><span class="p">,</span> <span class="s2">&quot;Guangzhou&quot;</span><span class="p">,</span> <span class="mf">113.106308</span><span class="p">,</span> <span class="mf">23.0088312</span><span class="p">,</span> <span class="s2">&quot;Foshan&quot;</span><span class="p">)</span>
 <span class="go">3</span>
 </pre></div>
 </div>
@@ -213,17 +205,17 @@ $sudo setup.py install
 <p>在将地理位置储存到键里面之后，
 我们就可以使用 <a class="reference external" href="http://redisdoc.com/geo/geopos.html">GEOPOS</a> 命令去获取已储存的地理位置信息。
 在 redis-py 里面，
-<code class="docutils literal"><span class="pre">GEOPOS</span></code> 命令可以通过执行 <code class="docutils literal"><span class="pre">geopos()</span></code> 方法来调用，
+<code class="docutils literal notranslate"><span class="pre">GEOPOS</span></code> 命令可以通过执行 <code class="docutils literal notranslate"><span class="pre">geopos()</span></code> 方法来调用，
 以下是这一方法的文档：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>geopos(self, name, *values) method of redis.client.Redis instance
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>geopos(self, name, *values) method of redis.client.Redis instance
     Return the postitions of each item of ``values`` as members of
     the specified key identified by the ``name``argument. Each position
     is represented by the pairs lat and lon.
 </pre></div>
 </div>
 <p>比如说，
-以下代码就展示了如何使用 <code class="docutils literal"><span class="pre">geopos()</span></code> 方法去从 <code class="docutils literal"><span class="pre">&quot;Guangdong&quot;</span></code> 键中获取清远和广州的地理位置：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">geopos</span><span class="p">(</span><span class="s2">&quot;Guangdong&quot;</span><span class="p">,</span> <span class="s2">&quot;Qingyuan&quot;</span><span class="p">,</span> <span class="s2">&quot;Guangzhou&quot;</span><span class="p">)</span>
+以下代码就展示了如何使用 <code class="docutils literal notranslate"><span class="pre">geopos()</span></code> 方法去从 <code class="docutils literal notranslate"><span class="pre">&quot;Guangdong&quot;</span></code> 键中获取清远和广州的地理位置：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">geopos</span><span class="p">(</span><span class="s2">&quot;Guangdong&quot;</span><span class="p">,</span> <span class="s2">&quot;Qingyuan&quot;</span><span class="p">,</span> <span class="s2">&quot;Guangzhou&quot;</span><span class="p">)</span>
 <span class="go">[(113.20996731519699, 23.593675019671288), (113.22784155607224, 23.125598202060807)]</span>
 </pre></div>
 </div>
@@ -232,9 +224,9 @@ $sudo setup.py install
 <h2>计算两地间的距离<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
 <p>对于被储存的两个地理位置，
 我们可以使用 <a class="reference external" href="http://redisdoc.com/geo/geodist.html">GEODIST</a> 命令去计算它们之间的距离，
-而这个命令在 redis-py 中可以通过同名的 <code class="docutils literal"><span class="pre">geodist()</span></code> 方法去调用，
+而这个命令在 redis-py 中可以通过同名的 <code class="docutils literal notranslate"><span class="pre">geodist()</span></code> 方法去调用，
 以下是该方法的文档说明：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>geodist(self, name, place1, place2, unit=None) method of redis.client.Redis instance
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>geodist(self, name, place1, place2, unit=None) method of redis.client.Redis instance
     Return the distance between ``place1`` and ``place2`` members of the
     ``name`` key.
     The units must be one o fthe following : m, km mi, ft. By default
@@ -244,15 +236,15 @@ $sudo setup.py install
 <p>比如说，
 要计算清远和广州之间的距离，
 我们可以执行以下代码：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">geodist</span><span class="p">(</span><span class="s2">&quot;Guangdong&quot;</span><span class="p">,</span> <span class="s2">&quot;Qingyuan&quot;</span><span class="p">,</span> <span class="s2">&quot;Guangzhou&quot;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">geodist</span><span class="p">(</span><span class="s2">&quot;Guangdong&quot;</span><span class="p">,</span> <span class="s2">&quot;Qingyuan&quot;</span><span class="p">,</span> <span class="s2">&quot;Guangzhou&quot;</span><span class="p">)</span>
 <span class="go">52094.4338</span>
 </pre></div>
 </div>
-<p>因为 <code class="docutils literal"><span class="pre">GEODIST</span></code> 命令默认使用米作为单位，
-所以它返回了 <code class="docutils literal"><span class="pre">52094.4338</span></code> 米作为结果，
+<p>因为 <code class="docutils literal notranslate"><span class="pre">GEODIST</span></code> 命令默认使用米作为单位，
+所以它返回了 <code class="docutils literal notranslate"><span class="pre">52094.4338</span></code> 米作为结果，
 为了让这个结果更为直观一些，
-我们可以将 <code class="docutils literal"><span class="pre">GEODIST</span></code> 命令的单位从米改为千米（公里）：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">geodist</span><span class="p">(</span><span class="s2">&quot;Guangdong&quot;</span><span class="p">,</span> <span class="s2">&quot;Qingyuan&quot;</span><span class="p">,</span> <span class="s2">&quot;Guangzhou&quot;</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;km&quot;</span><span class="p">)</span>
+我们可以将 <code class="docutils literal notranslate"><span class="pre">GEODIST</span></code> 命令的单位从米改为千米（公里）：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">geodist</span><span class="p">(</span><span class="s2">&quot;Guangdong&quot;</span><span class="p">,</span> <span class="s2">&quot;Qingyuan&quot;</span><span class="p">,</span> <span class="s2">&quot;Guangzhou&quot;</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;km&quot;</span><span class="p">)</span>
 <span class="go">52.0944</span>
 </pre></div>
 </div>
@@ -262,9 +254,9 @@ $sudo setup.py install
 <div class="section" id="id5">
 <h2>范围查找<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
 <p>Redis 的 <a class="reference external" href="http://redisdoc.com/geo/georadius.html">GEORADIUS 命令</a> 和 <a class="reference external" href="http://redisdoc.com/geo/georadiusbymember.html">GEORADIUSBYMEMBER 命令</a> 可以让用户基于指定的地理位置或者已有的地理位置进行范围查找，
-redis-py 也通过同名的 <code class="docutils literal"><span class="pre">georadius()</span></code> 方法和 <code class="docutils literal"><span class="pre">georadiusbymember()</span></code> 方法来执行这两个命令。</p>
-<p>以下是 <code class="docutils literal"><span class="pre">georadius()</span></code> 方法的文档：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>georadius(self, name, longitude, latitude, radius, unit=None, withdist=False, withcoord=False, withhash=False, count=None, sort=None, store=None, store_dist=None) method of redis.client.Redis instance
+redis-py 也通过同名的 <code class="docutils literal notranslate"><span class="pre">georadius()</span></code> 方法和 <code class="docutils literal notranslate"><span class="pre">georadiusbymember()</span></code> 方法来执行这两个命令。</p>
+<p>以下是 <code class="docutils literal notranslate"><span class="pre">georadius()</span></code> 方法的文档：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>georadius(self, name, longitude, latitude, radius, unit=None, withdist=False, withcoord=False, withhash=False, count=None, sort=None, store=None, store_dist=None) method of redis.client.Redis instance
     Return the members of the of the specified key identified by the
     ``name``argument which are within the borders of the area specified
     with the ``latitude`` and ``longitude`` location and the maxium
@@ -293,8 +285,8 @@ redis-py 也通过同名的 <code class="docutils literal"><span class="pre">geo
     destination score is set with the distance.
 </pre></div>
 </div>
-<p>而以下则是 <code class="docutils literal"><span class="pre">georadiusbymember()</span></code> 方法的文档：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>georadiusbymember(self, name, member, radius, unit=None, withdist=False, withcoord=False, withhash=False, count=None, sort=None, store=None, store_dist=None) method of redis.client.Redis instance
+<p>而以下则是 <code class="docutils literal notranslate"><span class="pre">georadiusbymember()</span></code> 方法的文档：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>georadiusbymember(self, name, member, radius, unit=None, withdist=False, withcoord=False, withhash=False, count=None, sort=None, store=None, store_dist=None) method of redis.client.Redis instance
     This command is exactly like ``georadius`` with the sole difference
     that instead of taking, as the center of the area to query, a longitude
     and latitude value, it takes the name of a member already existing
@@ -303,8 +295,8 @@ redis-py 也通过同名的 <code class="docutils literal"><span class="pre">geo
 </div>
 <p>作为例子，
 以下代码展示了如何通过给定深圳的地理坐标（114.0538788，22.5551603）来查找位于它指定范围之内的其他城市，
-这一查找操作是通过 <code class="docutils literal"><span class="pre">georadius()</span></code> 方法来完成的：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">georadius</span><span class="p">(</span><span class="s2">&quot;Guangdong&quot;</span><span class="p">,</span> <span class="mf">114.0538788</span><span class="p">,</span> <span class="mf">22.5551603</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;km&quot;</span><span class="p">,</span> <span class="n">withdist</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+这一查找操作是通过 <code class="docutils literal notranslate"><span class="pre">georadius()</span></code> 方法来完成的：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">georadius</span><span class="p">(</span><span class="s2">&quot;Guangdong&quot;</span><span class="p">,</span> <span class="mf">114.0538788</span><span class="p">,</span> <span class="mf">22.5551603</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;km&quot;</span><span class="p">,</span> <span class="n">withdist</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="go">[]  # 没有城市在深圳的半径 100 公里之内</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">georadius</span><span class="p">(</span><span class="s2">&quot;Guangdong&quot;</span><span class="p">,</span> <span class="mf">114.0538788</span><span class="p">,</span> <span class="mf">22.5551603</span><span class="p">,</span> <span class="mi">120</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;km&quot;</span><span class="p">,</span> <span class="n">withdist</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -315,9 +307,9 @@ redis-py 也通过同名的 <code class="docutils literal"><span class="pre">geo
 </pre></div>
 </div>
 <p>另一方面，
-以下代码则展示了如何通过 <code class="docutils literal"><span class="pre">georadiusbymember()</span></code> 方法，
+以下代码则展示了如何通过 <code class="docutils literal notranslate"><span class="pre">georadiusbymember()</span></code> 方法，
 找出位于广州指定半径范围内的其他城市：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">georadiusbymember</span><span class="p">(</span><span class="s2">&quot;Guangdong&quot;</span><span class="p">,</span> <span class="s2">&quot;Guangzhou&quot;</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;km&quot;</span><span class="p">,</span> <span class="n">withdist</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">georadiusbymember</span><span class="p">(</span><span class="s2">&quot;Guangdong&quot;</span><span class="p">,</span> <span class="s2">&quot;Guangzhou&quot;</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;km&quot;</span><span class="p">,</span> <span class="n">withdist</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="go">[[&#39;Guangzhou&#39;, 0.0], [&#39;Foshan&#39;, 17.9819]]  # 佛山在广州的半径 30 公里范围之内</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">georadiusbymember</span><span class="p">(</span><span class="s2">&quot;Guangdong&quot;</span><span class="p">,</span> <span class="s2">&quot;Guangzhou&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;km&quot;</span><span class="p">,</span> <span class="n">withdist</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -328,17 +320,17 @@ redis-py 也通过同名的 <code class="docutils literal"><span class="pre">geo
 <div class="section" id="geohash">
 <h2>获取 geohash<a class="headerlink" href="#geohash" title="Permalink to this headline">¶</a></h2>
 <p>最后，
-用户可以通过 <code class="docutils literal"><span class="pre">geohash()</span></code> 方法调用 <a class="reference external" href="http://redisdoc.com/geo/geohash.html">GEOHASH</a> 命令，
+用户可以通过 <code class="docutils literal notranslate"><span class="pre">geohash()</span></code> 方法调用 <a class="reference external" href="http://redisdoc.com/geo/geohash.html">GEOHASH</a> 命令，
 以此来获得指定地理位置的 geohash 值，
 以下是该方法的文档：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>geohash(self, name, *values) method of redis.client.Redis instance
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>geohash(self, name, *values) method of redis.client.Redis instance
     Return the geo hash string for each item of ``values`` members of
     the specified key identified by the ``name``argument.
 </pre></div>
 </div>
 <p>作为例子，
 以下代码展示了如何获取清远、广州和佛山的 geohash 值：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">geohash</span><span class="p">(</span><span class="s2">&quot;Guangdong&quot;</span><span class="p">,</span> <span class="s2">&quot;Qingyuan&quot;</span><span class="p">,</span> <span class="s2">&quot;Guangzhou&quot;</span><span class="p">,</span> <span class="s2">&quot;Foshan&quot;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">geohash</span><span class="p">(</span><span class="s2">&quot;Guangdong&quot;</span><span class="p">,</span> <span class="s2">&quot;Qingyuan&quot;</span><span class="p">,</span> <span class="s2">&quot;Guangzhou&quot;</span><span class="p">,</span> <span class="s2">&quot;Foshan&quot;</span><span class="p">)</span>
 <span class="go">[&#39;ws0w0phgp70&#39;, &#39;ws0e89curg0&#39;, &#39;ws06vu9s0j0&#39;]</span>
 </pre></div>
 </div>
@@ -370,7 +362,7 @@ redis-py 也通过同名的 <code class="docutils literal"><span class="pre">geo
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.0.<br/>
     </p>
   </div>
 </footer>

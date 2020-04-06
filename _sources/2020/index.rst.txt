@@ -1,0 +1,14 @@
+2020
+===========
+
+.. toctree::
+   :maxdepth: 2
+
+   hello-world-in-go
+   what-is-golang
+   gpwg-target-reader
+   unprofessional-translator
+   docker-on-linux
+   across-the-wall
+   windows-subsystem-for-linux
+   change-ubuntu-software-source.rst

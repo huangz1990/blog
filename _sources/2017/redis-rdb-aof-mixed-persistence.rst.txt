@@ -1,0 +1,127 @@
+Redis 4.0 新功能简介：RDB-AOF 混合持久化
+==========================================
+
+在过去，
+Redis 用户通常会因为 RDB 持久化和 AOF 持久化之间不同的优缺点而陷入两难的选择当中：
+
+- RDB 持久化能够快速地储存和恢复数据，
+  但是在服务器停机时却会丢失大量数据；
+
+- AOF 持久化能够有效地提高数据的安全性，
+  但是在储存和恢复数据方面却要耗费大量的时间。
+
+为了让用户能够同时拥有上述两种持久化的优点，
+Redis 4.0 推出了一个能够“鱼和熊掌兼得”的持久化方案 ——
+RDB-AOF 混合持久化：
+这种持久化能够通过 AOF 重写操作创建出一个同时包含 RDB 数据和 AOF 数据的 AOF 文件，
+其中 RDB 数据位于 AOF 文件的开头，
+它们储存了服务器开始执行重写操作时的数据库状态：
+至于那些在重写操作执行之后执行的 Redis 命令，
+则会继续以 AOF 格式追加到 AOF 文件的末尾，
+也即是 RDB 数据之后。
+
+
+创建包含混合持久化内容的 AOF 文件
+--------------------------------------
+
+在启用了 RDB-AOF 混合持久化功能的情况下，
+如果我们执行以下命令：
+
+::
+
+    127.0.0.1:6379> SET K1 "V1"
+    OK
+
+    127.0.0.1:6379> SET K2 "V2"
+    OK
+
+    127.0.0.1:6379> BGREWRITEAOF
+    Background append only file rewriting started
+
+    127.0.0.1:6379> SET K3 "V3"
+    OK
+
+    127.0.0.1:6379> SET K4 "V4"
+    OK
+
+那么 Redis 服务器将创建出包含以下内容的 AOF 文件：
+
+::
+
+    $ od -c appendonly.aof
+    0000000    R   E   D   I   S   0   0   0   8 372  \t   r   e   d   i   s
+    0000020    -   v   e   r  \v   9   9   9   .   9   9   9   .   9   9   9
+    0000040  372  \n   r   e   d   i   s   -   b   i   t   s 300   @ 372 005
+    0000060    c   t   i   m   e 302   ~ 204 016   Z 372  \b   u   s   e   d
+    0000100    -   m   e   m 302 300   z 017  \0 372  \f   a   o   f   -   p
+    0000120    r   e   a   m   b   l   e 300 001 376  \0 373 002  \0  \0 002
+    0000140    K   1 002   V   1  \0 002   K   2 002   V   2 377   9 214   H
+    0000160  253 212   0   G 344   *   2  \r  \n   $   6  \r  \n   S   E   L
+    0000200    E   C   T  \r  \n   $   1  \r  \n   0  \r  \n   *   3  \r  \n
+    0000220    $   3  \r  \n   S   E   T  \r  \n   $   2  \r  \n   K   3  \r
+    0000240   \n   $   2  \r  \n   V   3  \r  \n   *   3  \r  \n   $   3  \r
+    0000260   \n   S   E   T  \r  \n   $   2  \r  \n   K   4  \r  \n   $   2
+    0000300   \r  \n   V   4  \r  \n                                        
+    0000306
+
+从文件的内容可以看出，
+文件的前半部分储存的是 RDB 格式的数据，
+而后半部分储存的则是 AOF 格式的数据。
+
+
+启用 RDB-AOF 混合持久化
+------------------------
+
+在目前版本中，
+RDB-AOF 混合持久化功能默认是处于关闭状态的，
+为了启用该功能，
+用户不仅需要开启 AOF 持久化功能，
+还需要将 ``aof-use-rdb-preamble`` 选项的值设置为真，
+就像这样：
+
+::
+
+    $ cat redis.conf 
+    appendonly yes
+    aof-use-rdb-preamble yes
+
+    $ redis-server redis.conf 
+    9468:C 17 Nov 14:46:01.063 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+    9468:C 17 Nov 14:46:01.064 # Redis version=999.999.999, bits=64, commit=1189d90d, modified=1, pid=9468, just started
+    9468:C 17 Nov 14:46:01.064 # Configuration loaded
+    9468:M 17 Nov 14:46:01.065 * Increased maximum number of open files to 10032 (it was originally set to 256).
+                    _._                                                  
+               _.-``__ ''-._                                             
+          _.-``    `.  `_.  ''-._           Redis 999.999.999 (1189d90d/1) 64 bit
+      .-`` .-```.  ```\/    _.,_ ''-._                                   
+     (    '      ,       .-`  | `,    )     Running in standalone mode
+     |`-._`-...-` __...-.``-._|'` _.-'|     Port: 6379
+     |    `-._   `._    /     _.-'    |     PID: 9468
+      `-._    `-._  `-./  _.-'    _.-'                                   
+     |`-._`-._    `-.__.-'    _.-'_.-'|                                  
+     |    `-._`-._        _.-'_.-'    |           http://redis.io        
+      `-._    `-._`-.__.-'_.-'    _.-'                                   
+     |`-._`-._    `-.__.-'    _.-'_.-'|                                  
+     |    `-._`-._        _.-'_.-'    |                                  
+      `-._    `-._`-.__.-'_.-'    _.-'                                   
+          `-._    `-.__.-'    _.-'                                       
+              `-._        _.-'                                           
+                  `-.__.-'                                               
+
+    9468:M 17 Nov 14:46:01.066 # Server initialized
+    9468:M 17 Nov 14:46:01.066 * Reading RDB preamble from AOF file...
+    9468:M 17 Nov 14:46:01.066 * Reading the remaining AOF tail...
+    9468:M 17 Nov 14:46:01.066 * DB loaded from append only file: 0.000 seconds
+    9468:M 17 Nov 14:46:01.066 * Ready to accept connections
+
+
+结语
+--------
+
+好的，
+关于 RDB-AOF 混合持久化功能的介绍到此就结束了，
+希望这篇文章能够帮助大家更好地了解 Redis 4.0 的新功能，
+我将在接下来的更多文章中继续向大家介绍更多 Redis 4.0 的新功能。
+
+| 黄健宏
+| 2017.11.17

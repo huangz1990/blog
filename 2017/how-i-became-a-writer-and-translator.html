@@ -2,23 +2,16 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>技术图书作译者的炼成方法 &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     'present',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="重分片对 Redis 集群的性能影响分析" href="redis-reshard-performance-issue.html" />
@@ -32,8 +25,7 @@
 <script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -220,15 +212,15 @@
 但翻译图书对于我来说还是第一次，
 所以我在翻译《Redis实战》一书的过程中下了很大的功夫：</p>
 <ul class="simple">
-<li>比如说，
+<li><p>比如说，
 每当我开发出一种新的翻译技巧或技术时，
 我都会将这些技术记录到博客里面和大家分享，
 当我翻译完《Redis实战》的时候，
-类似的文章在我博客上已经发表了十多篇。</li>
-<li>另外对于《Redis实战》这种 300 页左右的图书来说，
+类似的文章在我博客上已经发表了十多篇。</p></li>
+<li><p>另外对于《Redis实战》这种 300 页左右的图书来说，
 出版社一般只会给译者三四个月，
 最多半年的时间来进行翻译，
-但是《Redis实战》的翻译工作却跨越了一年半之久。</li>
+但是《Redis实战》的翻译工作却跨越了一年半之久。</p></li>
 </ul>
 <p>对《Redis实战》的翻译过程感兴趣的读者，
 可以参考我之前写的<a class="reference external" href="http://blog.huangz.me/diary/2015/memories-of-redis-in-action-translation.html">《Redis in Action》翻译记事</a>以及<a class="reference external" href="http://blog.huangz.me/diary/2016/riacn-one-year-anniversary.html">《Redis实战》一周年回顾</a>这两篇文章。</p>
@@ -237,19 +229,19 @@
 <h2>专职作家如何才能养活自己<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h2>
 <p>写一本书的收入主要跟书本的销量有关，
 具体收益可以通过以下公式计算：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">定价</span> <span class="o">*</span> <span class="n">销量</span> <span class="o">*</span> <span class="n">版税率</span> <span class="o">=</span> <span class="n">税前收入</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">定价</span> <span class="o">*</span> <span class="n">销量</span> <span class="o">*</span> <span class="n">版税率</span> <span class="o">=</span> <span class="n">税前收入</span>
 </pre></div>
 </div>
 <p>其中：</p>
 <ul class="simple">
-<li>定价就是你书本的售价，
-比如 49、 59、 79 等等。</li>
-<li>销量就是你书本卖出的数量，
-比如 1 千册， 5 千册等等。</li>
-<li>版税率就是出版社买了你的版权之后，
+<li><p>定价就是你书本的售价，
+比如 49、 59、 79 等等。</p></li>
+<li><p>销量就是你书本卖出的数量，
+比如 1 千册， 5 千册等等。</p></li>
+<li><p>版税率就是出版社买了你的版权之后，
 每卖出一本书给你的报酬，
 通常是书本定价的 7% ~ 10% ，
-但不同出版社、不同作者的版税率可能会有所不同。</li>
+但不同出版社、不同作者的版税率可能会有所不同。</p></li>
 </ul>
 <p>以上三个数相乘，
 就得出了作者的税前收入。
@@ -294,32 +286,32 @@
 可以像我一样，
 先定个小目标：</p>
 <ul class="simple">
-<li>刚开始先写几篇博客，
+<li><p>刚开始先写几篇博客，
 写完几篇之后再写几篇，
 写完几篇之后再写几篇，
-然后你就有了十篇八篇文章了。</li>
-<li>接着在这个基础上再扩展和修改，
+然后你就有了十篇八篇文章了。</p></li>
+<li><p>接着在这个基础上再扩展和修改，
 凑够十几二十篇文章，
-你就有了一本书。</li>
-<li>然后你就可以联系出版社的编辑，
+你就有了一本书。</p></li>
+<li><p>然后你就可以联系出版社的编辑，
 看他们是否有兴趣出版你的书；
 又或者，
-你也可以在网上书店又或者 GitBook 、 LeanPub 等平台上发布你的书。</li>
+你也可以在网上书店又或者 GitBook 、 LeanPub 等平台上发布你的书。</p></li>
 </ul>
 <p>至于译者来说，
 我感觉最重要的是“认真”：</p>
 <ul class="simple">
-<li>在进行翻译的时候，
+<li><p>在进行翻译的时候，
 遇到不认识的单词可以查，
 遇到不认识的语法也可以查，
 遇到不了解的内容可以在 Google 上搜索或者在维基百科上进行查找，
-所以你很少会遇到技术上的难题。</li>
-<li>既然技术上不会出现难题，
+所以你很少会遇到技术上的难题。</p></li>
+<li><p>既然技术上不会出现难题，
 那么决定翻译作品质量的就是译者的态度了：
 只要你足够认真地对待翻译工作，
 那么出来的作品就会比较好；
 但如果你不认真对待这个工作的话，
-那么出来的作品可能就会不如人意。</li>
+那么出来的作品可能就会不如人意。</p></li>
 </ul>
 <p>最后，
 因为出书跟编程以及其他所有事情一样，
@@ -351,7 +343,7 @@
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.0.<br/>
     </p>
   </div>
 </footer>

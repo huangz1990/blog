@@ -2,23 +2,16 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>翻译笔记之四：消除人称代词 &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     'present',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Manning 出版社的买纸书送电子书策略" href="manning-ebook.html" />
@@ -32,8 +25,7 @@
 <script type="text/javascript" src="../../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../../_static/bootstrap-sphinx.js "></script>
 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -133,22 +125,24 @@
 <p>举个例子，
 对于以下原文来说：</p>
 <blockquote>
-<div>In almost every case where we want to deal with timeouts in Redis,
+<div><p>In almost every case where we want to deal with timeouts in Redis,
 we’ll generally look to one of two different methods.
-Either we’ll use <code class="docutils literal"><span class="pre">EXPIRE</span></code> like we did with our standard locks,
-or we’ll use <code class="docutils literal"><span class="pre">ZSET</span></code>s.
-In this case, we want to use <code class="docutils literal"><span class="pre">ZSET</span></code>s,
-because that allows us to keep information about multiple semaphore holders in a single structure.</div></blockquote>
+Either we’ll use <code class="docutils literal notranslate"><span class="pre">EXPIRE</span></code> like we did with our standard locks,
+or we’ll use <code class="docutils literal notranslate"><span class="pre">ZSET</span></code>s.
+In this case, we want to use <code class="docutils literal notranslate"><span class="pre">ZSET</span></code>s,
+because that allows us to keep information about multiple semaphore holders in a single structure.</p>
+</div></blockquote>
 <p>如果直接翻译这段原文的话，
 那么译文就会变成：</p>
 <blockquote>
-<div>每次<strong>我们</strong>打算在 Redis 里面处理超时的时候，
+<div><p>每次<strong>我们</strong>打算在 Redis 里面处理超时的时候，
 <strong>我们</strong>通常会选择两种方法中的其中一种。
-<strong>我们</strong>要么就像之前实现分布式锁一样使用 <code class="docutils literal"><span class="pre">EXPIRE</span></code> 命令，
+<strong>我们</strong>要么就像之前实现分布式锁一样使用 <code class="docutils literal notranslate"><span class="pre">EXPIRE</span></code> 命令，
 要么就使用有序集合。
 而这一次，
 <strong>我们</strong>打算使用有序集合，
-因为这可以让<strong>我们</strong>将多个信号量持有者的相关信息都保存到单个结构里面。</div></blockquote>
+因为这可以让<strong>我们</strong>将多个信号量持有者的相关信息都保存到单个结构里面。</p>
+</div></blockquote>
 <p>在这短短的三句话里面，
 光是“我们”就出现了 5 次，
 占了 10 个字的空间：
@@ -160,20 +154,21 @@ because that allows us to keep information about multiple semaphore holders in a
 就可以让译文里面的“我们”大量减少，
 并让译文的意思变得更为清晰：</p>
 <blockquote>
-<div>使用 Redis 实现超时限制特性通常有两种方法可选：
-一种是像之前构建分布式锁那样，使用 <code class="docutils literal"><span class="pre">EXPIRE</span></code> 命令；
+<div><p>使用 Redis 实现超时限制特性通常有两种方法可选：
+一种是像之前构建分布式锁那样，使用 <code class="docutils literal notranslate"><span class="pre">EXPIRE</span></code> 命令；
 而另一种则是使用有序集合。
 为了将多个信号量持有者的信息都储存到同一个结构里面，
-这次我们将使用有序集合来构建计数信号量。</div></blockquote>
+这次我们将使用有序集合来构建计数信号量。</p>
+</div></blockquote>
 <p>上面的译文根据原文的上下文，
 删去了多余的代词，
 并将必须的代词替换成了原本被代指的元素，
 使得译文要表达的意思变得更为准确，
 让读者一看就明白。</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
+<p class="admonition-title">Note</p>
 <p>快速检验译文质量的诀窍</p>
-<p class="last">基于本文所说的问题，
+<p>基于本文所说的问题，
 如果你在一本译作里面发现了大量人称代词，
 那么就需要提高警惕了：
 如果译文连这种人称代词的基本问题都没有处理好，
@@ -198,7 +193,7 @@ because that allows us to keep information about multiple semaphore holders in a
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.0.<br/>
     </p>
   </div>
 </footer>

@@ -2,23 +2,16 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>使用 Redis GEO 储存地理位置 &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     'present',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="使用 HyperLogLog 实现概率去重" href="redis-duplicate-checker.html" />
@@ -32,8 +25,7 @@
 <script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -127,21 +119,21 @@
   <div class="section" id="redis-geo">
 <h1>使用 Redis GEO 储存地理位置<a class="headerlink" href="#redis-geo" title="Permalink to this headline">¶</a></h1>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
+<p class="admonition-title">Note</p>
 <p>本文摘录自《Redis使用手册》，
 详情请见： <a class="reference external" href="http://RedisGuide.com">RedisGuide.com</a> 。</p>
-<img alt="../_images/redisguide.png" class="last" src="../_images/redisguide.png" />
+<img alt="../_images/redisguide.png" src="../_images/redisguide.png" />
 </div>
 <p>很多社交网站都提供了与地理位置相关的功能，
 比如记录用户自己的位置、获取指定用户的位置，
 又或者查找指定范围内的其他用户等等。</p>
-<p>在学习了 <code class="docutils literal"><span class="pre">GEOADD</span></code> 、 <code class="docutils literal"><span class="pre">GEOPOS</span></code> 和 <code class="docutils literal"><span class="pre">GEODIST</span></code> 这三个命令之后，
+<p>在学习了 <code class="docutils literal notranslate"><span class="pre">GEOADD</span></code> 、 <code class="docutils literal notranslate"><span class="pre">GEOPOS</span></code> 和 <code class="docutils literal notranslate"><span class="pre">GEODIST</span></code> 这三个命令之后，
 我们同样可以构建出一个具有基本功能的用户地理位置程序，
 该程序能够记录用户所在的位置、获取指定用户所在的位置以及计算两个用户之间的直线距离，
 具体的实现如代码清单 9-1 所示。</p>
 <hr class="docutils" />
-<p>代码清单 9-1 具有基本功能的用户地理位置程序：<code class="docutils literal"><span class="pre">/geo/location.py</span></code></p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">random</span>
+<p>代码清单 9-1 具有基本功能的用户地理位置程序：<code class="docutils literal notranslate"><span class="pre">/geo/location.py</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">random</span>
 
 <span class="n">USER_LOCATION_KEY</span> <span class="o">=</span> <span class="s2">&quot;user_locations&quot;</span>
 
@@ -176,13 +168,13 @@
 </pre></div>
 </div>
 <hr class="docutils" />
-<p>这个程序所做的就是使用 <code class="docutils literal"><span class="pre">GEOADD</span></code> 命令把用户的 ID 以及用户所在的经纬度关联起来，
-然后使用 <code class="docutils literal"><span class="pre">GEOPOS</span></code> 命令去获取用户所在的经纬度，
-又或者使用 <code class="docutils literal"><span class="pre">GEODIST</span></code> 命令去计算两个用户之间的直线距离。</p>
+<p>这个程序所做的就是使用 <code class="docutils literal notranslate"><span class="pre">GEOADD</span></code> 命令把用户的 ID 以及用户所在的经纬度关联起来，
+然后使用 <code class="docutils literal notranslate"><span class="pre">GEOPOS</span></code> 命令去获取用户所在的经纬度，
+又或者使用 <code class="docutils literal notranslate"><span class="pre">GEODIST</span></code> 命令去计算两个用户之间的直线距离。</p>
 <p>通过执行以下代码，
 我们可以创建出相应的用户位置对象，
 并使用它记录 peter 、jack 和 tom 这三个用户的地理位置：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">redis</span> <span class="kn">import</span> <span class="n">Redis</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">redis</span> <span class="kn">import</span> <span class="n">Redis</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">location</span> <span class="kn">import</span> <span class="n">Location</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">client</span> <span class="o">=</span> <span class="n">Redis</span><span class="p">(</span><span class="n">decode_responses</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">location</span> <span class="o">=</span> <span class="n">Location</span><span class="p">(</span><span class="n">client</span><span class="p">)</span>
@@ -193,7 +185,7 @@
 </div>
 <p>然后通过执行以下代码，
 获取 peter 和 jack 的坐标：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">location</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;peter&quot;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">location</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;peter&quot;</span><span class="p">)</span>
 <span class="go">(113.20996731519699, 23.593675019671288)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">location</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;jack&quot;</span><span class="p">)</span>
 <span class="go">(113.22784155607224, 23.125598202060807)</span>
@@ -202,7 +194,7 @@
 <p>最后通过执行以下代码，
 计算 peter 和 jack 之间的直线距离，
 以及 peter 和 tom 之间的直线距离：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">location</span><span class="o">.</span><span class="n">calculate_distance</span><span class="p">(</span><span class="s2">&quot;peter&quot;</span><span class="p">,</span> <span class="s2">&quot;jack&quot;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">location</span><span class="o">.</span><span class="n">calculate_distance</span><span class="p">(</span><span class="s2">&quot;peter&quot;</span><span class="p">,</span> <span class="s2">&quot;jack&quot;</span><span class="p">)</span>
 <span class="go">52.0944</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">location</span><span class="o">.</span><span class="n">calculate_distance</span><span class="p">(</span><span class="s2">&quot;peter&quot;</span><span class="p">,</span> <span class="s2">&quot;tom&quot;</span><span class="p">)</span>
 <span class="go">122.0651</span>
@@ -223,7 +215,7 @@
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.0.<br/>
     </p>
   </div>
 </footer>

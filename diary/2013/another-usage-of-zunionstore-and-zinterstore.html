@@ -2,23 +2,16 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Redis 的 ZUNIONSTORE 命令和 ZINTERSTORE 命令的另一种用法 &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     'present',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="怎么样写出更好、也更简短的源码分析书" href="how-to-write-a-better-and-shorter-code-analysis-book.html" />
@@ -32,8 +25,7 @@
 <script type="text/javascript" src="../../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../../_static/bootstrap-sphinx.js "></script>
 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -139,8 +131,8 @@
 <p><a class="reference external" href="http://redis.readthedocs.org/en/latest/sorted_set/zunionstore.html">ZUNIONSTORE</a> 和 <a class="reference external" href="http://redis.readthedocs.org/en/latest/sorted_set/zinterstore.html">ZINTERSTORE</a> 是用于有序集（sorted set）的聚合命令。</p>
 <p>根据文档的说明：</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">ZUNIONSTORE</span></code> 用于计算给定的一个或多个有序集的并集。</li>
-<li>而 <code class="docutils literal"><span class="pre">ZINTERSTORE</span></code> 则用于计算给定的一个或多个有序集的交集。</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ZUNIONSTORE</span></code> 用于计算给定的一个或多个有序集的并集。</p></li>
+<li><p>而 <code class="docutils literal notranslate"><span class="pre">ZINTERSTORE</span></code> 则用于计算给定的一个或多个有序集的交集。</p></li>
 </ul>
 <p>除此之外，
 这两个命令还有一种没有记载于文档的用法，
@@ -149,9 +141,9 @@
 <div class="section" id="zunionstore-zinterstore">
 <h2>例子：使用 ZUNIONSTORE 和 ZINTERSTORE 计算爱好水果的并集和交集<a class="headerlink" href="#zunionstore-zinterstore" title="Permalink to this headline">¶</a></h2>
 <p>作为例子，
-下文展示了怎样用 <code class="docutils literal"><span class="pre">ZUNIONSTORE</span></code> 和 <code class="docutils literal"><span class="pre">ZINTERSTORE</span></code> 命令计算爱好水果的并集和交集。</p>
+下文展示了怎样用 <code class="docutils literal notranslate"><span class="pre">ZUNIONSTORE</span></code> 和 <code class="docutils literal notranslate"><span class="pre">ZINTERSTORE</span></code> 命令计算爱好水果的并集和交集。</p>
 <p>首先，输入一些测试数据（注意，输入的三个键都是集合，并非有序集）：</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">SADD</span> <span class="n">huangz</span> <span class="n">orange</span> <span class="n">banana</span> <span class="n">tomato</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">SADD</span> <span class="n">huangz</span> <span class="n">orange</span> <span class="n">banana</span> <span class="n">tomato</span>
 <span class="p">(</span><span class="n">integer</span><span class="p">)</span> <span class="mi">3</span>
 
 <span class="n">redis</span><span class="o">&gt;</span> <span class="n">SADD</span> <span class="n">peter</span> <span class="n">apple</span> <span class="n">strawberry</span> <span class="n">orange</span> <span class="n">banana</span>
@@ -161,8 +153,8 @@
 <span class="p">(</span><span class="n">integer</span><span class="p">)</span> <span class="mi">4</span>
 </pre></div>
 </div>
-<p>接着，用 <code class="docutils literal"><span class="pre">ZUNIONSTORE</span></code> 命令计算三人爱好水果的并集：</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">ZUNIONSTORE</span> <span class="n">favorite</span><span class="o">-</span><span class="n">fruits</span><span class="o">-</span><span class="n">union</span> <span class="mi">3</span> <span class="n">huangz</span> <span class="n">peter</span> <span class="n">john</span>
+<p>接着，用 <code class="docutils literal notranslate"><span class="pre">ZUNIONSTORE</span></code> 命令计算三人爱好水果的并集：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">ZUNIONSTORE</span> <span class="n">favorite</span><span class="o">-</span><span class="n">fruits</span><span class="o">-</span><span class="n">union</span> <span class="mi">3</span> <span class="n">huangz</span> <span class="n">peter</span> <span class="n">john</span>
 <span class="p">(</span><span class="n">integer</span><span class="p">)</span> <span class="mi">6</span>
 
 <span class="n">redis</span><span class="o">&gt;</span> <span class="n">ZRANGE</span> <span class="n">favorite</span><span class="o">-</span><span class="n">fruits</span><span class="o">-</span><span class="n">union</span> <span class="mi">0</span> <span class="o">-</span><span class="mi">1</span> <span class="n">WITHSCORES</span>
@@ -180,9 +172,9 @@
 <span class="mi">12</span><span class="p">)</span> <span class="s2">&quot;3&quot;</span>
 </pre></div>
 </div>
-<p><code class="docutils literal"><span class="pre">ZUNIONSTORE</span></code> 的计算结果非常有用，它清晰地展示了输入的三个集合中，不同的水果出现了多少次。</p>
+<p><code class="docutils literal notranslate"><span class="pre">ZUNIONSTORE</span></code> 的计算结果非常有用，它清晰地展示了输入的三个集合中，不同的水果出现了多少次。</p>
 <p>相比之下， <a class="reference external" href="http://redis.readthedocs.org/en/latest/set/sunion.html">SUNION</a> 命令的结果就显得单薄很多了：</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">SUNION</span> <span class="n">huangz</span> <span class="n">peter</span> <span class="n">john</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">SUNION</span> <span class="n">huangz</span> <span class="n">peter</span> <span class="n">john</span>
 <span class="mi">1</span><span class="p">)</span> <span class="s2">&quot;tomato&quot;</span>
 <span class="mi">2</span><span class="p">)</span> <span class="s2">&quot;banana&quot;</span>
 <span class="mi">3</span><span class="p">)</span> <span class="s2">&quot;apple&quot;</span>
@@ -191,14 +183,14 @@
 <span class="mi">6</span><span class="p">)</span> <span class="s2">&quot;strawberry&quot;</span>
 </pre></div>
 </div>
-<p><code class="docutils literal"><span class="pre">SUNION</span></code> 的结果只显示计算并集所得的元素，但并不显示元素在输入集合中出现了多少次。</p>
-<p>从 <code class="docutils literal"><span class="pre">ZUNIONSTORE</span></code> 和 <code class="docutils literal"><span class="pre">SUNION</span></code> 两个命令的对比中可以看出：</p>
+<p><code class="docutils literal notranslate"><span class="pre">SUNION</span></code> 的结果只显示计算并集所得的元素，但并不显示元素在输入集合中出现了多少次。</p>
+<p>从 <code class="docutils literal notranslate"><span class="pre">ZUNIONSTORE</span></code> 和 <code class="docutils literal notranslate"><span class="pre">SUNION</span></code> 两个命令的对比中可以看出：</p>
 <ul class="simple">
-<li>如果只是处理集合之间的关系，那么 <code class="docutils literal"><span class="pre">SUNION</span></code> 已经足够。</li>
-<li>另一方面，如果不仅要处理集合之间的关系，还需要对集合元素进行聚合计算，那么就必须使用 <code class="docutils literal"><span class="pre">ZUNIONSTORE</span></code> 。</li>
+<li><p>如果只是处理集合之间的关系，那么 <code class="docutils literal notranslate"><span class="pre">SUNION</span></code> 已经足够。</p></li>
+<li><p>另一方面，如果不仅要处理集合之间的关系，还需要对集合元素进行聚合计算，那么就必须使用 <code class="docutils literal notranslate"><span class="pre">ZUNIONSTORE</span></code> 。</p></li>
 </ul>
-<p>三人爱好水果的并集可以通过 <code class="docutils literal"><span class="pre">ZINTERSTORE</span></code> 命令来计算：</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">ZINTERSTORE</span> <span class="n">favorite</span><span class="o">-</span><span class="n">fruits</span><span class="o">-</span><span class="n">inter</span> <span class="mi">3</span> <span class="n">huangz</span> <span class="n">peter</span> <span class="n">john</span>
+<p>三人爱好水果的并集可以通过 <code class="docutils literal notranslate"><span class="pre">ZINTERSTORE</span></code> 命令来计算：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">ZINTERSTORE</span> <span class="n">favorite</span><span class="o">-</span><span class="n">fruits</span><span class="o">-</span><span class="n">inter</span> <span class="mi">3</span> <span class="n">huangz</span> <span class="n">peter</span> <span class="n">john</span>
 <span class="p">(</span><span class="n">integer</span><span class="p">)</span> <span class="mi">1</span>
 
 <span class="n">redis</span><span class="o">&gt;</span> <span class="n">ZRANGE</span> <span class="n">favorite</span><span class="o">-</span><span class="n">fruits</span><span class="o">-</span><span class="n">inter</span> <span class="mi">0</span> <span class="o">-</span><span class="mi">1</span> <span class="n">WITHSCORES</span>
@@ -207,11 +199,11 @@
 </pre></div>
 </div>
 <p>可以看出，
-<code class="docutils literal"><span class="pre">ZINTERSTORE</span></code> 的用处并不如 <code class="docutils literal"><span class="pre">ZUNIONSTORE</span></code> 那么大 ——
+<code class="docutils literal notranslate"><span class="pre">ZINTERSTORE</span></code> 的用处并不如 <code class="docutils literal notranslate"><span class="pre">ZUNIONSTORE</span></code> 那么大 ——
 因为只计算并集的话，
 记录元素出现的次数是没有用的（并集元素出现的次数必然等于输入集合的个数），
 所以计算并集实际上只使用 <a class="reference external" href="http://redis.readthedocs.org/en/latest/set/sinter.html">SINTER</a> 或者 <a class="reference external" href="http://redis.readthedocs.org/en/latest/set/sinterstore.html">SINTERSTORE</a> 就可以了：</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">SINTER</span> <span class="n">huangz</span> <span class="n">peter</span> <span class="n">john</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">SINTER</span> <span class="n">huangz</span> <span class="n">peter</span> <span class="n">john</span>
 <span class="mi">1</span><span class="p">)</span> <span class="s2">&quot;orange&quot;</span>
 </pre></div>
 </div>
@@ -222,7 +214,7 @@
 而且也非常实用 —— 将水果换成物品、商品、书籍、等等，
 就可以衍生出更多玩法，
 应用到各种不同的应用中。</p>
-<p>作为一个更详细的例子，让我们用集合和 <code class="docutils literal"><span class="pre">ZUNIONSTORE</span></code> 命令来实现一个签到功能。</p>
+<p>作为一个更详细的例子，让我们用集合和 <code class="docutils literal notranslate"><span class="pre">ZUNIONSTORE</span></code> 命令来实现一个签到功能。</p>
 <div class="section" id="id2">
 <h3>什么是签到？<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <p>签到在很多网站都有不同的叫法，比如出勤、打卡，等等，
@@ -231,9 +223,9 @@
 不管如何，
 签到功能都有以下共同特性：</p>
 <ul class="simple">
-<li>记录用户的某一行为（通常是登录，或者完成某项任务），并进行计数。</li>
-<li>为用户提供签到次数统计，比如说，用户界面会显示“你已经签到了 xx 次”，诸如此类。</li>
-<li>对所有用户的签到进行统计，并进行签到次数排名。</li>
+<li><p>记录用户的某一行为（通常是登录，或者完成某项任务），并进行计数。</p></li>
+<li><p>为用户提供签到次数统计，比如说，用户界面会显示“你已经签到了 xx 次”，诸如此类。</p></li>
+<li><p>对所有用户的签到进行统计，并进行签到次数排名。</p></li>
 </ul>
 <p>以下是 <a class="reference external" href="http://www.shanbay.com/checkin/top/">扇贝网</a> 上的一个签到排名示例：</p>
 <img alt="../../_images/top-checkin.png" src="../../_images/top-checkin.png" />
@@ -242,10 +234,10 @@
 <h3>签到功能的实现<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
 <p>以下 Python 代码实现了一些基本的签到功能，
 其中用到了前面提到的，
-将 <code class="docutils literal"><span class="pre">ZUNIONSTORE</span></code> 应用到集合上的技巧，
+将 <code class="docutils literal notranslate"><span class="pre">ZUNIONSTORE</span></code> 应用到集合上的技巧，
 并且也用到了集合本身的命令，
-比如 <code class="docutils literal"><span class="pre">SINTERSTORE</span></code> ：</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#coding: utf-8</span>
+比如 <code class="docutils literal notranslate"><span class="pre">SINTERSTORE</span></code> ：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#coding: utf-8</span>
 
 <span class="kn">from</span> <span class="nn">redis</span> <span class="kn">import</span> <span class="n">Redis</span>
 
@@ -391,11 +383,11 @@
     <span class="n">r</span><span class="o">.</span><span class="n">flushdb</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>多得 <code class="docutils literal"><span class="pre">ZUNIONSTORE</span></code> 可以直接用于集合，
+<p>多得 <code class="docutils literal notranslate"><span class="pre">ZUNIONSTORE</span></code> 可以直接用于集合，
 不然实现这个签到功能就没有那么简单了：</p>
 <ul class="simple">
-<li>因为如果单纯使用集合命令，那么签到排名的实现就会非常复杂、而且低效。</li>
-<li>而如果直接使用有序集而不是集合来记录签到信息，又会浪费不少额外的空间：因为每个有序集元素都必须保存一个值为 <code class="docutils literal"><span class="pre">1.0</span></code> 的 <code class="docutils literal"><span class="pre">double</span></code> 分值，更不必说 <a class="reference external" href="http://www.redisbook.com/en/latest/datatype/sorted_set.html">有序集消耗的空间本来就比集合消耗的空间要多</a> 了。</li>
+<li><p>因为如果单纯使用集合命令，那么签到排名的实现就会非常复杂、而且低效。</p></li>
+<li><p>而如果直接使用有序集而不是集合来记录签到信息，又会浪费不少额外的空间：因为每个有序集元素都必须保存一个值为 <code class="docutils literal notranslate"><span class="pre">1.0</span></code> 的 <code class="docutils literal notranslate"><span class="pre">double</span></code> 分值，更不必说 <a class="reference external" href="http://www.redisbook.com/en/latest/datatype/sorted_set.html">有序集消耗的空间本来就比集合消耗的空间要多</a> 了。</p></li>
 </ul>
 </div>
 </div>
@@ -403,15 +395,15 @@
 <h2>关于这个技巧的说明<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h2>
 <p>好的，
 看过前面的两个例子
-我想你已经熟悉 <code class="docutils literal"><span class="pre">ZUNIONSTORE</span></code> 和 <code class="docutils literal"><span class="pre">ZINTERSTORE</span></code> 处理集合这一用法了，
+我想你已经熟悉 <code class="docutils literal notranslate"><span class="pre">ZUNIONSTORE</span></code> 和 <code class="docutils literal notranslate"><span class="pre">ZINTERSTORE</span></code> 处理集合这一用法了，
 不过还有两件事要说明一下。</p>
-<p>首先， <code class="docutils literal"><span class="pre">ZUNIONSTORE</span></code> 和 <code class="docutils literal"><span class="pre">ZINTERSTORE</span></code> 在处理集合时的功能和处理有序集时完全一样。</p>
+<p>首先， <code class="docutils literal notranslate"><span class="pre">ZUNIONSTORE</span></code> 和 <code class="docutils literal notranslate"><span class="pre">ZINTERSTORE</span></code> 在处理集合时的功能和处理有序集时完全一样。</p>
 <p>也即是说，
-<code class="docutils literal"><span class="pre">ZUNIONSTORE</span></code> 和 <code class="docutils literal"><span class="pre">ZINTERSTORE</span></code> 两个命令的各个选项，
-比如 <code class="docutils literal"><span class="pre">WEIGHTS</span></code> 和 <code class="docutils literal"><span class="pre">AGGREGATE</span></code> ，
+<code class="docutils literal notranslate"><span class="pre">ZUNIONSTORE</span></code> 和 <code class="docutils literal notranslate"><span class="pre">ZINTERSTORE</span></code> 两个命令的各个选项，
+比如 <code class="docutils literal notranslate"><span class="pre">WEIGHTS</span></code> 和 <code class="docutils literal notranslate"><span class="pre">AGGREGATE</span></code> ，
 在处理集合时都是可以正常使用的。</p>
 <p>关于这些选项的具体信息请参考 <a class="reference external" href="http://redis.readthedocs.org/en/latest/sorted_set/zunionstore.html">ZUNIONSTORE 的文档</a> 和 <a class="reference external" href="http://redis.readthedocs.org/en/latest/sorted_set/zinterstore.html">ZINTERSTORE 的文档</a></p>
-<p>其次，使用 <code class="docutils literal"><span class="pre">ZUNIONSTORE</span></code> 和 <code class="docutils literal"><span class="pre">ZINTERSTORE</span></code> 处理集合的这个技巧只是 <a class="reference external" href="https://groups.google.com/forum/?fromgroups=#!topic/redis-db/kgoNgevlWzs">一个未写入文档的特性</a> ，
+<p>其次，使用 <code class="docutils literal notranslate"><span class="pre">ZUNIONSTORE</span></code> 和 <code class="docutils literal notranslate"><span class="pre">ZINTERSTORE</span></code> 处理集合的这个技巧只是 <a class="reference external" href="https://groups.google.com/forum/?fromgroups=#!topic/redis-db/kgoNgevlWzs">一个未写入文档的特性</a> ，
 它并不是一个废弃特性，
 所以可以放心使用。</p>
 <p>至少在目前的 2.6 、 2.8 和 3.0 （unstable）三个版本中，这个特性都是可以正常使用的。</p>
@@ -420,26 +412,26 @@
 <h2>底层实现<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h2>
 <p>最后，
 是时候揭晓谜题了 ——
-为什么 <code class="docutils literal"><span class="pre">ZUNIONSTORE</span></code> 和 <code class="docutils literal"><span class="pre">ZINTERSTORE</span></code> 既可以对有序集进行处理，
+为什么 <code class="docutils literal notranslate"><span class="pre">ZUNIONSTORE</span></code> 和 <code class="docutils literal notranslate"><span class="pre">ZINTERSTORE</span></code> 既可以对有序集进行处理，
 又可以对集合进行处理？</p>
 <p>原理是这样的：
-<code class="docutils literal"><span class="pre">ZUNIONSTORE</span></code> 和 <code class="docutils literal"><span class="pre">ZINTERSTORE</span></code> 两个命令在执行时，
+<code class="docutils literal notranslate"><span class="pre">ZUNIONSTORE</span></code> 和 <code class="docutils literal notranslate"><span class="pre">ZINTERSTORE</span></code> 两个命令在执行时，
 都会对一个迭代器（iterator）进行处理，
 而这个迭代器是一个多态迭代器：</p>
 <ul class="simple">
-<li>当输入的键是集合时，它就迭代集合。</li>
-<li>当如何的键是有序集时，它就迭代有序集。</li>
+<li><p>当输入的键是集合时，它就迭代集合。</p></li>
+<li><p>当如何的键是有序集时，它就迭代有序集。</p></li>
 </ul>
 <img alt="../../_images/iterator.png" src="../../_images/iterator.png" />
 <p>如果在迭代集合的时候，
-用户没有通过 <code class="docutils literal"><span class="pre">WEIGHTS</span></code> 命令设置集合元素的分值（score），
-那么 <code class="docutils literal"><span class="pre">ZUNIONSTORE</span></code> 和 <code class="docutils literal"><span class="pre">ZINTERSTORE</span></code> 就将集合元素的分值当作 <code class="docutils literal"><span class="pre">1.0</span></code> 。</p>
+用户没有通过 <code class="docutils literal notranslate"><span class="pre">WEIGHTS</span></code> 命令设置集合元素的分值（score），
+那么 <code class="docutils literal notranslate"><span class="pre">ZUNIONSTORE</span></code> 和 <code class="docutils literal notranslate"><span class="pre">ZINTERSTORE</span></code> 就将集合元素的分值当作 <code class="docutils literal notranslate"><span class="pre">1.0</span></code> 。</p>
 <p>也即是说，
-当不使用 <code class="docutils literal"><span class="pre">WEIGHTS</span></code> 参数调用 <code class="docutils literal"><span class="pre">ZUNIONSTORE</span></code> 或者 <code class="docutils literal"><span class="pre">ZINTERSTORE</span></code> 两个命令时，
-它们将集合输入当作分值都是 <code class="docutils literal"><span class="pre">1.0</span></code> 的有序集来看待。</p>
-<p>以上就是 <code class="docutils literal"><span class="pre">ZUNIONSTORE</span></code> 和 <code class="docutils literal"><span class="pre">ZINTERSTORE</span></code> 既可以处理有序集，又可以处理集合的原因，
+当不使用 <code class="docutils literal notranslate"><span class="pre">WEIGHTS</span></code> 参数调用 <code class="docutils literal notranslate"><span class="pre">ZUNIONSTORE</span></code> 或者 <code class="docutils literal notranslate"><span class="pre">ZINTERSTORE</span></code> 两个命令时，
+它们将集合输入当作分值都是 <code class="docutils literal notranslate"><span class="pre">1.0</span></code> 的有序集来看待。</p>
+<p>以上就是 <code class="docutils literal notranslate"><span class="pre">ZUNIONSTORE</span></code> 和 <code class="docutils literal notranslate"><span class="pre">ZINTERSTORE</span></code> 既可以处理有序集，又可以处理集合的原因，
 有兴趣知道完整信息的话，
-可以参考 <code class="docutils literal"><span class="pre">ZUNIONSTORE</span></code> 和 <code class="docutils literal"><span class="pre">ZINTERSTORE</span></code> 的 <a class="reference external" href="https://github.com/huangz1990/annotated_redis_source/blob/unstable/src/t_zset.c#L1652">实现源码</a> 。</p>
+可以参考 <code class="docutils literal notranslate"><span class="pre">ZUNIONSTORE</span></code> 和 <code class="docutils literal notranslate"><span class="pre">ZINTERSTORE</span></code> 的 <a class="reference external" href="https://github.com/huangz1990/annotated_redis_source/blob/unstable/src/t_zset.c#L1652">实现源码</a> 。</p>
 <div class="line-block">
 <div class="line">huangz</div>
 <div class="line">2013.4.13</div>
@@ -460,7 +452,7 @@
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.0.<br/>
     </p>
   </div>
 </footer>

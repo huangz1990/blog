@@ -2,23 +2,16 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>我进行翻译的方法 &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     'present',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="写作与翻译" href="writing-and-translation.html" />
@@ -32,8 +25,7 @@
 <script type="text/javascript" src="../../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../../_static/bootstrap-sphinx.js "></script>
 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -156,13 +148,13 @@
 <p>我进行翻译的第一个步骤是阅读原文，
 并在阅读过程中进行以下工作：</p>
 <ol class="arabic simple">
-<li>如果在原文里面发现自己不懂的单词或者语法，
+<li><p>如果在原文里面发现自己不懂的单词或者语法，
 那么通过查字典或者阅读语法书来弄懂它们：
 我使用<a class="reference external" href="http://www.iciba.com/">爱词霸</a>和 <a class="reference external" href="http://translate.google.cn/">Google 翻译</a>来查单词，
 使用<a class="reference external" href="http://book.douban.com/subject/1003087/">《朗文英语语法》</a>来查阅语法知识。
 如果原文里面出现了一些自己不认识的技术名词，
-那么 <a class="reference external" href="https://www.google.com/">Google</a> 和<a class="reference external" href="http://zh.wikipedia.org/wiki/Wikipedia:%E9%A6%96%E9%A1%B5">维基百科</a>当然也是必不可少的。</li>
-<li>在一些能够了解基本意思，
+那么 <a class="reference external" href="https://www.google.com/">Google</a> 和<a class="reference external" href="http://zh.wikipedia.org/wiki/Wikipedia:%E9%A6%96%E9%A1%B5">维基百科</a>当然也是必不可少的。</p></li>
+<li><p>在一些能够了解基本意思，
 但暂时还没办法很好地用中文表达出来的句子底下划线，
 提醒自己在将来翻译的时候注意这些句子：
 被划线的句子一般都是比较复杂的长句，
@@ -170,11 +162,11 @@
 等等。
 根据情况，
 我还会在划线句子旁边添加注释，
-以便为将来的翻译工作提供一些帮助。</li>
-<li>如果原文句子非常短的话，
+以便为将来的翻译工作提供一些帮助。</p></li>
+<li><p>如果原文句子非常短的话，
 我会直接将译文写在句子的旁边，
 避免之后进行重复翻译，
-浪费时间。</li>
+浪费时间。</p></li>
 </ol>
 <p><strong>这几个步骤的主要作用在于找出自己不懂或者不太确定的地方，
 为之后的翻译工作扫清障碍，
@@ -216,13 +208,14 @@
 <p>比如说，
 以下是《RIA》第三章的其中一段：</p>
 <blockquote>
-<div>So far we’ve gone through the five structures that Redis provides, as well as shown a bit
+<div><p>So far we’ve gone through the five structures that Redis provides, as well as shown a bit
 of pub/sub. The commands in this section are commands that operate on multiple
 types of data. We’ll first cover SORT, which can involve STRINGs, SETs or LISTs, and
 HASHes all at the same time. We’ll then cover basic transactions with MULTI and EXEC,
 which can allow you to execute multiple commands together as though they were just
 one command. Finally, we’ll cover the variety of automatic expiration commands for
-automatically deleting unnecessary data.</div></blockquote>
+automatically deleting unnecessary data.</p>
+</div></blockquote>
 <p>我会对这一段中的每个句子进行分行：</p>
 <blockquote>
 <div><p>So far we’ve gone through the five structures that Redis provides, as well as shown a bit of pub/sub.</p>
@@ -262,21 +255,21 @@ as though they were just one command.</p>
 <p>如果我们将最开始的一段原文和断句之后的原文进行对比，
 就可以明显地发现断句带来的好处：</p>
 <ul class="simple">
-<li>原文是一整段长长的、密密麻麻的文字，
+<li><p>原文是一整段长长的、密密麻麻的文字，
 别说翻译了，
 眼睛光是扫描这段文字就已经够吃力的了，
-一不小心的话就可能会看错或者看漏单词和句子。</li>
-<li>相反地，
+一不小心的话就可能会看错或者看漏单词和句子。</p></li>
+<li><p>相反地，
 断句之后的原文在物理上被分成了多个句子，
 眼睛扫描起来毫不费力，
 看得清楚了，
-翻译起来也事半功倍。</li>
-<li>另外，
+翻译起来也事半功倍。</p></li>
+<li><p>另外，
 因为我们将每个句子分成了多个子句，
 这样在翻译的时候就可以以子句为单位进行翻译，
 而不是以整个句子为单位，
 或者以整个段落为单位，
-这种化繁为简、分而治之的方法在翻译一些长句的时候非常有帮助。</li>
+这种化繁为简、分而治之的方法在翻译一些长句的时候非常有帮助。</p></li>
 </ul>
 <p>根据我自己的经验，
 <strong>断句可能是翻译过程中最考技术的部分了 ——
@@ -291,14 +284,14 @@ as though they were just one command.</p>
 我会从头到尾完整地阅读一遍译文，
 原因在于：</p>
 <ul class="simple">
-<li>在进行翻译的时候，
+<li><p>在进行翻译的时候，
 译者关注的通常是一个段落，
 或者一个句子，
 虽然在翻译的时候也会阅读译文并进行修改，
-但是译者却很少会完整地阅读整篇译文。</li>
-<li>而在翻译完成之后阅读译文，
+但是译者却很少会完整地阅读整篇译文。</p></li>
+<li><p>而在翻译完成之后阅读译文，
 可以让译者将角色变为读者，
-并以读者的角度去审视整篇译文的翻译质量和流畅程度。</li>
+并以读者的角度去审视整篇译文的翻译质量和流畅程度。</p></li>
 </ul>
 <p>虽然阅读译文只是一个非常简单的步骤，
 但是对于译文的流畅度却有非常大的影响。
@@ -352,7 +345,7 @@ as though they were just one command.</p>
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.0.<br/>
     </p>
   </div>
 </footer>

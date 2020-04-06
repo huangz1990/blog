@@ -2,23 +2,16 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>通过 Linux 子系统在 Windows 10 上安装 Ubuntu &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     'present',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="修改 Ubuntu 软件更新源" href="change-ubuntu-software-source.html" />
@@ -32,8 +25,7 @@
 <script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -133,9 +125,9 @@
 所以我们在使用它之前必须先开启它，
 具体的步骤是：</p>
 <ol class="arabic simple">
-<li>在 Windows 系统的搜索框键入“powershell”，然后右键点击弹出的“Windows PowerShell“，选择“以管理员身份运行“。</li>
-<li>在弹出的 PowerShell 窗口输入命令 <code class="docutils literal"><span class="pre">Enable-WindowsOptionalFeature</span> <span class="pre">-Online</span> <span class="pre">-FeatureName</span> <span class="pre">Microsoft-Windows-Subsystem-Linux</span></code> ，然后回车。</li>
-<li>命令要求重启电脑以完成操作，再次按下回车键，重启电脑。</li>
+<li><p>在 Windows 系统的搜索框键入“powershell”，然后右键点击弹出的“Windows PowerShell“，选择“以管理员身份运行“。</p></li>
+<li><p>在弹出的 PowerShell 窗口输入命令 <code class="docutils literal notranslate"><span class="pre">Enable-WindowsOptionalFeature</span> <span class="pre">-Online</span> <span class="pre">-FeatureName</span> <span class="pre">Microsoft-Windows-Subsystem-Linux</span></code> ，然后回车。</p></li>
+<li><p>命令要求重启电脑以完成操作，再次按下回车键，重启电脑。</p></li>
 </ol>
 <img alt="../_images/enable-wsl.png" src="../_images/enable-wsl.png" />
 <p>重启系统之后，
@@ -153,7 +145,7 @@
 <p>最后，
 因为 WSL 初始安装的只是迷你版本的 Ubuntu 系统，
 所以为了正常使用，
-别忘了在安装系统之后执行 <code class="docutils literal"><span class="pre">apt</span> <span class="pre">update</span></code> 命令和 <code class="docutils literal"><span class="pre">apt</span> <span class="pre">upgrade</span></code> 命令安装和更新系统中的软件。</p>
+别忘了在安装系统之后执行 <code class="docutils literal notranslate"><span class="pre">apt</span> <span class="pre">update</span></code> 命令和 <code class="docutils literal notranslate"><span class="pre">apt</span> <span class="pre">upgrade</span></code> 命令安装和更新系统中的软件。</p>
 <div class="line-block">
 <div class="line">感叹 Windows 居然爱上了 Linux 的黄健宏</div>
 <div class="line">2020.2.6</div>
@@ -173,7 +165,7 @@
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.0.<br/>
     </p>
   </div>
 </footer>
