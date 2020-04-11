@@ -2,16 +2,23 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Redis 集群管理常见操作一览 &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     'present',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="如何精简一本书" href="how-to-shrink-a-book.html" />
@@ -25,7 +32,8 @@
 <script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
 
-  </head><body>
+  </head>
+  <body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -127,10 +135,10 @@
       
   <div class="section" id="redis">
 <h1>Redis 集群管理常见操作一览<a class="headerlink" href="#redis" title="Permalink to this headline">¶</a></h1>
-<p>Redis 内置客户端 <code class="docutils literal notranslate"><span class="pre">redis-cli</span></code> 通过 <code class="docutils literal notranslate"><span class="pre">--cluster</span></code> 选项集成了多个 Redis 集群管理工具，
+<p>Redis 内置客户端 <code class="docutils literal"><span class="pre">redis-cli</span></code> 通过 <code class="docutils literal"><span class="pre">--cluster</span></code> 选项集成了多个 Redis 集群管理工具，
 这些工具可以执行创建集群、向集群中添加或移除节点、对集群实施重分片以及负载均衡等操作，
 它们每一个都非常强大：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ redis-cli --cluster help
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ redis-cli --cluster help
 Cluster Manager Commands:
   create         host1:port1 ... hostN:portN
                  --cluster-replicas &lt;arg&gt;
@@ -170,12 +178,12 @@ For check, fix, reshard, del-node, set-timeout you can specify the host and port
 帮助大家初步地了解这些工具的基本用法。</p>
 <div class="section" id="id1">
 <h2>创建集群<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
-<p>创建集群的工作可以通过 <code class="docutils literal notranslate"><span class="pre">create</span></code> 命令来完成，
+<p>创建集群的工作可以通过 <code class="docutils literal"><span class="pre">create</span></code> 命令来完成，
 用户只需要给定各个节点的地址以及想要设置的从服务器数量即可。
 比如说，
 通过执行以下命令，
 我们可以创建出一个由三个主节点和三个从节点组成的集群：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ redis-cli --cluster create 127.0.0.1:30001 127.0.0.1:30002 127.0.0.1:30003 127.0.0.1:30004 127.0.0.1:30005 127.0.0.1:30006 --cluster-replicas 1
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ redis-cli --cluster create 127.0.0.1:30001 127.0.0.1:30002 127.0.0.1:30003 127.0.0.1:30004 127.0.0.1:30005 127.0.0.1:30006 --cluster-replicas 1
 &gt;&gt;&gt; Performing hash slots allocation on 6 nodes...
 Master[0] -&gt; Slots 0 - 5460
 Master[1] -&gt; Slots 5461 - 10922
@@ -231,10 +239,10 @@ M: 07e230805903e4e1657743a2e4d8811a59e2f32f 127.0.0.1:30003
 </div>
 <div class="section" id="id2">
 <h2>查看集群信息<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
-<p>通过执行 <code class="docutils literal notranslate"><span class="pre">info</span></code> 命令，
+<p>通过执行 <code class="docutils literal"><span class="pre">info</span></code> 命令，
 用户可以看到集群包含的主从节点数量，
 以及集群中的键、槽分布信息：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ redis-cli --cluster info 127.0.0.1:30001
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ redis-cli --cluster info 127.0.0.1:30001
 127.0.0.1:30001 (4979f858...) -&gt; 1 keys | 5461 slots | 1 slaves.
 127.0.0.1:30002 (4ff303d9...) -&gt; 4 keys | 5462 slots | 1 slaves.
 127.0.0.1:30003 (07e23080...) -&gt; 3 keys | 5461 slots | 1 slaves.
@@ -246,12 +254,12 @@ M: 07e230805903e4e1657743a2e4d8811a59e2f32f 127.0.0.1:30003
 <div class="section" id="id3">
 <h2>添加节点/移除节点<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
 <p>在拥有了集群之后，
-用户就可以通过执行 <code class="docutils literal notranslate"><span class="pre">add-node</span></code> 命令或者 <code class="docutils literal notranslate"><span class="pre">del-node</span></code> 命令，
+用户就可以通过执行 <code class="docutils literal"><span class="pre">add-node</span></code> 命令或者 <code class="docutils literal"><span class="pre">del-node</span></code> 命令，
 向集群里面添加新节点又或者移除已有的节点。</p>
 <p>比如说，
 通过执行以下命令，
 我们可以把节点 30007 添加至集群当中：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">-</span><span class="n">cli</span> <span class="o">--</span><span class="n">cluster</span> <span class="n">add</span><span class="o">-</span><span class="n">node</span> <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">30007</span> <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">30001</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">-</span><span class="n">cli</span> <span class="o">--</span><span class="n">cluster</span> <span class="n">add</span><span class="o">-</span><span class="n">node</span> <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">30007</span> <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">30001</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">Adding</span> <span class="n">node</span> <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">30007</span> <span class="n">to</span> <span class="n">cluster</span> <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">30001</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">Performing</span> <span class="n">Cluster</span> <span class="n">Check</span> <span class="p">(</span><span class="n">using</span> <span class="n">node</span> <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">30001</span><span class="p">)</span>
 <span class="o">...</span>
@@ -264,8 +272,8 @@ M: 07e230805903e4e1657743a2e4d8811a59e2f32f 127.0.0.1:30003
 </pre></div>
 </div>
 <p>又或者通过执行以下命令，
-将 ID 为 <code class="docutils literal notranslate"><span class="pre">e1971e...</span></code> 的节点 30007 移出集群：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">-</span><span class="n">cli</span> <span class="o">--</span><span class="n">cluster</span> <span class="k">del</span><span class="o">-</span><span class="n">node</span> <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">30001</span> <span class="n">e1971eef02709cf4698a6fcb09935a910982ab3b</span>
+将 ID 为 <code class="docutils literal"><span class="pre">e1971e...</span></code> 的节点 30007 移出集群：</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">-</span><span class="n">cli</span> <span class="o">--</span><span class="n">cluster</span> <span class="k">del</span><span class="o">-</span><span class="n">node</span> <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">30001</span> <span class="n">e1971eef02709cf4698a6fcb09935a910982ab3b</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">Removing</span> <span class="n">node</span> <span class="n">e1971eef02709cf4698a6fcb09935a910982ab3b</span> <span class="kn">from</span> <span class="nn">cluster</span> <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">30001</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">Sending</span> <span class="n">CLUSTER</span> <span class="n">FORGET</span> <span class="n">messages</span> <span class="n">to</span> <span class="n">the</span> <span class="n">cluster</span><span class="o">...</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">SHUTDOWN</span> <span class="n">the</span> <span class="n">node</span><span class="o">.</span>
@@ -274,12 +282,12 @@ M: 07e230805903e4e1657743a2e4d8811a59e2f32f 127.0.0.1:30003
 </div>
 <div class="section" id="id4">
 <h2>重分片<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
-<p>通过执行 <code class="docutils literal notranslate"><span class="pre">reshard</span></code> 命令，
+<p>通过执行 <code class="docutils literal"><span class="pre">reshard</span></code> 命令，
 用户可以将指定数量的槽从一个节点迁移至另一个节点。
 比如说，
 通过执行以下命令，
-我们可以将 ID 为 <code class="docutils literal notranslate"><span class="pre">4979f...</span></code> 的节点 30001 目前负责的其中 10 个槽转交给 ID 为 <code class="docutils literal notranslate"><span class="pre">1cd87d...</span></code> 的节点 30007 负责：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ redis-cli --cluster reshard 127.0.0.1:30001 --cluster-from 4979f8583676c46039672fb7319e917e4b303707 --cluster-to 1cd87d132101893b7aa2b81cf333b2f7be9e1b75 --cluster-slots 10
+我们可以将 ID 为 <code class="docutils literal"><span class="pre">4979f...</span></code> 的节点 30001 目前负责的其中 10 个槽转交给 ID 为 <code class="docutils literal"><span class="pre">1cd87d...</span></code> 的节点 30007 负责：</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ redis-cli --cluster reshard 127.0.0.1:30001 --cluster-from 4979f8583676c46039672fb7319e917e4b303707 --cluster-to 1cd87d132101893b7aa2b81cf333b2f7be9e1b75 --cluster-slots 10
 &gt;&gt;&gt; Performing Cluster Check (using node 127.0.0.1:30001)
 M: 4979f8583676c46039672fb7319e917e4b303707 127.0.0.1:30001
    slots:[0-5460] (5461 slots) master
@@ -346,12 +354,12 @@ Moving slot 9 from 127.0.0.1:30001 to 127.0.0.1:30007:
 并导致某些节点超负荷运行，
 而某些节点则长时间空置。
 为了解决这个问题，
-用户可以通过执行 <code class="docutils literal notranslate"><span class="pre">rebalance</span></code> 命令，
+用户可以通过执行 <code class="docutils literal"><span class="pre">rebalance</span></code> 命令，
 让各个节点负责的槽数量重新回到平均状态。</p>
 <p>比如说，
 对于以下这个由三个节点组成，
 并且三个节点分别负责 2000 、 11384 和 3000 个槽的集群来说：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ redis-cli --cluster info 127.0.0.1:30001
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ redis-cli --cluster info 127.0.0.1:30001
 127.0.0.1:30001 (61d1f17b...) -&gt; 0 keys | 2000 slots | 1 slaves.
 127.0.0.1:30002 (101fbae9...) -&gt; 0 keys | 11384 slots | 1 slaves.
 127.0.0.1:30003 (31822e0a...) -&gt; 0 keys | 3000 slots | 1 slaves.
@@ -360,7 +368,7 @@ Moving slot 9 from 127.0.0.1:30001 to 127.0.0.1:30007:
 </pre></div>
 </div>
 <p>我们可以通过执行以下命令来重新分配各个节点负责的槽：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ redis-cli --cluster rebalance 127.0.0.1:30001
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ redis-cli --cluster rebalance 127.0.0.1:30001
 &gt;&gt;&gt; Performing Cluster Check (using node 127.0.0.1:30001)
 [OK] All nodes agree about slots configuration.
 &gt;&gt;&gt; Check for open slots...
@@ -376,7 +384,7 @@ Moving 2461 slots from 127.0.0.1:30002 to 127.0.0.1:30003
 <p>在复杂均衡操作执行完毕之后，
 集群各个节点负责的槽数量将趋于平均，
 这样它们各自负担的载荷也会重新回到平均状态：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ redis-cli --cluster info 127.0.0.1:30001
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ redis-cli --cluster info 127.0.0.1:30001
 127.0.0.1:30001 (61d1f17b...) -&gt; 0 keys | 5462 slots | 1 slaves.
 127.0.0.1:30002 (101fbae9...) -&gt; 0 keys | 5461 slots | 1 slaves.
 127.0.0.1:30003 (31822e0a...) -&gt; 0 keys | 5461 slots | 1 slaves.
@@ -388,12 +396,12 @@ Moving 2461 slots from 127.0.0.1:30002 to 127.0.0.1:30003
 <div class="section" id="id6">
 <h2>在集群的所有节点中执行命令<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h2>
 <p>如果用户想要对集群中的所有节点执行同一个命令，
-那么可以通过 <code class="docutils literal notranslate"><span class="pre">call</span></code> 命令来完成。
+那么可以通过 <code class="docutils literal"><span class="pre">call</span></code> 命令来完成。
 比如说，
 通过执行以下命令，
-用户就可以让集群中的每个节点都执行 <code class="docutils literal notranslate"><span class="pre">DBSIZE</span></code> 命令，
+用户就可以让集群中的每个节点都执行 <code class="docutils literal"><span class="pre">DBSIZE</span></code> 命令，
 从而得到各个节点各自的数据库大小：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ redis-cli --cluster call 127.0.0.1:30001 DBSIZE
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ redis-cli --cluster call 127.0.0.1:30001 DBSIZE
 &gt;&gt;&gt; Calling DBSIZE
 127.0.0.1:30001: (integer) 0
 
@@ -412,14 +420,14 @@ Moving 2461 slots from 127.0.0.1:30002 to 127.0.0.1:30003
 <div class="section" id="id7">
 <h2>小结<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h2>
 <p>好的，
-关于 <code class="docutils literal notranslate"><span class="pre">redis-cli</span> <span class="pre">--cluster</span></code> 选项的简单介绍就到此结束了，
+关于 <code class="docutils literal"><span class="pre">redis-cli</span> <span class="pre">--cluster</span></code> 选项的简单介绍就到此结束了，
 希望这些介绍可以帮助大家更好地了解到这些命令。
 大家有兴趣的话，
 也可以以此为起点，
 更加深入地学习这些命令。</p>
 <p>本文节选自尚未发布的《Redis使用教程》（<a class="reference external" href="http://redisguide.com">RedisGuide.com</a>），
 大家有兴趣的话也可以关注一下本书，
-里面有关于 <code class="docutils literal notranslate"><span class="pre">redis-cli</span> <span class="pre">--cluster</span></code> 工具更深入和更详细的介绍。</p>
+里面有关于 <code class="docutils literal"><span class="pre">redis-cli</span> <span class="pre">--cluster</span></code> 工具更深入和更详细的介绍。</p>
 <div class="line-block">
 <div class="line">黄健宏</div>
 <div class="line">2018.11.21</div>
@@ -440,7 +448,7 @@ Moving 2461 slots from 127.0.0.1:30002 to 127.0.0.1:30003
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.0.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
     </p>
   </div>
 </footer>

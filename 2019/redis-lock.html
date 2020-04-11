@@ -2,16 +2,23 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>使用 Redis 实现锁 &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     'present',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Redis 数据库取样程序" href="redis-database-sampling.html" />
@@ -25,7 +32,8 @@
 <script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
 
-  </head><body>
+  </head>
+  <body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -119,8 +127,8 @@
   <div class="section" id="redis">
 <h1>使用 Redis 实现锁<a class="headerlink" href="#redis" title="Permalink to this headline">¶</a></h1>
 <div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>本文摘录自即将出版的《Redis使用手册》，
+<p class="first admonition-title">Note</p>
+<p class="last">本文摘录自即将出版的《Redis使用手册》，
 详情请见： <a class="reference external" href="http://RedisGuide.com">RedisGuide.com</a> 。</p>
 </div>
 <p>锁是一种同步机制，
@@ -130,23 +138,23 @@
 直到正在使用资源的进程放弃使用权为止。</p>
 <p>一个锁实现通常会有获取（acquire）和释放（release）这两种操作：</p>
 <ul class="simple">
-<li><p>获取操作用于取得资源的独占使用权。
+<li>获取操作用于取得资源的独占使用权。
 在任何时候，
 最多只能有一个进程取得锁，
 我们把成功取得锁的这个进程称之为锁的持有者。
 在锁已经被持有的情况下，
-所有尝试再次获取锁的操作都会失败。</p></li>
-<li><p>释放操作用于放弃资源的独占使用权，
+所有尝试再次获取锁的操作都会失败。</li>
+<li>释放操作用于放弃资源的独占使用权，
 一般由锁的持有者调用。
 在锁被释放之后，
-其他进程就可以再次尝试获取这个锁了。</p></li>
+其他进程就可以再次尝试获取这个锁了。</li>
 </ul>
 <p>代码清单 2-2 展示了一个使用字符串键实现的锁程序，
 这个程序会根据给定的字符串键是否有值来判断锁是否已经被获取，
 而针对锁的获取操作和释放操作则是分别通过设置字符串键和删除字符串键来完成的。</p>
 <hr class="docutils" />
-<p>代码清单 2-2 使用字符串键实现的锁程序：<code class="docutils literal notranslate"><span class="pre">/string/lock.py</span></code></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">VALUE_OF_LOCK</span> <span class="o">=</span> <span class="s2">&quot;locking&quot;</span>
+<p>代码清单 2-2 使用字符串键实现的锁程序：<code class="docutils literal"><span class="pre">/string/lock.py</span></code></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">VALUE_OF_LOCK</span> <span class="o">=</span> <span class="s2">&quot;locking&quot;</span>
 
 <span class="k">class</span> <span class="nc">Lock</span><span class="p">:</span>
 
@@ -171,45 +179,45 @@
 </pre></div>
 </div>
 <hr class="docutils" />
-<p>获取操作 <code class="docutils literal notranslate"><span class="pre">acquire()</span></code> 方法是通过执行带有 <code class="docutils literal notranslate"><span class="pre">NX</span></code> 选项的 <code class="docutils literal notranslate"><span class="pre">SET</span></code> 命令来实现的：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">,</span> <span class="n">VALUE_OF_LOCK</span><span class="p">,</span> <span class="n">nx</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<p>获取操作 <code class="docutils literal"><span class="pre">acquire()</span></code> 方法是通过执行带有 <code class="docutils literal"><span class="pre">NX</span></code> 选项的 <code class="docutils literal"><span class="pre">SET</span></code> 命令来实现的：</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">,</span> <span class="n">VALUE_OF_LOCK</span><span class="p">,</span> <span class="n">nx</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">NX</span></code> 选项的效果确保了代表锁的字符串键只会在没有值的情况下被设置：</p>
+<p><code class="docutils literal"><span class="pre">NX</span></code> 选项的效果确保了代表锁的字符串键只会在没有值的情况下被设置：</p>
 <ul class="simple">
-<li><p>如果给定的字符串键没有值，
+<li>如果给定的字符串键没有值，
 那么说明锁尚未被获取，
-<code class="docutils literal notranslate"><span class="pre">SET</span></code> 命令将执行设置操作，
-并将 <code class="docutils literal notranslate"><span class="pre">result</span></code> 变量的值设置为 <code class="docutils literal notranslate"><span class="pre">True</span></code> ；</p></li>
-<li><p>与此相反，
+<code class="docutils literal"><span class="pre">SET</span></code> 命令将执行设置操作，
+并将 <code class="docutils literal"><span class="pre">result</span></code> 变量的值设置为 <code class="docutils literal"><span class="pre">True</span></code> ；</li>
+<li>与此相反，
 如果给定的字符串键已经有值了，
 那么说明锁已经被获取，
-<code class="docutils literal notranslate"><span class="pre">SET</span></code> 命令将放弃执行设置操作，
-并将 <code class="docutils literal notranslate"><span class="pre">result</span></code> 变量的值将为 <code class="docutils literal notranslate"><span class="pre">None</span></code> ；</p></li>
+<code class="docutils literal"><span class="pre">SET</span></code> 命令将放弃执行设置操作，
+并将 <code class="docutils literal"><span class="pre">result</span></code> 变量的值将为 <code class="docutils literal"><span class="pre">None</span></code> ；</li>
 </ul>
-<p><code class="docutils literal notranslate"><span class="pre">acquire()</span></code> 方法最后会通过检查 <code class="docutils literal notranslate"><span class="pre">result</span></code> 变量的值是否为 <code class="docutils literal notranslate"><span class="pre">True</span></code> 来判断自己是否成功取得了锁。</p>
-<p>释放操作 <code class="docutils literal notranslate"><span class="pre">release()</span></code> 方法使用了本书之前没有介绍过的 <code class="docutils literal notranslate"><span class="pre">DEL</span></code> 命令，
+<p><code class="docutils literal"><span class="pre">acquire()</span></code> 方法最后会通过检查 <code class="docutils literal"><span class="pre">result</span></code> 变量的值是否为 <code class="docutils literal"><span class="pre">True</span></code> 来判断自己是否成功取得了锁。</p>
+<p>释放操作 <code class="docutils literal"><span class="pre">release()</span></code> 方法使用了本书之前没有介绍过的 <code class="docutils literal"><span class="pre">DEL</span></code> 命令，
 这个命令接受一个或多个数据库键作为参数，
 尝试删除这些键以及与之相关联的值，
 并返回被成功删除的键数量作为结果：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DEL</span> <span class="n">key</span> <span class="p">[</span><span class="n">key</span> <span class="o">...</span><span class="p">]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">DEL</span> <span class="n">key</span> <span class="p">[</span><span class="n">key</span> <span class="o">...</span><span class="p">]</span>
 </pre></div>
 </div>
-<p>因为 Redis 的 <code class="docutils literal notranslate"><span class="pre">DEL</span></code> 命令和 Python 的 <code class="docutils literal notranslate"><span class="pre">del</span></code> 关键字重名，
+<p>因为 Redis 的 <code class="docutils literal"><span class="pre">DEL</span></code> 命令和 Python 的 <code class="docutils literal"><span class="pre">del</span></code> 关键字重名，
 所以在 redis-py 客户端中，
-执行 <code class="docutils literal notranslate"><span class="pre">DEL</span></code> 命令实际上是通过调用 <code class="docutils literal notranslate"><span class="pre">delete()</span></code> 方法来完成的：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+执行 <code class="docutils literal"><span class="pre">DEL</span></code> 命令实际上是通过调用 <code class="docutils literal"><span class="pre">delete()</span></code> 方法来完成的：</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">release()</span></code> 方法通过检查 <code class="docutils literal notranslate"><span class="pre">delete()</span></code> 方法的返回值是否为 <code class="docutils literal notranslate"><span class="pre">1</span></code> 来判断删除操作是否执行成功：
-如果用户尝试对一个尚未被获取的锁执行 <code class="docutils literal notranslate"><span class="pre">release()</span></code> 方法，
-那么方法将返回 <code class="docutils literal notranslate"><span class="pre">false</span></code> ，
+<p><code class="docutils literal"><span class="pre">release()</span></code> 方法通过检查 <code class="docutils literal"><span class="pre">delete()</span></code> 方法的返回值是否为 <code class="docutils literal"><span class="pre">1</span></code> 来判断删除操作是否执行成功：
+如果用户尝试对一个尚未被获取的锁执行 <code class="docutils literal"><span class="pre">release()</span></code> 方法，
+那么方法将返回 <code class="docutils literal"><span class="pre">false</span></code> ，
 表示没有锁被释放。</p>
-<p>在使用 <code class="docutils literal notranslate"><span class="pre">DEL</span></code> 命令删除代表锁的字符串键之后，
+<p>在使用 <code class="docutils literal"><span class="pre">DEL</span></code> 命令删除代表锁的字符串键之后，
 字符串键将重新回到没有值的状态，
-这时用户就可以再次调用 <code class="docutils literal notranslate"><span class="pre">acquire()</span></code> 方法去获取锁了。</p>
+这时用户就可以再次调用 <code class="docutils literal"><span class="pre">acquire()</span></code> 方法去获取锁了。</p>
 <p>以下代码演示了这个锁的使用方法：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">redis</span> <span class="kn">import</span> <span class="n">Redis</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">redis</span> <span class="kn">import</span> <span class="n">Redis</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">lock</span> <span class="kn">import</span> <span class="n">Lock</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">client</span> <span class="o">=</span> <span class="n">Redis</span><span class="p">(</span><span class="n">decode_responses</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">lock</span> <span class="o">=</span> <span class="n">Lock</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="s1">&#39;test-lock&#39;</span><span class="p">)</span>
@@ -226,18 +234,18 @@
 <p>虽然代码清单 2-2 中展示的锁实现了基本的获取和释放功能，
 但它并不完美：</p>
 <ol class="arabic simple">
-<li><p>因为这个锁的释放操作无法验证进程的身份，
+<li>因为这个锁的释放操作无法验证进程的身份，
 所以无论执行释放操作的进程是否就是锁的持有者，
 锁都会被释放。
 如果锁被持有者以外的其他进程释放了的话，
 那么系统中可能就会同时出现多个锁，
-导致锁的唯一性被破坏。</p></li>
-<li><p>这个锁的获取操作不能设置最大加锁时间，
+导致锁的唯一性被破坏。</li>
+<li>这个锁的获取操作不能设置最大加锁时间，
 它无法让锁在超过给定的时限之后自动释放。
 因此，
 如果持有锁的进程因为故障或者编程错误而没有在退出之前主动释放锁，
 那么锁就会一直处于已被获取的状态，
-导致其他进程永远无法取得锁。</p></li>
+导致其他进程永远无法取得锁。</li>
 </ol>
 <p>本书后续将继续改进这个锁实现，
 使得它可以解决这两个问题。</p>
@@ -256,7 +264,7 @@
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.0.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
     </p>
   </div>
 </footer>

@@ -2,16 +2,23 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>《算法导论》2.1 节《插入排序》：笔记、代码实现与练习解答 &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
-    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/language_data.js"></script>
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     'present',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="2015" href="../../2015/index.html" />
@@ -25,7 +32,8 @@
 <script type="text/javascript" src="../../../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js "></script>
 
-  </head><body>
+  </head>
+  <body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -132,16 +140,16 @@
 <div class="section" id="id2">
 <h2>笔记<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><p>较为低效的排序算法，只在元素较少时有效。</p></li>
-<li><p>算法的最坏情况输入为降序排列的元素，比如 <code class="docutils literal notranslate"><span class="pre">[7,</span> <span class="pre">6,</span> <span class="pre">5,</span> <span class="pre">4,</span> <span class="pre">3,</span> <span class="pre">2,</span> <span class="pre">1]</span></code> ，每次移动元素的复杂度为 O(N) ，因此算法的复杂度为 O(N^2) 。</p></li>
-<li><p>原地排序，执行时只需要常量大小的额外内存空间。</p></li>
-<li><p>每次排序 A[i] 的时候， A[i] 之前的元素都是有序的，而算法要做的就是将 A[i] 添加到这个有序数组当中，并把它放到合适的位置上。</p></li>
+<li>较为低效的排序算法，只在元素较少时有效。</li>
+<li>算法的最坏情况输入为降序排列的元素，比如 <code class="docutils literal"><span class="pre">[7,</span> <span class="pre">6,</span> <span class="pre">5,</span> <span class="pre">4,</span> <span class="pre">3,</span> <span class="pre">2,</span> <span class="pre">1]</span></code> ，每次移动元素的复杂度为 O(N) ，因此算法的复杂度为 O(N^2) 。</li>
+<li>原地排序，执行时只需要常量大小的额外内存空间。</li>
+<li>每次排序 A[i] 的时候， A[i] 之前的元素都是有序的，而算法要做的就是将 A[i] 添加到这个有序数组当中，并把它放到合适的位置上。</li>
 </ul>
 </div>
 <div class="section" id="id3">
 <h2>代码实现<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
 <p>以下是书本展示的插入排序的直译代码：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#coding:utf-8</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1">#coding:utf-8</span>
 
 <span class="k">def</span> <span class="nf">insertion_sort</span><span class="p">(</span><span class="n">array</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">array</span><span class="p">)):</span>          <span class="c1"># 产生一个 1..array.length 的序列</span>
@@ -169,22 +177,22 @@
 </div>
 <p>有两个要注意的地方：</p>
 <ol class="arabic simple">
-<li><p>书本原来在外循环使用 <code class="docutils literal notranslate"><span class="pre">j</span></code> 作下标，
-内循环使用 <code class="docutils literal notranslate"><span class="pre">i</span></code> 作下标，
+<li>书本原来在外循环使用 <code class="docutils literal"><span class="pre">j</span></code> 作下标，
+内循环使用 <code class="docutils literal"><span class="pre">i</span></code> 作下标，
 这里我根据自己的习惯进行了修改，
-与书本的做法正好相反。</p></li>
-<li><p>书本的数组下标是以 <code class="docutils literal notranslate"><span class="pre">1</span></code> 为开始的，
-而 Python 的数组下标则是以 <code class="docutils literal notranslate"><span class="pre">0</span></code> 为开始，
-所以书本中的 <code class="docutils literal notranslate"><span class="pre">for</span> <span class="pre">j</span> <span class="pre">=</span> <span class="pre">2</span> <span class="pre">to</span> <span class="pre">A.length</span></code> 在代码中改成了 <code class="docutils literal notranslate"><span class="pre">for</span> <span class="pre">i</span> <span class="pre">in</span> <span class="pre">range(1,</span> <span class="pre">len(array))</span></code> 。</p></li>
-<li><p>跟理由 2 一样，
-书本中的 <code class="docutils literal notranslate"><span class="pre">while</span> <span class="pre">i</span> <span class="pre">&gt;</span> <span class="pre">0</span> <span class="pre">and</span> <span class="pre">...</span></code> 在代码中改成了 <code class="docutils literal notranslate"><span class="pre">while</span> <span class="pre">j</span> <span class="pre">&gt;=</span> <span class="pre">0</span> <span class="pre">and</span> <span class="pre">...</span></code> 。
+与书本的做法正好相反。</li>
+<li>书本的数组下标是以 <code class="docutils literal"><span class="pre">1</span></code> 为开始的，
+而 Python 的数组下标则是以 <code class="docutils literal"><span class="pre">0</span></code> 为开始，
+所以书本中的 <code class="docutils literal"><span class="pre">for</span> <span class="pre">j</span> <span class="pre">=</span> <span class="pre">2</span> <span class="pre">to</span> <span class="pre">A.length</span></code> 在代码中改成了 <code class="docutils literal"><span class="pre">for</span> <span class="pre">i</span> <span class="pre">in</span> <span class="pre">range(1,</span> <span class="pre">len(array))</span></code> 。</li>
+<li>跟理由 2 一样，
+书本中的 <code class="docutils literal"><span class="pre">while</span> <span class="pre">i</span> <span class="pre">&gt;</span> <span class="pre">0</span> <span class="pre">and</span> <span class="pre">...</span></code> 在代码中改成了 <code class="docutils literal"><span class="pre">while</span> <span class="pre">j</span> <span class="pre">&gt;=</span> <span class="pre">0</span> <span class="pre">and</span> <span class="pre">...</span></code> 。
 刚开始时没有注意到这个问题，
 结果在测试的时候发现数组的第一个元素没有被排序，
 吓我一跳，
-以为书本的算法出 bug 了。</p></li>
+以为书本的算法出 bug 了。</li>
 </ol>
 <p>测试结果：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python3 insertion_sort.py
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ python3 insertion_sort.py
 input = [0, 5, 4, 3, 1, 2, 6]
 output = [0, 1, 2, 3, 4, 5, 6]
 </pre></div>
@@ -194,23 +202,23 @@ output = [0, 1, 2, 3, 4, 5, 6]
 <h2>练习解答<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="id5">
 <h3>2.1-1<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
-<p>使用插入排序对输入 <code class="docutils literal notranslate"><span class="pre">[31,</span> <span class="pre">41,</span> <span class="pre">59,</span> <span class="pre">26,</span> <span class="pre">41,</span> <span class="pre">58]</span></code> 进行排序的过程：</p>
+<p>使用插入排序对输入 <code class="docutils literal"><span class="pre">[31,</span> <span class="pre">41,</span> <span class="pre">59,</span> <span class="pre">26,</span> <span class="pre">41,</span> <span class="pre">58]</span></code> 进行排序的过程：</p>
 <p>1）排序 A[1] ，值 41</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[31, 41, 59, 26, 41, 58]
+<div class="highlight-default"><div class="highlight"><pre><span></span>[31, 41, 59, 26, 41, 58]
       ^
       |
     31 &gt; 41 为假，直接插入原位
 </pre></div>
 </div>
 <p>2）排序 A[2] ，值 59</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[31, 41, 59, 26, 41, 58]
+<div class="highlight-default"><div class="highlight"><pre><span></span>[31, 41, 59, 26, 41, 58]
          ^
          |
     41 &gt; 59 为假，直接插入原位
 </pre></div>
 </div>
 <p>3）排序 A[3] ，值 26</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[31, 41, 59, 26, 41, 58]
+<div class="highlight-default"><div class="highlight"><pre><span></span>[31, 41, 59, 26, 41, 58]
           ^  ^
           |  |
           +--+
@@ -237,7 +245,7 @@ output = [0, 1, 2, 3, 4, 5, 6]
 </pre></div>
 </div>
 <p>4）排序 A[4] ，值 41</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[26, 31, 41, 59, 41, 58]
+<div class="highlight-default"><div class="highlight"><pre><span></span>[26, 31, 41, 59, 41, 58]
              ^    ^
              |    |
              +----+
@@ -252,7 +260,7 @@ output = [0, 1, 2, 3, 4, 5, 6]
 </pre></div>
 </div>
 <p>5）排序 A[5] ，值 58</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[26, 31, 41, 41, 59, 58]
+<div class="highlight-default"><div class="highlight"><pre><span></span>[26, 31, 41, 41, 59, 58]
                   ^   ^
                   |   |
                   +---+
@@ -266,21 +274,21 @@ output = [0, 1, 2, 3, 4, 5, 6]
 [26, 31, 41, 41, 58, 59]
 </pre></div>
 </div>
-<p>6）排序完毕，结果为 <code class="docutils literal notranslate"><span class="pre">[26,</span> <span class="pre">31,</span> <span class="pre">41,</span> <span class="pre">41,</span> <span class="pre">58,</span> <span class="pre">59]</span></code> 。</p>
+<p>6）排序完毕，结果为 <code class="docutils literal"><span class="pre">[26,</span> <span class="pre">31,</span> <span class="pre">41,</span> <span class="pre">41,</span> <span class="pre">58,</span> <span class="pre">59]</span></code> 。</p>
 </div>
 <div class="section" id="id6">
 <h3>2.1-2<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
 <p>题目的要求是写一个产生降序排列结果的插入排序。
 比如说，
-对于输入 <code class="docutils literal notranslate"><span class="pre">[5,</span> <span class="pre">2,</span> <span class="pre">4,</span> <span class="pre">6,</span> <span class="pre">1,</span> <span class="pre">3]</span></code> ，
-这个降序插入排序应该产生结果 <code class="docutils literal notranslate"><span class="pre">[6,</span> <span class="pre">5,</span> <span class="pre">4,</span> <span class="pre">3,</span> <span class="pre">2,</span> <span class="pre">1]</span></code> ，
-而不是原来的 <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">2,</span> <span class="pre">3,</span> <span class="pre">4,</span> <span class="pre">5,</span> <span class="pre">6]</span></code> 。</p>
+对于输入 <code class="docutils literal"><span class="pre">[5,</span> <span class="pre">2,</span> <span class="pre">4,</span> <span class="pre">6,</span> <span class="pre">1,</span> <span class="pre">3]</span></code> ，
+这个降序插入排序应该产生结果 <code class="docutils literal"><span class="pre">[6,</span> <span class="pre">5,</span> <span class="pre">4,</span> <span class="pre">3,</span> <span class="pre">2,</span> <span class="pre">1]</span></code> ，
+而不是原来的 <code class="docutils literal"><span class="pre">[1,</span> <span class="pre">2,</span> <span class="pre">3,</span> <span class="pre">4,</span> <span class="pre">5,</span> <span class="pre">6]</span></code> 。</p>
 <p>原来的升序排列插入排序的做法是将较小的值插入到数组的前面，
 为了产生一个降序排列的结果，
 我们的排序算法应该反其道而行之，
 将较大的值插入到数组的前面。</p>
 <p>以下是算法的具体实现：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#coding:utf-8</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1">#coding:utf-8</span>
 
 <span class="k">def</span> <span class="nf">insertion_sort</span><span class="p">(</span><span class="n">array</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">array</span><span class="p">)):</span>
@@ -307,12 +315,12 @@ output = [0, 1, 2, 3, 4, 5, 6]
 </pre></div>
 </div>
 <p>这个算法和之前的升序排列的插入算法的唯一不同，
-就是将原来的 <code class="docutils literal notranslate"><span class="pre">while</span> <span class="pre">j</span> <span class="pre">&gt;=</span> <span class="pre">0</span> <span class="pre">and</span> <span class="pre">array[j]</span> <span class="pre">&gt;</span> <span class="pre">key</span></code> 改成了 <code class="docutils literal notranslate"><span class="pre">while</span> <span class="pre">j</span> <span class="pre">&gt;=</span> <span class="pre">0</span> <span class="pre">and</span> <span class="pre">array[j]</span> <span class="pre">&lt;</span> <span class="pre">key</span></code> ，
+就是将原来的 <code class="docutils literal"><span class="pre">while</span> <span class="pre">j</span> <span class="pre">&gt;=</span> <span class="pre">0</span> <span class="pre">and</span> <span class="pre">array[j]</span> <span class="pre">&gt;</span> <span class="pre">key</span></code> 改成了 <code class="docutils literal"><span class="pre">while</span> <span class="pre">j</span> <span class="pre">&gt;=</span> <span class="pre">0</span> <span class="pre">and</span> <span class="pre">array[j]</span> <span class="pre">&lt;</span> <span class="pre">key</span></code> ，
 使得较大的值会被插入到数组的前面。
 除此之外，
 这个算法跟之前展示的升序插入排序算法没有什么不同。</p>
 <p>测试结果：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python3 decrease_insertion_sort.py
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ python3 decrease_insertion_sort.py
 input = [1, 0, 5, 4, 2, 3, 6]
 output = [6, 5, 4, 3, 2, 1, 0]
 </pre></div>
@@ -330,13 +338,13 @@ output = [6, 5, 4, 3, 2, 1, 0]
 那就是，
 它没有定义当数组里面出现多个 v 时，
 算法应该返回哪个 v 的 i ：
-比如对于输入 <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">3,</span> <span class="pre">5,</span> <span class="pre">2,</span> <span class="pre">3]</span></code> ，
-如果 <code class="docutils literal notranslate"><span class="pre">v=3</span></code> ，
+比如对于输入 <code class="docutils literal"><span class="pre">[1,</span> <span class="pre">3,</span> <span class="pre">5,</span> <span class="pre">2,</span> <span class="pre">3]</span></code> ，
+如果 <code class="docutils literal"><span class="pre">v=3</span></code> ，
 那么 i 可以是 1 也可以是 4 。
 为了消除这一点，
 我的算法实现将会返回第一个遇到的 v 的 i 。</p>
 <p>算法实现：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#coding:utf-8</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1">#coding:utf-8</span>
 
 <span class="k">def</span> <span class="nf">search_value</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
     <span class="n">i</span> <span class="o">=</span> <span class="kc">None</span>
@@ -363,32 +371,32 @@ output = [6, 5, 4, 3, 2, 1, 0]
 </pre></div>
 </div>
 <p>测试：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python3 search_value.py
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ python3 search_value.py
 find 1 in [2, 5, 3, 4, 1, 0], i = 4.
 find 10086 in [2, 5, 3, 4, 1, 0], i = None.
 </pre></div>
 </div>
 <p>（不太规范、非常随意的）循环不变式证明：</p>
 <ol class="arabic simple">
-<li><p>初始化：
+<li>初始化：
 在第一次循环之前，
-<code class="docutils literal notranslate"><span class="pre">array[0]</span></code> 要么等于 <code class="docutils literal notranslate"><span class="pre">value</span></code> ，
-要么不等于 <code class="docutils literal notranslate"><span class="pre">value</span></code> ：
+<code class="docutils literal"><span class="pre">array[0]</span></code> 要么等于 <code class="docutils literal"><span class="pre">value</span></code> ，
+要么不等于 <code class="docutils literal"><span class="pre">value</span></code> ：
 对于前者，
-算法会返回 <code class="docutils literal notranslate"><span class="pre">0</span></code> ；
+算法会返回 <code class="docutils literal"><span class="pre">0</span></code> ；
 而对于后者，
-算法将在后续的循环中继续进行查找。</p></li>
-<li><p>保持：
-算法在第 <code class="docutils literal notranslate"><span class="pre">i</span></code> 次循环时，
-会检查 <code class="docutils literal notranslate"><span class="pre">array[i]</span></code> 是否等于 <code class="docutils literal notranslate"><span class="pre">value</span></code> ，
-是的话就返回 <code class="docutils literal notranslate"><span class="pre">i</span></code> ，
-不是的话就继续进行下次循环。</p></li>
-<li><p>终止：
-当算法找到 <code class="docutils literal notranslate"><span class="pre">array[i]</span> <span class="pre">==</span> <span class="pre">value</span></code> 时，
+算法将在后续的循环中继续进行查找。</li>
+<li>保持：
+算法在第 <code class="docutils literal"><span class="pre">i</span></code> 次循环时，
+会检查 <code class="docutils literal"><span class="pre">array[i]</span></code> 是否等于 <code class="docutils literal"><span class="pre">value</span></code> ，
+是的话就返回 <code class="docutils literal"><span class="pre">i</span></code> ，
+不是的话就继续进行下次循环。</li>
+<li>终止：
+当算法找到 <code class="docutils literal"><span class="pre">array[i]</span> <span class="pre">==</span> <span class="pre">value</span></code> 时，
 它会终止循环，
-并返回 <code class="docutils literal notranslate"><span class="pre">i</span></code> ；
-如果算法遍历了整个数组也没有找到 <code class="docutils literal notranslate"><span class="pre">value</span></code> 所在的 <code class="docutils literal notranslate"><span class="pre">i</span></code> ，
-那么算法返回 <code class="docutils literal notranslate"><span class="pre">None</span></code> 。</p></li>
+并返回 <code class="docutils literal"><span class="pre">i</span></code> ；
+如果算法遍历了整个数组也没有找到 <code class="docutils literal"><span class="pre">value</span></code> 所在的 <code class="docutils literal"><span class="pre">i</span></code> ，
+那么算法返回 <code class="docutils literal"><span class="pre">None</span></code> 。</li>
 </ol>
 </div>
 <div class="section" id="id8">
@@ -411,7 +419,7 @@ find 10086 in [2, 5, 3, 4, 1, 0], i = None.
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.0.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
     </p>
   </div>
 </footer>

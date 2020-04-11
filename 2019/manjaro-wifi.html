@@ -2,16 +2,23 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>为 Manjaro 18.1.4 配置无线网卡 &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     'present',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Go 的变量作用域" href="go-scope.html" />
@@ -25,7 +32,8 @@
 <script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
 
-  </head><body>
+  </head>
+  <body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -133,8 +141,8 @@
 </div>
 <div class="section" id="id2">
 <h2>步骤<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
-<p>首先使用 <code class="docutils literal notranslate"><span class="pre">lsusb</span></code> 命令查看 USB 设备是否已经被正确识别：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ lsusb -v | more
+<p>首先使用 <code class="docutils literal"><span class="pre">lsusb</span></code> 命令查看 USB 设备是否已经被正确识别：</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ lsusb -v | more
 ...
 Bus 003 Device 002: ID 7392:c822 Edimax Technology Co., Ltd AC1200 MU-MIMO USB3.0 Adapter
 Device Descriptor:
@@ -162,10 +170,10 @@ Device Descriptor:
 包名为 <a class="reference external" href="https://aur.archlinux.org/packages/rtl8822bu-dkms-git">rtl8822bu-dkms-git</a> ，
 直接在 AUR 里面安装这个包即可。</p>
 <p>另外需要注意的是，
-<code class="docutils literal notranslate"><span class="pre">rtl8822bu-dkms-git</span></code> 包依赖 <code class="docutils literal notranslate"><span class="pre">linux-headers</span></code> 包，
+<code class="docutils literal"><span class="pre">rtl8822bu-dkms-git</span></code> 包依赖 <code class="docutils literal"><span class="pre">linux-headers</span></code> 包，
 我们需要根据自己的 Linux 版本安装相应的 headers 包，
 然后再安装网卡驱动：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pacman -Ss linux-headers
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ pacman -Ss linux-headers
 ...
     Header files and scripts for building modules for Linux44 kernel
 core/linux49-headers 4.9.206-1
@@ -183,8 +191,8 @@ wifi 应该就能够正常工作了。</p>
 <p>Ubuntu 上的安装方法也是类似的，
 可以参考<a class="reference external" href="https://edimax.freshdesk.com/support/solutions/articles/14000065859-how-to-install-ew-7822ulc-ew-7822utc-in-linux-running-kernel-higher-than-v4-15">这个帖子</a>。</p>
 <div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>不知道是驱动的问题还是网卡的问题，
+<p class="first admonition-title">Tip</p>
+<p class="last">不知道是驱动的问题还是网卡的问题，
 在连接特定 wifi 网络的时候可能会出现无法连接的情况，
 这时删掉已知的 wifi 网络再重新尝试连接即可，
 还不行就多试几次（笑）。</p>
@@ -209,7 +217,7 @@ wifi 应该就能够正常工作了。</p>
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.0.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
     </p>
   </div>
 </footer>

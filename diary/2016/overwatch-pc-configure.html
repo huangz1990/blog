@@ -2,16 +2,23 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>守望先锋主机配置分享 &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     'present',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Redis 学习路线" href="how-to-learn-redis.html" />
@@ -25,7 +32,8 @@
 <script type="text/javascript" src="../../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../../_static/bootstrap-sphinx.js "></script>
 
-  </head><body>
+  </head>
+  <body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -129,93 +137,93 @@
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
-<table class="docutils align-default">
+<table border="1" class="docutils">
 <colgroup>
-<col style="width: 42%" />
-<col style="width: 25%" />
-<col style="width: 33%" />
+<col width="42%" />
+<col width="25%" />
+<col width="33%" />
 </colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>硬件</p></th>
-<th class="head"><p>主要特点和选择理由</p></th>
-<th class="head"><p>在守望先锋中的实际效果</p></th>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">硬件</th>
+<th class="head">主要特点和选择理由</th>
+<th class="head">在守望先锋中的实际效果</th>
 </tr>
 </thead>
-<tbody>
-<tr class="row-even"><td><p><a class="reference external" href="http://item.jd.com/2011989.html">酷睿双核 i3-6100</a></p></td>
-<td><p>Skylake 平台，2 核 4 线程，主频 3.7 GHz ，
-3 MB 三级缓存，支持 DDR4-2133 内存。</p></td>
-<td><p>CPU 占用率在载入地图时会有一两秒钟达到 100% ，
-其他时候都是稳定在 70% 左右。</p></td>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference external" href="http://item.jd.com/2011989.html">酷睿双核 i3-6100</a></td>
+<td>Skylake 平台，2 核 4 线程，主频 3.7 GHz ，
+3 MB 三级缓存，支持 DDR4-2133 内存。</td>
+<td>CPU 占用率在载入地图时会有一两秒钟达到 100% ，
+其他时候都是稳定在 70% 左右。</td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="http://item.jd.com/1853383.html">技嘉 B150M-D3H 主板</a></p></td>
-<td><p>M-ATX 小板，LGA 1151 接口，
+<tr class="row-odd"><td><a class="reference external" href="http://item.jd.com/1853383.html">技嘉 B150M-D3H 主板</a></td>
+<td>M-ATX 小板，LGA 1151 接口，
 最大支持 64 GB 内存，支持 DDR4-2133 内存，
 带有 M2 接口和 6 个 SATA 3.0 接口。
-一直都买技嘉的主板，对质量很放心。</p></td>
-<td><p>（无）</p></td>
+一直都买技嘉的主板，对质量很放心。</td>
+<td>（无）</td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="http://item.jd.com/1212631.html">华硕猛禽 STRIX-GTX750TI-OC-2G</a></p></td>
-<td><p>最大核心频率 1202MHz ，2 GB DDR5 显存，
+<tr class="row-even"><td><a class="reference external" href="http://item.jd.com/1212631.html">华硕猛禽 STRIX-GTX750TI-OC-2G</a></td>
+<td>最大核心频率 1202MHz ，2 GB DDR5 显存，
 DVI、HDMI、DP 接口各一个。
 在众多 GTX 750 Ti 显卡中，
 这张的最大核心频率是最高的，
 并且华硕的品质让人放心，
-所以就选它了。</p></td>
-<td><p>低画质稳定跑在 100 幁左右，
+所以就选它了。</td>
+<td>低画质稳定跑在 100 幁左右，
 高画质稳定跑在 90 幁左右，
 超高画质没有仔细测试，
 但能够明显地感受到画面有延迟存在，
 想要使用这张显卡流畅地运行游戏的话，
 高画质应该是一个不错的选项。
 另外，请记得在游戏的选项页面里面，
-把“帧率限制”这个选项关掉，对幁数提升有很大的帮助。</p></td>
+把“帧率限制”这个选项关掉，对幁数提升有很大的帮助。</td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="http://item.jd.com/1358803.html">金士顿 DDR4 2133 8GB 台式机内存</a></p></td>
-<td><p>金士顿内存，稳定的保证!</p></td>
-<td><p>我安装的系统是 Windows 10 ，
+<tr class="row-odd"><td><a class="reference external" href="http://item.jd.com/1358803.html">金士顿 DDR4 2133 8GB 台式机内存</a></td>
+<td>金士顿内存，稳定的保证!</td>
+<td>我安装的系统是 Windows 10 ，
 运行守望先锋之后整个系统还有大约 3 GB
-的空闲内存可用。</p></td>
+的空闲内存可用。</td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="http://item.jd.com/2010277.html">三星 750 EVO 120G SATA3 固态硬盘</a></p></td>
-<td><p>在同价位的主流固态硬盘厂商中，
+<tr class="row-even"><td><a class="reference external" href="http://item.jd.com/2010277.html">三星 750 EVO 120G SATA3 固态硬盘</a></td>
+<td>在同价位的主流固态硬盘厂商中，
 三星的这款硬盘给出的测试速度是最快的，
-所以就选它了。</p></td>
-<td><p>没有仔细计算过游戏载入地图时的时间，
+所以就选它了。</td>
+<td>没有仔细计算过游戏载入地图时的时间，
 但都是很快就完成了，
 估计在 3 ~ 5 秒钟左右。
 Windows 10 开机一般 11~14 秒钟左右，
 最快试过 7 秒钟。
 安装 Windows 10 花了 15 个 GB ，
 安装游戏花了 6 个 GB ，
-硬盘还有不少空间可以用。</p></td>
+硬盘还有不少空间可以用。</td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="http://item.jd.com/568742.html">美商海盗船450W VS450 电源</a></p></td>
-<td><p>以前电源基本上都是买安钛克的，
+<tr class="row-odd"><td><a class="reference external" href="http://item.jd.com/568742.html">美商海盗船450W VS450 电源</a></td>
+<td>以前电源基本上都是买安钛克的，
 因为海盗船这牌子看上去比较逼格，
 价格也差不多，
 并且安钛克质保 2 年而这个保 3 年，
-所以这次就上船了。</p></td>
-<td><p>（无）</p></td>
+所以这次就上船了。</td>
+<td>（无）</td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="http://item.jd.com/1186783.html">Tt 启航者 S3 M-ATX 迷你机箱</a></p></td>
-<td><p>Tt 品牌产品，100 块就可以拿下，超值。
+<tr class="row-even"><td><a class="reference external" href="http://item.jd.com/1186783.html">Tt 启航者 S3 M-ATX 迷你机箱</a></td>
+<td>Tt 品牌产品，100 块就可以拿下，超值。
 小机箱，比较节约空间。
 有两个硬盘位和一个 SSD 位，
-水冷的位置也有，为将来升级留下了空间。</p></td>
-<td><p>（无）</p></td>
+水冷的位置也有，为将来升级留下了空间。</td>
+<td>（无）</td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="http://item.jd.com/132920.html">酷冷至尊黑旋风-L12 机箱风扇</a></p></td>
-<td><p>便宜，声音不大，没有灯，不闪眼睛。</p></td>
-<td><p>（无）</p></td>
+<tr class="row-odd"><td><a class="reference external" href="http://item.jd.com/132920.html">酷冷至尊黑旋风-L12 机箱风扇</a></td>
+<td>便宜，声音不大，没有灯，不闪眼睛。</td>
+<td>（无）</td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="http://item.jd.com/1429780.html">EDUP EP-AC1606 双频无线网卡</a></p></td>
-<td><p>AC 无线双频，USB 3.0 接口，带双天线。</p></td>
-<td><p>信号不错，隔着一栋厚墙连家里的路由，
+<tr class="row-even"><td><a class="reference external" href="http://item.jd.com/1429780.html">EDUP EP-AC1606 双频无线网卡</a></td>
+<td>AC 无线双频，USB 3.0 接口，带双天线。</td>
+<td>信号不错，隔着一栋厚墙连家里的路由，
 信号可以达到 Windows 的“佳”状态（差一格满格）。
 2.4 G 和 5 G 频率都可以。
 家里用的是 100 Mb 的电信宽带，
-游戏时的 ping 值在 40 左右。</p></td>
+游戏时的 ping 值在 40 左右。</td>
 </tr>
 </tbody>
 </table>
@@ -253,7 +261,7 @@ Windows 10 开机一般 11~14 秒钟左右，
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.0.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
     </p>
   </div>
 </footer>

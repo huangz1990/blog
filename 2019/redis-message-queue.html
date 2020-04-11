@@ -2,16 +2,23 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>使用 Redis 流实现消息队列 &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     'present',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="使用 Redis GEO 储存地理位置" href="redis-geo-location.html" />
@@ -25,7 +32,8 @@
 <script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
 
-  </head><body>
+  </head>
+  <body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -119,8 +127,8 @@
   <div class="section" id="redis">
 <h1>使用 Redis 流实现消息队列<a class="headerlink" href="#redis" title="Permalink to this headline">¶</a></h1>
 <div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>本文摘录自《Redis使用手册》，
+<p class="first admonition-title">Note</p>
+<p class="last">本文摘录自《Redis使用手册》，
 更多信息请见： <a class="reference external" href="http://RedisGuide.com">RedisGuide.com</a> 。</p>
 </div>
 <p>在介绍了 Redis 流的基本功能之后，
@@ -131,17 +139,17 @@
 这个消息队列跟我们之前使用其他 Redis 数据结构构建的消息队列具有相似的功能。</p>
 <p>代码清单 10-1 展示了一个具有基本功能的消息队列实现：</p>
 <ul class="simple">
-<li><p>代码最开头的是几个转换函数，
-它们负责对程序的相关输入输出进行转换和格式化；</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">MessageQueue</span></code> 类用于实现消息队列，
-它的添加消息、移除消息以及返回消息数量三个方法分别使用了流的 <code class="docutils literal notranslate"><span class="pre">XADD</span></code> 命令、 <code class="docutils literal notranslate"><span class="pre">XDEL</span></code> 命令和 <code class="docutils literal notranslate"><span class="pre">XLEN</span></code> 命令；</p></li>
-<li><p>消息队列的两个获取方法 <code class="docutils literal notranslate"><span class="pre">get_message()</span></code> 和 <code class="docutils literal notranslate"><span class="pre">get_by_range()</span></code> 分别以两种形式调用了流的 <code class="docutils literal notranslate"><span class="pre">XRANGE</span></code> 命令；</p></li>
-<li><p>最后，
-用于迭代消息的 <code class="docutils literal notranslate"><span class="pre">iterate()</span></code> 方法使用了 <code class="docutils literal notranslate"><span class="pre">XREAD</span></code> 命令对流进行迭代。</p></li>
+<li>代码最开头的是几个转换函数，
+它们负责对程序的相关输入输出进行转换和格式化；</li>
+<li><code class="docutils literal"><span class="pre">MessageQueue</span></code> 类用于实现消息队列，
+它的添加消息、移除消息以及返回消息数量三个方法分别使用了流的 <code class="docutils literal"><span class="pre">XADD</span></code> 命令、 <code class="docutils literal"><span class="pre">XDEL</span></code> 命令和 <code class="docutils literal"><span class="pre">XLEN</span></code> 命令；</li>
+<li>消息队列的两个获取方法 <code class="docutils literal"><span class="pre">get_message()</span></code> 和 <code class="docutils literal"><span class="pre">get_by_range()</span></code> 分别以两种形式调用了流的 <code class="docutils literal"><span class="pre">XRANGE</span></code> 命令；</li>
+<li>最后，
+用于迭代消息的 <code class="docutils literal"><span class="pre">iterate()</span></code> 方法使用了 <code class="docutils literal"><span class="pre">XREAD</span></code> 命令对流进行迭代。</li>
 </ul>
 <hr class="docutils" />
-<p>代码清单 10-1 使用 Redis 流实现的消息队列：<code class="docutils literal notranslate"><span class="pre">/stream/message_queue.py</span></code></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">reconstruct_message_list</span><span class="p">(</span><span class="n">message_list</span><span class="p">):</span>
+<p>代码清单 10-1 使用 Redis 流实现的消息队列：<code class="docutils literal"><span class="pre">/stream/message_queue.py</span></code></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">reconstruct_message_list</span><span class="p">(</span><span class="n">message_list</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    为了让多条消息能够以更结构化的方式返回给调用者，</span>
 <span class="sd">    将 Redis 返回的多条消息从原来的格式：</span>
@@ -219,7 +227,7 @@
 <p>对于这个消息队列实现，
 我们可以通过执行以下代码，
 创建出它的实例：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">redis</span> <span class="kn">import</span> <span class="n">Redis</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">redis</span> <span class="kn">import</span> <span class="n">Redis</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">message_queue</span> <span class="kn">import</span> <span class="n">MessageQueue</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">client</span> <span class="o">=</span> <span class="n">Redis</span><span class="p">(</span><span class="n">decode_responses</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mq</span> <span class="o">=</span> <span class="n">MessageQueue</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="s2">&quot;mq&quot;</span><span class="p">)</span>
@@ -227,7 +235,7 @@
 </div>
 <p>然后通过执行以下代码，
 向队列里面添加十条消息：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
 <span class="gp">... </span>  <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;key</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 <span class="gp">... </span>  <span class="n">value</span> <span class="o">=</span> <span class="s2">&quot;value</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 <span class="gp">... </span>  <span class="n">msg</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span><span class="n">value</span><span class="p">}</span>
@@ -246,8 +254,8 @@
 </pre></div>
 </div>
 <p>还可以根据 ID 获取指定的消息，
-又或者使用 <code class="docutils literal notranslate"><span class="pre">get_by_range()</span></code> 方法同时获取多条消息：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mq</span><span class="o">.</span><span class="n">get_message</span><span class="p">(</span><span class="s1">&#39;1554113926280-0&#39;</span><span class="p">)</span>
+又或者使用 <code class="docutils literal"><span class="pre">get_by_range()</span></code> 方法同时获取多条消息：</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mq</span><span class="o">.</span><span class="n">get_message</span><span class="p">(</span><span class="s1">&#39;1554113926280-0&#39;</span><span class="p">)</span>
 <span class="go">{&#39;key0&#39;: &#39;value0&#39;}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mq</span><span class="o">.</span><span class="n">get_message</span><span class="p">(</span><span class="s1">&#39;1554113926280-1&#39;</span><span class="p">)</span>
 <span class="go">{&#39;key1&#39;: &#39;value1&#39;}</span>
@@ -255,9 +263,9 @@
 <span class="go">[{&#39;1554113926280-0&#39;: {&#39;key0&#39;: &#39;value0&#39;}}, {&#39;1554113926280-1&#39;: {&#39;key1&#39;: &#39;value1&#39;}}, {&#39;1554113926281-0&#39;: {&#39;key2&#39;: &#39;value2&#39;}}]</span>
 </pre></div>
 </div>
-<p>又或者使用 <code class="docutils literal notranslate"><span class="pre">iterate()</span></code> 方法对消息队列进行迭代，
+<p>又或者使用 <code class="docutils literal"><span class="pre">iterate()</span></code> 方法对消息队列进行迭代，
 等等：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mq</span><span class="o">.</span><span class="n">iterate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mq</span><span class="o">.</span><span class="n">iterate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
 <span class="go">[{&#39;1554113926280-0&#39;: {&#39;key0&#39;: &#39;value0&#39;}}, {&#39;1554113926280-1&#39;: {&#39;key1&#39;: &#39;value1&#39;}}, {&#39;1554113926281-0&#39;: {&#39;key2&#39;: &#39;value2&#39;}}]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mq</span><span class="o">.</span><span class="n">iterate</span><span class="p">(</span><span class="s1">&#39;1554113926281-0&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
 <span class="go">[{&#39;1554113926281-1&#39;: {&#39;key3&#39;: &#39;value3&#39;}}, {&#39;1554113926281-2&#39;: {&#39;key4&#39;: &#39;value4&#39;}}, {&#39;1554113926281-3&#39;: {&#39;key5&#39;: &#39;value5&#39;}}]</span>
@@ -278,7 +286,7 @@
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.0.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
     </p>
   </div>
 </footer>

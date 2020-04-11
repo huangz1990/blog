@@ -2,16 +2,23 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Redis 处理和修复不合法 AOF 文件的方法 &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     'present',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="编写《Redis 设计与实现》时用到的工具" href="tools-for-writing-redisbook.html" />
@@ -25,7 +32,8 @@
 <script type="text/javascript" src="../../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../../_static/bootstrap-sphinx.js "></script>
 
-  </head><body>
+  </head>
+  <body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -130,29 +138,29 @@
 每条对数据库进行修改的写命令都会被追加到 AOF 文件中。</p>
 <p>举个例子，
 如果当前 AOF 文件中的状态为：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">TODAY</span> <span class="mi">2013</span><span class="o">-</span><span class="mi">4</span><span class="o">-</span><span class="mi">26</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">TODAY</span> <span class="mi">2013</span><span class="o">-</span><span class="mi">4</span><span class="o">-</span><span class="mi">26</span>
 </pre></div>
 </div>
-<p>那么当用户执行命令 <code class="docutils literal notranslate"><span class="pre">SET</span> <span class="pre">TOMORROW</span> <span class="pre">2013-4-27</span></code> 之后，
+<p>那么当用户执行命令 <code class="docutils literal"><span class="pre">SET</span> <span class="pre">TOMORROW</span> <span class="pre">2013-4-27</span></code> 之后，
 AOF 文件中的内容将变为：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">TODAY</span> <span class="mi">2013</span><span class="o">-</span><span class="mi">4</span><span class="o">-</span><span class="mi">26</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">TODAY</span> <span class="mi">2013</span><span class="o">-</span><span class="mi">4</span><span class="o">-</span><span class="mi">26</span>
 
 <span class="n">SET</span> <span class="n">TOMORROW</span> <span class="mi">2013</span><span class="o">-</span><span class="mi">4</span><span class="o">-</span><span class="mi">27</span>
 </pre></div>
 </div>
-<p>Redis 服务器使用 <code class="docutils literal notranslate"><span class="pre">O_APPEND</span></code> 模式的 <a class="reference external" href="http://linux.die.net/man/2/open">open</a> 函数来打开 AOF 文件，
+<p>Redis 服务器使用 <code class="docutils literal"><span class="pre">O_APPEND</span></code> 模式的 <a class="reference external" href="http://linux.die.net/man/2/open">open</a> 函数来打开 AOF 文件，
 并通过 <a class="reference external" href="http://linux.die.net/man/2/write">write</a> 函数来将命令内容追加到 AOF 文件的末尾。</p>
 <p>在一般情况下，
 <a class="reference external" href="http://linux.die.net/man/2/write">write</a> 函数可以无错地、原子地完成 ——
 除非出现以下两种情况的任意一种：</p>
 <ol class="arabic simple">
-<li><p>写入错误：在写入的过程中，出现写入操作被打断，磁盘空间不足，或者磁盘出现物理故障等问题。</p></li>
-<li><p>停机故障：在写入的过程中，发生 Redis 服务器进程别强制杀死，或者服务器的宿主机器被强制停机等情况。</p></li>
+<li>写入错误：在写入的过程中，出现写入操作被打断，磁盘空间不足，或者磁盘出现物理故障等问题。</li>
+<li>停机故障：在写入的过程中，发生 Redis 服务器进程别强制杀死，或者服务器的宿主机器被强制停机等情况。</li>
 </ol>
 <p>比如说，
 在以下 AOF 文件中，
-命令 <code class="docutils literal notranslate"><span class="pre">SET</span> <span class="pre">TOMORROW</span> <span class="pre">2013-4-27</span></code> 就只有 <code class="docutils literal notranslate"><span class="pre">SET</span></code> 部分被写入到了 AOF 文件中：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">TODAY</span> <span class="mi">2013</span><span class="o">-</span><span class="mi">4</span><span class="o">-</span><span class="mi">26</span>
+命令 <code class="docutils literal"><span class="pre">SET</span> <span class="pre">TOMORROW</span> <span class="pre">2013-4-27</span></code> 就只有 <code class="docutils literal"><span class="pre">SET</span></code> 部分被写入到了 AOF 文件中：</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">TODAY</span> <span class="mi">2013</span><span class="o">-</span><span class="mi">4</span><span class="o">-</span><span class="mi">26</span>
 
 <span class="n">SET</span>
 </pre></div>
@@ -166,17 +174,17 @@ AOF 文件中的内容将变为：</p>
 Redis 将会拒绝使用用户所提供的 AOF 文件来还原数据，
 因为错误的 AOF 文件会破坏数据的一致性。</p>
 <p>这篇文章将对 Redis 处理错误 AOF 文件的方法进行介绍，
-并讲解 AOF 修复软件 <code class="docutils literal notranslate"><span class="pre">redis-check-aof</span></code> 的运作原理。</p>
+并讲解 AOF 修复软件 <code class="docutils literal"><span class="pre">redis-check-aof</span></code> 的运作原理。</p>
 <div class="section" id="id1">
 <h2>前提知识<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <p>本文的讨论涉及 Redis 的命令、通讯协议、AOF 持久化和系统文件操作等几个方面的内容，
 如果读者不具备这些前提知识的话，
 请先阅读以下文档：</p>
 <ul class="simple">
-<li><p><a class="reference external" href="http://redis.readthedocs.org">Redis 命令参考</a></p></li>
-<li><p><a class="reference external" href="http://redis.readthedocs.org/en/latest/topic/protocol.html">Redis 通讯协议</a></p></li>
-<li><p><a class="reference external" href="http://redis.readthedocs.org/en/latest/topic/persistence.html">Redis 持久化</a></p></li>
-<li><p><a class="reference external" href="http://linux.die.net/man/2/write">write 函数手册</a> 、 <a class="reference external" href="http://linux.die.net/man/2/open">open 函数手册</a> 、 <a class="reference external" href="http://linux.die.net/man/2/ftruncate">ftruncate 函数手册</a> 和 <a class="reference external" href="http://linux.die.net/man/2/exit">exit 函数手册</a></p></li>
+<li><a class="reference external" href="http://redis.readthedocs.org">Redis 命令参考</a></li>
+<li><a class="reference external" href="http://redis.readthedocs.org/en/latest/topic/protocol.html">Redis 通讯协议</a></li>
+<li><a class="reference external" href="http://redis.readthedocs.org/en/latest/topic/persistence.html">Redis 持久化</a></li>
+<li><a class="reference external" href="http://linux.die.net/man/2/write">write 函数手册</a> 、 <a class="reference external" href="http://linux.die.net/man/2/open">open 函数手册</a> 、 <a class="reference external" href="http://linux.die.net/man/2/ftruncate">ftruncate 函数手册</a> 和 <a class="reference external" href="http://linux.die.net/man/2/exit">exit 函数手册</a></li>
 </ul>
 </div>
 <div class="section" id="id4">
@@ -193,24 +201,24 @@ Redis 仍然处于运行当中，
 因此，
 Redis 可以根据写入错误的情况，
 尝试对错误进行修复。</p>
-<p>以下是 Redis 源码 <code class="docutils literal notranslate"><span class="pre">aof.c</span></code> 文件中的其中一行代码，
+<p>以下是 Redis 源码 <code class="docutils literal"><span class="pre">aof.c</span></code> 文件中的其中一行代码，
 它描述了 Redis 是如何将要追加的新内容写入到 AOF 文件里的：</p>
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">nwritten</span> <span class="o">=</span> <span class="n">write</span><span class="p">(</span><span class="n">server</span><span class="p">.</span><span class="n">aof_fd</span><span class="p">,</span><span class="n">server</span><span class="p">.</span><span class="n">aof_buf</span><span class="p">,</span><span class="n">sdslen</span><span class="p">(</span><span class="n">server</span><span class="p">.</span><span class="n">aof_buf</span><span class="p">));</span>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="n">nwritten</span> <span class="o">=</span> <span class="n">write</span><span class="p">(</span><span class="n">server</span><span class="p">.</span><span class="n">aof_fd</span><span class="p">,</span><span class="n">server</span><span class="p">.</span><span class="n">aof_buf</span><span class="p">,</span><span class="n">sdslen</span><span class="p">(</span><span class="n">server</span><span class="p">.</span><span class="n">aof_buf</span><span class="p">));</span>
 </pre></div>
 </div>
-<p>其中 <code class="docutils literal notranslate"><span class="pre">server.aof_fd</span></code> 是 AOF 文件的描述符，
-<code class="docutils literal notranslate"><span class="pre">server.aof_buf</span></code> 是要被写入到 AOF 文件的内容，
-而 <code class="docutils literal notranslate"><span class="pre">sdslen(server.aof_buf)</span></code> 则是被写入内容的长度。</p>
-<p>取决于 <code class="docutils literal notranslate"><span class="pre">nwritten</span></code> 的值（也即是 <a class="reference external" href="http://linux.die.net/man/2/write">write</a> 函数的返回值），
+<p>其中 <code class="docutils literal"><span class="pre">server.aof_fd</span></code> 是 AOF 文件的描述符，
+<code class="docutils literal"><span class="pre">server.aof_buf</span></code> 是要被写入到 AOF 文件的内容，
+而 <code class="docutils literal"><span class="pre">sdslen(server.aof_buf)</span></code> 则是被写入内容的长度。</p>
+<p>取决于 <code class="docutils literal"><span class="pre">nwritten</span></code> 的值（也即是 <a class="reference external" href="http://linux.die.net/man/2/write">write</a> 函数的返回值），
 有以下四种情况出现：</p>
 <ol class="arabic simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">nwritten</span> <span class="pre">==</span> <span class="pre">sdslen(server.aof_buf)</span></code> ：内容全部被成功写入到 AOF 文件中。</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">nwritten</span> <span class="pre">==</span> <span class="pre">-1</span></code> ：写入出错，没有任何内容被写入。</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">nwritten</span> <span class="pre">==</span> <span class="pre">0</span></code> ，并且 <code class="docutils literal notranslate"><span class="pre">errno</span></code> 被设置：和情况 2 一样。</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;=</span> <span class="pre">nwritten</span> <span class="pre">&lt;</span> <span class="pre">sdslen(server.aof_buf)</span></code> ，
-并且当 <code class="docutils literal notranslate"><span class="pre">nwritten</span> <span class="pre">==</span> <span class="pre">0</span></code> 时，
-<code class="docutils literal notranslate"><span class="pre">errno</span></code> 没有被设置：
-内容没有被全部写入。</p></li>
+<li><code class="docutils literal"><span class="pre">nwritten</span> <span class="pre">==</span> <span class="pre">sdslen(server.aof_buf)</span></code> ：内容全部被成功写入到 AOF 文件中。</li>
+<li><code class="docutils literal"><span class="pre">nwritten</span> <span class="pre">==</span> <span class="pre">-1</span></code> ：写入出错，没有任何内容被写入。</li>
+<li><code class="docutils literal"><span class="pre">nwritten</span> <span class="pre">==</span> <span class="pre">0</span></code> ，并且 <code class="docutils literal"><span class="pre">errno</span></code> 被设置：和情况 2 一样。</li>
+<li><code class="docutils literal"><span class="pre">0</span> <span class="pre">&lt;=</span> <span class="pre">nwritten</span> <span class="pre">&lt;</span> <span class="pre">sdslen(server.aof_buf)</span></code> ，
+并且当 <code class="docutils literal"><span class="pre">nwritten</span> <span class="pre">==</span> <span class="pre">0</span></code> 时，
+<code class="docutils literal"><span class="pre">errno</span></code> 没有被设置：
+内容没有被全部写入。</li>
 </ol>
 <p>在情况 1 中，写入没有发生任何错误，程序继续运行。</p>
 <p>在情况 2 和 3 中，
@@ -228,7 +236,7 @@ Redis 也不指望自己能再继续执行下去了，
 因此，
 程序会使用以下代码，
 尝试自动修复出错的 AOF 文件：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">尝试移除新追加的不完整内容</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">尝试移除新追加的不完整内容</span>
 <span class="k">if</span> <span class="p">(</span><span class="n">ftruncate</span><span class="p">(</span><span class="n">server</span><span class="o">.</span><span class="n">aof_fd</span><span class="p">,</span> <span class="n">server</span><span class="o">.</span><span class="n">aof_current_size</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
     <span class="n">redisLog</span><span class="p">(</span><span class="n">REDIS_WARNING</span><span class="p">,</span> <span class="s2">&quot;Could not remove short write &quot;</span>
                             <span class="s2">&quot;from the append-only file.  Redis may refuse &quot;</span>
@@ -240,24 +248,24 @@ Redis 也不指望自己能再继续执行下去了，
 <p>所谓的自动修复操作，
 实际上就是尝试将 <a class="reference external" href="http://linux.die.net/man/2/write">write</a> 写入的不完整内容从 AOF 文件中删除掉：
 在上面的代码中，
-<code class="docutils literal notranslate"><span class="pre">server.aof_current_size</span></code> 记录了 AOF 文件在执行 <a class="reference external" href="http://linux.die.net/man/2/write">write</a> 之前的大小，
+<code class="docutils literal"><span class="pre">server.aof_current_size</span></code> 记录了 AOF 文件在执行 <a class="reference external" href="http://linux.die.net/man/2/write">write</a> 之前的大小，
 通过 <a class="reference external" href="http://linux.die.net/man/2/ftruncate">ftruncate</a> 函数，
 可以将 <a class="reference external" href="http://linux.die.net/man/2/write">write</a> 写入的不完整内容删除掉，
 从而将 AOF 文件还原到执行 <a class="reference external" href="http://linux.die.net/man/2/write">write</a> 之前的状态。</p>
 <p>比如说，
 如果这是 AOF 文件执行 <a class="reference external" href="http://linux.die.net/man/2/write">write</a> 之前的内容：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">TODAY</span> <span class="mi">2013</span><span class="o">-</span><span class="mi">4</span><span class="o">-</span><span class="mi">26</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">TODAY</span> <span class="mi">2013</span><span class="o">-</span><span class="mi">4</span><span class="o">-</span><span class="mi">26</span>
 </pre></div>
 </div>
-<p>当 <code class="docutils literal notranslate"><span class="pre">write</span></code> 出错之后，文件的内容变为：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">TODAY</span> <span class="mi">2013</span><span class="o">-</span><span class="mi">4</span><span class="o">-</span><span class="mi">26</span>
+<p>当 <code class="docutils literal"><span class="pre">write</span></code> 出错之后，文件的内容变为：</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">TODAY</span> <span class="mi">2013</span><span class="o">-</span><span class="mi">4</span><span class="o">-</span><span class="mi">26</span>
 
 <span class="n">SET</span>
 </pre></div>
 </div>
-<p>如果 <code class="docutils literal notranslate"><span class="pre">ftruncate</span></code> 函数能够成功执行，
-那么 AOF 文件的内容将会变回执行 <code class="docutils literal notranslate"><span class="pre">write</span></code> 之前的样子：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">TODAY</span> <span class="mi">2013</span><span class="o">-</span><span class="mi">4</span><span class="o">-</span><span class="mi">26</span>
+<p>如果 <code class="docutils literal"><span class="pre">ftruncate</span></code> 函数能够成功执行，
+那么 AOF 文件的内容将会变回执行 <code class="docutils literal"><span class="pre">write</span></code> 之前的样子：</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">TODAY</span> <span class="mi">2013</span><span class="o">-</span><span class="mi">4</span><span class="o">-</span><span class="mi">26</span>
 </pre></div>
 </div>
 <p>无论自动修复是否成功，
@@ -266,16 +274,16 @@ Redis 也不指望自己能再继续执行下去了，
 <p>自动修复能否成功取决于 <a class="reference external" href="http://linux.die.net/man/2/ftruncate">ftruncate</a> 函数能否成功执行，
 而 <a class="reference external" href="http://linux.die.net/man/2/ftruncate">ftruncate</a> 能否成功执行取决于磁盘能否被正常读写：</p>
 <ul class="simple">
-<li><p>如果自动修复成功的话，
+<li>如果自动修复成功的话，
 那么客户在服务器退出之后，
 可以无须执行任何额外动作，
-直接重启服务器。</p></li>
-<li><p>另一方面，
+直接重启服务器。</li>
+<li>另一方面，
 如果自动修复失败，
 那么客户在重启服务器之前，
-必须使用 <code class="docutils literal notranslate"><span class="pre">redis-check-aof</span></code> 程序手动修复 AOF 文件，
+必须使用 <code class="docutils literal"><span class="pre">redis-check-aof</span></code> 程序手动修复 AOF 文件，
 否则的话，
-服务器将拒绝重新启动。</p></li>
+服务器将拒绝重新启动。</li>
 </ul>
 </div>
 <div class="section" id="id5">
@@ -295,20 +303,20 @@ Redis 也不指望自己能再继续执行下去了，
 那么为了保护数据的一致性，
 Redis 会拒绝载入这个 AOF 文件，
 并打印以下日志信息：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ redis-server
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ redis-server
 [6842] 26 Apr 10:43:48.842 # Server started, Redis version 2.9.9
 [6842] 26 Apr 10:43:48.842 # Unexpected end of file reading the append only file
 </pre></div>
 </div>
-<p>Redis 附带的 <code class="docutils literal notranslate"><span class="pre">redis-check-aof</span></code> 可以解决这类因为 AOF 出错而无法启动的问题：
+<p>Redis 附带的 <code class="docutils literal"><span class="pre">redis-check-aof</span></code> 可以解决这类因为 AOF 出错而无法启动的问题：
 它可以移除 AOF 文件所包含的不完整的数据，
 使得 Redis 可以重新载入 AOF 文件中的数据。</p>
 <p>举个例子，
 以下是一个不完整的 AOF 文件，
-程序本来打算将命令 <code class="docutils literal notranslate"><span class="pre">SET</span> <span class="pre">TOMORROW</span> <span class="pre">2013-4-27</span></code> 写入到 AOF 文件里，
-但没想到只写完 <code class="docutils literal notranslate"><span class="pre">*3\r\n$3\r\nSET\r\n</span></code> 就遇上了停机故障
+程序本来打算将命令 <code class="docutils literal"><span class="pre">SET</span> <span class="pre">TOMORROW</span> <span class="pre">2013-4-27</span></code> 写入到 AOF 文件里，
+但没想到只写完 <code class="docutils literal"><span class="pre">*3\r\n$3\r\nSET\r\n</span></code> 就遇上了停机故障
 （开头的 <span class="xref std std-ref">SELECT</span> 命令是 AOF 程序自动加上的）：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>*2
+<div class="highlight-default"><div class="highlight"><pre><span></span>*2
 $6
 SELECT
 $1
@@ -325,20 +333,20 @@ $3
 SET
 </pre></div>
 </div>
-<p>执行 <code class="docutils literal notranslate"><span class="pre">redis-check-aof</span></code> 程序可以检查给定的 AOF 文件是否合法（有没有包含不完整的数据）。</p>
+<p>执行 <code class="docutils literal"><span class="pre">redis-check-aof</span></code> 程序可以检查给定的 AOF 文件是否合法（有没有包含不完整的数据）。</p>
 <p>举个例子，
-我们可以用 <code class="docutils literal notranslate"><span class="pre">redis-check-aof</span></code> 来检查上面展示的 AOF 文件：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ redis-check-aof invalid.aof
+我们可以用 <code class="docutils literal"><span class="pre">redis-check-aof</span></code> 来检查上面展示的 AOF 文件：</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ redis-check-aof invalid.aof
 AOF analyzed: size=75, ok_up_to=62, diff=13
 AOF is not valid
 </pre></div>
 </div>
 <p>程序显示，
-<code class="docutils literal notranslate"><span class="pre">invalid.aof</span></code> 是一个不合法的 AOF 文件：
-它的前 <code class="docutils literal notranslate"><span class="pre">62</span></code> 字节是正常的，
-但是之后的 <code class="docutils literal notranslate"><span class="pre">13</span></code> 字节是错误的。</p>
-<p>使用命令 <code class="docutils literal notranslate"><span class="pre">redis-check-aof</span> <span class="pre">--fix</span></code> 可以修复一个不合法的 AOF 文件：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ redis-check-aof --fix invalid.aof
+<code class="docutils literal"><span class="pre">invalid.aof</span></code> 是一个不合法的 AOF 文件：
+它的前 <code class="docutils literal"><span class="pre">62</span></code> 字节是正常的，
+但是之后的 <code class="docutils literal"><span class="pre">13</span></code> 字节是错误的。</p>
+<p>使用命令 <code class="docutils literal"><span class="pre">redis-check-aof</span> <span class="pre">--fix</span></code> 可以修复一个不合法的 AOF 文件：</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ redis-check-aof --fix invalid.aof
 AOF analyzed: size=75, ok_up_to=62, diff=13
 This will shrink the AOF from 75 bytes, with 13 bytes, to 62 bytes
 Continue? [y/N]: y
@@ -348,10 +356,10 @@ Successfully truncated AOF
 <p>程序会定位到出错的地方，
 并询问用户，
 是否要对文件进行截断，
-如果选择 <code class="docutils literal notranslate"><span class="pre">y</span></code> 的话，
+如果选择 <code class="docutils literal"><span class="pre">y</span></code> 的话，
 就会对指定的 AOF 文件进行修复。</p>
 <p>以下是修复后的 AOF 文件：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>*2
+<div class="highlight-default"><div class="highlight"><pre><span></span>*2
 $6
 SELECT
 $1
@@ -366,15 +374,15 @@ $9
 </pre></div>
 </div>
 <p>可以看到，出错的原因 —— 那个不完整的 <span class="xref std std-ref">SET</span> 命令已经被删除了。</p>
-<p>现在再次使用 <code class="docutils literal notranslate"><span class="pre">redis-check-aof</span></code> 程序检查这个 AOF 文件的话，
+<p>现在再次使用 <code class="docutils literal"><span class="pre">redis-check-aof</span></code> 程序检查这个 AOF 文件的话，
 程序会显示这是一个合法的 AOF 文件：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ redis-check-aof invalid.aof
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ redis-check-aof invalid.aof
 AOF analyzed: size=62, ok_up_to=62, diff=0
 AOF is valid
 </pre></div>
 </div>
 <p>并且 Redis 也可以正确地载入这个 AOF 文件：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ redis-server
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ redis-server
 [12948] 26 Apr 18:40:43.355 # Server started, Redis version 2.9.9
 [12948] 26 Apr 18:40:43.355 * DB loaded from append only file: 0.000 seconds
 [12948] 26 Apr 18:40:43.355 * The server is now ready to accept connections on port 6379
@@ -384,14 +392,14 @@ AOF is valid
 <div class="section" id="id6">
 <h2>修复命令错误<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h2>
 <p>在上一个小节，
-我们看到了如何使用 <code class="docutils literal notranslate"><span class="pre">redis-check-aof</span></code> 来检查一个 AOF 文件是否合法，
-并且知道了怎样使用 <code class="docutils literal notranslate"><span class="pre">redis-check-aof</span> <span class="pre">--fix</span></code> 来修复一个 AOF 文件，
+我们看到了如何使用 <code class="docutils literal"><span class="pre">redis-check-aof</span></code> 来检查一个 AOF 文件是否合法，
+并且知道了怎样使用 <code class="docutils literal"><span class="pre">redis-check-aof</span> <span class="pre">--fix</span></code> 来修复一个 AOF 文件，
 在这一节，
 我们就来看看，
-<code class="docutils literal notranslate"><span class="pre">redis-check-aof</span></code> 程序是如何定位错误的命令，
+<code class="docutils literal"><span class="pre">redis-check-aof</span></code> 程序是如何定位错误的命令，
 以及它又是怎样删除不完整的命令内容的。</p>
 <p>还是以前面的那个不合法的 AOF 文件作为例子：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>*2
+<div class="highlight-default"><div class="highlight"><pre><span></span>*2
 $6
 SELECT
 $1
@@ -408,32 +416,29 @@ $3
 SET
 </pre></div>
 </div>
-<p>以下是 <code class="docutils literal notranslate"><span class="pre">redis-check-aof</span></code> 处理上面这个 AOF 文件时的步骤：</p>
+<p>以下是 <code class="docutils literal"><span class="pre">redis-check-aof</span></code> 处理上面这个 AOF 文件时的步骤：</p>
 <ol class="arabic simple">
-<li><p>读入 <code class="docutils literal notranslate"><span class="pre">*2\r\n</span></code> ，确认到接下来的是一个两个参数的命令（一个是命令、一个是参数）：</p>
-<ol class="loweralpha simple">
-<li><p>读入 <code class="docutils literal notranslate"><span class="pre">$6\r\n</span></code> ，并确认接下来的参数为 <code class="docutils literal notranslate"><span class="pre">6</span></code> 字节长的 <code class="docutils literal notranslate"><span class="pre">SELECT</span></code> 。</p></li>
-<li><p>读入 <code class="docutils literal notranslate"><span class="pre">$1\r\n</span></code> ，并确认接下来的参数为 <code class="docutils literal notranslate"><span class="pre">1</span></code> 字节长的 <code class="docutils literal notranslate"><span class="pre">0</span></code> 。</p></li>
+<li>读入 <code class="docutils literal"><span class="pre">*2\r\n</span></code> ，确认到接下来的是一个两个参数的命令（一个是命令、一个是参数）：<ol class="loweralpha">
+<li>读入 <code class="docutils literal"><span class="pre">$6\r\n</span></code> ，并确认接下来的参数为 <code class="docutils literal"><span class="pre">6</span></code> 字节长的 <code class="docutils literal"><span class="pre">SELECT</span></code> 。</li>
+<li>读入 <code class="docutils literal"><span class="pre">$1\r\n</span></code> ，并确认接下来的参数为 <code class="docutils literal"><span class="pre">1</span></code> 字节长的 <code class="docutils literal"><span class="pre">0</span></code> 。</li>
 </ol>
 </li>
-<li><p>读入 <code class="docutils literal notranslate"><span class="pre">*3\r\n</span></code> ，确认到接下来的是一个三个参数的命令（一个是命令，两个是参数）：</p>
-<ol class="loweralpha simple">
-<li><p>读入 <code class="docutils literal notranslate"><span class="pre">$3\r\n</span></code> ，并确认 <code class="docutils literal notranslate"><span class="pre">3</span></code> 字节长的参数 <code class="docutils literal notranslate"><span class="pre">SET</span></code> 。</p></li>
-<li><p>读入 <code class="docutils literal notranslate"><span class="pre">$5\r\n</span></code> ，并确认 <code class="docutils literal notranslate"><span class="pre">5</span></code> 字节长的参数 <code class="docutils literal notranslate"><span class="pre">TODAY</span></code> 。</p></li>
-<li><p>读入 <code class="docutils literal notranslate"><span class="pre">$9\r\n</span></code> ，并确认 <code class="docutils literal notranslate"><span class="pre">9</span></code> 字节长的参数 <code class="docutils literal notranslate"><span class="pre">2013-4-26</span></code> 。</p></li>
+<li>读入 <code class="docutils literal"><span class="pre">*3\r\n</span></code> ，确认到接下来的是一个三个参数的命令（一个是命令，两个是参数）：<ol class="loweralpha">
+<li>读入 <code class="docutils literal"><span class="pre">$3\r\n</span></code> ，并确认 <code class="docutils literal"><span class="pre">3</span></code> 字节长的参数 <code class="docutils literal"><span class="pre">SET</span></code> 。</li>
+<li>读入 <code class="docutils literal"><span class="pre">$5\r\n</span></code> ，并确认 <code class="docutils literal"><span class="pre">5</span></code> 字节长的参数 <code class="docutils literal"><span class="pre">TODAY</span></code> 。</li>
+<li>读入 <code class="docutils literal"><span class="pre">$9\r\n</span></code> ，并确认 <code class="docutils literal"><span class="pre">9</span></code> 字节长的参数 <code class="docutils literal"><span class="pre">2013-4-26</span></code> 。</li>
 </ol>
 </li>
-<li><p>读入 <code class="docutils literal notranslate"><span class="pre">*3\r\n</span></code> ，确认到接下来的是一个三个参数的命令（一个是命令，两个是参数）：</p>
-<ol class="loweralpha simple">
-<li><p>读入 <code class="docutils literal notranslate"><span class="pre">$3\r\n</span></code> ，并确认 <code class="docutils literal notranslate"><span class="pre">3</span></code> 字节长的参数 <code class="docutils literal notranslate"><span class="pre">SET</span></code> 。</p></li>
-<li><p>程序试图读入三个参数中的第二个，但是意外地发现读入已经到达了文件的末尾，出错！</p></li>
+<li>读入 <code class="docutils literal"><span class="pre">*3\r\n</span></code> ，确认到接下来的是一个三个参数的命令（一个是命令，两个是参数）：<ol class="loweralpha">
+<li>读入 <code class="docutils literal"><span class="pre">$3\r\n</span></code> ，并确认 <code class="docutils literal"><span class="pre">3</span></code> 字节长的参数 <code class="docutils literal"><span class="pre">SET</span></code> 。</li>
+<li>程序试图读入三个参数中的第二个，但是意外地发现读入已经到达了文件的末尾，出错！</li>
 </ol>
 </li>
 </ol>
 <p>上面是从协议的角度来分析 AOF 中的内容，
 如果我们从文本的角度来看，
 分析的步骤就会简单得多：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SELECT</span> <span class="mi">0</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">SELECT</span> <span class="mi">0</span>
 
 <span class="n">SET</span> <span class="n">TODAY</span> <span class="mi">2013</span><span class="o">-</span><span class="mi">4</span><span class="o">-</span><span class="mi">26</span>
 
@@ -441,40 +446,40 @@ SET
 </pre></div>
 </div>
 <ol class="arabic simple">
-<li><p>程序首先读入 <code class="docutils literal notranslate"><span class="pre">SELECT</span></code> 命令，还有它的参数 <code class="docutils literal notranslate"><span class="pre">0</span></code> 。</p></li>
-<li><p>程序首先读入 <code class="docutils literal notranslate"><span class="pre">SET</span></code> 命令，接着是它的第二个参数 <code class="docutils literal notranslate"><span class="pre">TODAY</span></code> ，然后是它的第三个参数 <code class="docutils literal notranslate"><span class="pre">2013-4-26</span></code> 。</p></li>
-<li><p>程序首先读入 <code class="docutils literal notranslate"><span class="pre">SET</span></code> 命令，然后试图读取第二个参数，但是失败，于是程序报告错误。</p></li>
+<li>程序首先读入 <code class="docutils literal"><span class="pre">SELECT</span></code> 命令，还有它的参数 <code class="docutils literal"><span class="pre">0</span></code> 。</li>
+<li>程序首先读入 <code class="docutils literal"><span class="pre">SET</span></code> 命令，接着是它的第二个参数 <code class="docutils literal"><span class="pre">TODAY</span></code> ，然后是它的第三个参数 <code class="docutils literal"><span class="pre">2013-4-26</span></code> 。</li>
+<li>程序首先读入 <code class="docutils literal"><span class="pre">SET</span></code> 命令，然后试图读取第二个参数，但是失败，于是程序报告错误。</li>
 </ol>
-<p>这就是 <code class="docutils literal notranslate"><span class="pre">redis-check-aof</span></code> 程序的运作方式 ——
+<p>这就是 <code class="docutils literal"><span class="pre">redis-check-aof</span></code> 程序的运作方式 ——
 按 Redis 通讯协议的格式，
 按顺序读入 AOF 文件中的每个命令的每个参数，
 并对这些参数进行检查：</p>
 <ol class="arabic simple">
-<li><p>如果遇到了不符合协议格式的内容，或者命令在不该结束的地方结束了，那么这个 AOF 文件就是不合法的。</p></li>
-<li><p>如果没有发现参数错误，并且顺利地读到了文件末尾，那么这个 AOF 文件就是合法的。</p></li>
+<li>如果遇到了不符合协议格式的内容，或者命令在不该结束的地方结束了，那么这个 AOF 文件就是不合法的。</li>
+<li>如果没有发现参数错误，并且顺利地读到了文件末尾，那么这个 AOF 文件就是合法的。</li>
 </ol>
 <p>每次读入一个命令之前，
-<code class="docutils literal notranslate"><span class="pre">redis-check-aof</span></code> 都会记录命令开始的偏移量，
+<code class="docutils literal"><span class="pre">redis-check-aof</span></code> 都会记录命令开始的偏移量，
 当某个命令出现错误时：</p>
 <ul class="simple">
-<li><p>如果执行的是 <code class="docutils literal notranslate"><span class="pre">redis-check-aof</span></code> ，那么程序就向用户报告 AOF 文件的错误。</p></li>
-<li><p>如果执行的是 <code class="docutils literal notranslate"><span class="pre">redis-check-aof</span> <span class="pre">--fix</span></code> ，那么程序就询问用户，要不要对 AOF 文件进行修复。</p></li>
+<li>如果执行的是 <code class="docutils literal"><span class="pre">redis-check-aof</span></code> ，那么程序就向用户报告 AOF 文件的错误。</li>
+<li>如果执行的是 <code class="docutils literal"><span class="pre">redis-check-aof</span> <span class="pre">--fix</span></code> ，那么程序就询问用户，要不要对 AOF 文件进行修复。</li>
 </ul>
-<p>以下是 <code class="docutils literal notranslate"><span class="pre">redis-check-aof</span></code> 检查 <code class="docutils literal notranslate"><span class="pre">invalid.aof</span></code> 的结果：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ redis-check-aof invalid.aof
+<p>以下是 <code class="docutils literal"><span class="pre">redis-check-aof</span></code> 检查 <code class="docutils literal"><span class="pre">invalid.aof</span></code> 的结果：</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ redis-check-aof invalid.aof
 AOF analyzed: size=75, ok_up_to=62, diff=13
 AOF is not valid
 </pre></div>
 </div>
 <p>程序显示，
-<code class="docutils literal notranslate"><span class="pre">invalid.aof</span></code> 文件总共 <code class="docutils literal notranslate"><span class="pre">75</span></code> 字节，
-文件的前 <code class="docutils literal notranslate"><span class="pre">62</span></code> 字节是正常的，
-而后面的 <code class="docutils literal notranslate"><span class="pre">13</span></code> 字节则是写入不完整的数据。</p>
-<p>使用 <code class="docutils literal notranslate"><span class="pre">od</span> <span class="pre">-c</span></code> 命令，
+<code class="docutils literal"><span class="pre">invalid.aof</span></code> 文件总共 <code class="docutils literal"><span class="pre">75</span></code> 字节，
+文件的前 <code class="docutils literal"><span class="pre">62</span></code> 字节是正常的，
+而后面的 <code class="docutils literal"><span class="pre">13</span></code> 字节则是写入不完整的数据。</p>
+<p>使用 <code class="docutils literal"><span class="pre">od</span> <span class="pre">-c</span></code> 命令，
 可以正好看到，
-<code class="docutils literal notranslate"><span class="pre">62</span></code> 字节之后，
+<code class="docutils literal"><span class="pre">62</span></code> 字节之后，
 就是出错的 <span class="xref std std-ref">SET</span> 命令的协议内容：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ od -c invalid.aof
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ od -c invalid.aof
 0000000   *   2  \r  \n   $   6  \r  \n   S   E   L   E   C   T  \r  \n
 0000020   $   1  \r  \n   0  \r  \n   *   3  \r  \n   $   3  \r  \n   S
 0000040   E   T  \r  \n   $   5  \r  \n   T   O   D   A   Y  \r  \n   $
@@ -483,8 +488,8 @@ AOF is not valid
 </pre></div>
 </div>
 <p>修复 AOF 文件的办法就是使用 <a class="reference external" href="http://linux.die.net/man/2/ftruncate">ftruncate</a> 将出错命令整个删除掉。</p>
-<p>以下命令展示了 <code class="docutils literal notranslate"><span class="pre">invalid.aof</span></code> 在被修复之后的样子：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ redis-check-aof --fix invalid.aof
+<p>以下命令展示了 <code class="docutils literal"><span class="pre">invalid.aof</span></code> 在被修复之后的样子：</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ redis-check-aof --fix invalid.aof
 AOF analyzed: size=75, ok_up_to=62, diff=13
 This will shrink the AOF from 75 bytes, with 13 bytes, to 62 bytes
 Continue? [y/N]: y
@@ -500,17 +505,17 @@ $ od -c invalid.aof
 </div>
 <p>可以看到，
 不合法的 <span class="xref std std-ref">SET</span> 命令已经被删掉了，
-修复后的文件只保留了合法的前 <code class="docutils literal notranslate"><span class="pre">62</span></code> 字节的内容。</p>
+修复后的文件只保留了合法的前 <code class="docutils literal"><span class="pre">62</span></code> 字节的内容。</p>
 </div>
 <div class="section" id="id7">
 <h2>修复事务错误<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h2>
 <p>在上一节，
-我们看到了 <code class="docutils literal notranslate"><span class="pre">redis-check-aof</span></code> 如何分析、定位并删除出错的命令内容，
+我们看到了 <code class="docutils literal"><span class="pre">redis-check-aof</span></code> 如何分析、定位并删除出错的命令内容，
 从而修复一个 AOF 文件。</p>
 <p>但是在一些情况下，
 单单删除一个命令并不能达到修复 AOF 文件的要求，
 考虑以下这个 AOF 文件：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>*2
+<div class="highlight-default"><div class="highlight"><pre><span></span>*2
 $6
 SELECT
 $1
@@ -540,8 +545,8 @@ SET
 这个 <span class="xref std std-ref">MULTI</span> 没有和它相对应的 <span class="xref std std-ref">EXEC</span> 命令。</p>
 <p>事实上，
 即使遇上这种情况，
-<code class="docutils literal notranslate"><span class="pre">redis-check-aof</span></code> 也有办法修复：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ redis-check-aof invalid_transaction.aof
+<code class="docutils literal"><span class="pre">redis-check-aof</span></code> 也有办法修复：</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ redis-check-aof invalid_transaction.aof
 0x              5a: Reached EOF before reading EXEC for MULTI
 AOF analyzed: size=90, ok_up_to=62, diff=28
 AOF is not valid
@@ -571,7 +576,7 @@ $ od -c invalid_transaction.aof
 </pre></div>
 </div>
 <p>以下是被修复后的 AOF 文件：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>*2
+<div class="highlight-default"><div class="highlight"><pre><span></span>*2
 $6
 SELECT
 $1
@@ -587,27 +592,27 @@ $9
 </div>
 <p>可以看到，
 不止是 <span class="xref std std-ref">SET</span> 命令，
-<code class="docutils literal notranslate"><span class="pre">redis-check-aof</span></code> 程序将整个事务，
+<code class="docutils literal"><span class="pre">redis-check-aof</span></code> 程序将整个事务，
 包括 <span class="xref std std-ref">MULTI</span> 和 <span class="xref std std-ref">SET</span> 在内的两个命令都删除了。</p>
-<p>这就是 <code class="docutils literal notranslate"><span class="pre">redis-check-aof</span></code> 处理事务的方式：
+<p>这就是 <code class="docutils literal"><span class="pre">redis-check-aof</span></code> 处理事务的方式：
 当它在读入 AOF 文件时，
 如果遇到 <span class="xref std std-ref">MULTI</span> 命令，
 那么它就记录 <span class="xref std std-ref">MULTI</span> 命令开始时的偏移量：</p>
 <ol class="arabic simple">
-<li><p>如果在事务的内部，
+<li>如果在事务的内部，
 有任何一个命令出错了，
-那么程序将删除 <span class="xref std std-ref">MULTI</span> 命令，以及这个命令之后的所有文件内容。</p></li>
-<li><p>如果程序能够成功找到和 <span class="xref std std-ref">MULTI</span> 相匹配的 <span class="xref std std-ref">EXEC</span> ，
+那么程序将删除 <span class="xref std std-ref">MULTI</span> 命令，以及这个命令之后的所有文件内容。</li>
+<li>如果程序能够成功找到和 <span class="xref std std-ref">MULTI</span> 相匹配的 <span class="xref std std-ref">EXEC</span> ，
 那么程序就将偏移量移动到 <span class="xref std std-ref">EXEC</span> 的末尾，
 也就是下个命令开始的地方，
 并继续进行读入分析，
-一直到整个 AOF 文件读入完毕为止。</p></li>
+一直到整个 AOF 文件读入完毕为止。</li>
 </ol>
-<p>回过头来观察被修复之前的 <code class="docutils literal notranslate"><span class="pre">invalid_transaction.aof</span></code> 文件，
-<code class="docutils literal notranslate"><span class="pre">redis-check-aof</span></code> 将 <span class="xref std std-ref">MULTI</span> 命令，
-以及命令之后的共 <code class="docutils literal notranslate"><span class="pre">28</span></code> 个字节都标记为非法数据，
+<p>回过头来观察被修复之前的 <code class="docutils literal"><span class="pre">invalid_transaction.aof</span></code> 文件，
+<code class="docutils literal"><span class="pre">redis-check-aof</span></code> 将 <span class="xref std std-ref">MULTI</span> 命令，
+以及命令之后的共 <code class="docutils literal"><span class="pre">28</span></code> 个字节都标记为非法数据，
 而不仅仅是标记 <span class="xref std std-ref">SET</span> 那么简单：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ redis-check-aof invalid_transaction.aof
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ redis-check-aof invalid_transaction.aof
 0x              5a: Reached EOF before reading EXEC for MULTI
 AOF analyzed: size=90, ok_up_to=62, diff=28
 AOF is not valid
@@ -627,11 +632,11 @@ $ od -c invalid_transaction.aof
 <h2>小结<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h2>
 <p>以上就是本文的所有内容了。</p>
 <p>我们首先观察了 Redis 是如何在磁盘出错时进行自动修复的，
-然后学习了使用 <code class="docutils literal notranslate"><span class="pre">redis-check-aof</span></code> 对 AOF 文件进行手动修复的步骤，
-并研究了 <code class="docutils literal notranslate"><span class="pre">redis-check-aof</span></code> 修复一般命令、以及修复事务命令时的工作原理。</p>
+然后学习了使用 <code class="docutils literal"><span class="pre">redis-check-aof</span></code> 对 AOF 文件进行手动修复的步骤，
+并研究了 <code class="docutils literal"><span class="pre">redis-check-aof</span></code> 修复一般命令、以及修复事务命令时的工作原理。</p>
 <p>学习这些知识可以让我们更好地应对 AOF 出错之类的问题，
 还可以加深我们对 AOF 程序、以及 Redis 通讯协议等方面的熟悉程度，
-如果有兴趣进一步地了解 <code class="docutils literal notranslate"><span class="pre">redis-check-aof</span></code> 程序的话，
+如果有兴趣进一步地了解 <code class="docutils literal"><span class="pre">redis-check-aof</span></code> 程序的话，
 可以阅读这份 <a class="reference external" href="https://github.com/huangz1990/annotated_redis_source/blob/unstable/src/redis-check-aof.c">带注释的 redis-check-aof.c 源码</a> 。</p>
 <div class="line-block">
 <div class="line">huangz</div>
@@ -653,7 +658,7 @@ $ od -c invalid_transaction.aof
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.0.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
     </p>
   </div>
 </footer>

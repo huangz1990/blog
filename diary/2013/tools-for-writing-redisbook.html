@@ -2,16 +2,23 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>编写《Redis 设计与实现》时用到的工具 &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     'present',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Redis 的 ZUNIONSTORE 命令和 ZINTERSTORE 命令的另一种用法" href="another-usage-of-zunionstore-and-zinterstore.html" />
@@ -25,7 +32,8 @@
 <script type="text/javascript" src="../../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../../_static/bootstrap-sphinx.js "></script>
 
-  </head><body>
+  </head>
+  <body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -143,17 +151,20 @@ rst 格式和 markdown 格式一样，
 它具备了一系列强大的特性，
 使得这个工具非常利于编写文档：</p>
 <ul>
-<li><p>通过 <a class="reference external" href="http://pygments.org/">Pygments</a> ，支持多种语言、多种风格的代码高亮。</p></li>
-<li><p>代码和文件可以内嵌在 rst 文件中，也可以 <a class="reference external" href="http://sphinx-doc.org/markup/code.html?highlight=include#includes">从其他文件载入</a> ，这保证了多个文件之间的模块化：比如你可以将一系列文档放在一个文件夹，而将文档中用到的代码放在另一个文件夹，这样不同文件之间的就不会互相干扰。</p></li>
-<li><p>文档本身可以非常简单地 <a class="reference external" href="http://sphinx-doc.org/markup/inline.html#role-ref">引用同一文档的其他章节、其他小节，或者文档的任何地方</a> 。</p>
+<li><p class="first">通过 <a class="reference external" href="http://pygments.org/">Pygments</a> ，支持多种语言、多种风格的代码高亮。</p>
+</li>
+<li><p class="first">代码和文件可以内嵌在 rst 文件中，也可以 <a class="reference external" href="http://sphinx-doc.org/markup/code.html?highlight=include#includes">从其他文件载入</a> ，这保证了多个文件之间的模块化：比如你可以将一系列文档放在一个文件夹，而将文档中用到的代码放在另一个文件夹，这样不同文件之间的就不会互相干扰。</p>
+</li>
+<li><p class="first">文档本身可以非常简单地 <a class="reference external" href="http://sphinx-doc.org/markup/inline.html#role-ref">引用同一文档的其他章节、其他小节，或者文档的任何地方</a> 。</p>
 <p>更为强大的是， <a class="reference external" href="http://sphinx-doc.org/ext/intersphinx.html">一个 Sphinx 文档还可以引用另一个 Sphinx 文档的内容</a> ：举个例子，在《设计与实现》中，我需要添加大量链向《<a class="reference external" href="http://redis.readthedocs.org">Redis 命令参考</a>》的链接，比如 <a class="reference external" href="http://redis.readthedocs.org/en/latest/script/eval.html">EVAL</a> 。</p>
 <p>如果每次都要为这些命令手动添加链接，那可就真是既无聊又痛苦 —— 而使用 Sphinx 的跨文档链接就可以轻松地解决这个问题：我只要按照 Sphinx 的格式在 rst 文件中写下一个（简短的）命令，Sphinx 就会自动帮我添加到链向《Redis 命令参考》的链接，非常简单。</p>
 </li>
-<li><p>Sphinx 还支持 <a class="reference external" href="http://sphinx-doc.org/extensions.html">一系列插件</a> ，通过这些插件，可以增强 Sphinx 本身的功能。</p>
+<li><p class="first">Sphinx 还支持 <a class="reference external" href="http://sphinx-doc.org/extensions.html">一系列插件</a> ，通过这些插件，可以增强 Sphinx 本身的功能。</p>
 <p>这些插件很多都是和 Python 有关的，但有一些在非 Python 的文档项目中都能用得上。</p>
 <p>比如《设计与实现》就使用了其中的 <a class="reference external" href="http://sphinx-doc.org/ext/math.html#module-sphinx.ext.mathjax">mathjax 插件</a> 来显示 LaTeX 格式的算法复杂度；文章接下来会介绍的 Graphviz 图片生成工具，也有 <a class="reference external" href="http://sphinx-doc.org/ext/graphviz.html">相应的 Sphinx 插件</a> ；另外，前面提到的，对跨文档链接的支持，也是通过插件来完成的。</p>
 </li>
-<li><p>Sphinx <a class="reference external" href="http://sphinx-doc.org/theming.html">内置了多个蛮不错的外观样式</a> ，更换不同的样式、或者自己 <a class="reference external" href="http://sphinx-doc.org/templating.html">修改样式</a> 都非常简单。《设计与实现》所使用的样式就是通过修改内置的 pyramid 样式而来的，可以在 GitHub 找到这个样式： <a class="reference external" href="https://github.com/huangz1990/der">github.com/huangz1990/der</a> 。</p></li>
+<li><p class="first">Sphinx <a class="reference external" href="http://sphinx-doc.org/theming.html">内置了多个蛮不错的外观样式</a> ，更换不同的样式、或者自己 <a class="reference external" href="http://sphinx-doc.org/templating.html">修改样式</a> 都非常简单。《设计与实现》所使用的样式就是通过修改内置的 pyramid 样式而来的，可以在 GitHub 找到这个样式： <a class="reference external" href="https://github.com/huangz1990/der">github.com/huangz1990/der</a> 。</p>
+</li>
 </ul>
 <p>在编写《设计与实现》之前，
 我就已经用 Sphinx 做了多个文档，
@@ -190,8 +201,8 @@ rst 格式和 markdown 格式一样，
 安全性方面是可以保障的。
 这两个网站在项目托管方面的主要区别是：</p>
 <ul class="simple">
-<li><p>GitHub 的私有项目需要按月收费，而 Bitbucket 则为至多 5 人的团队提供免费的私有项目。</p></li>
-<li><p>但是 GitHub 的人气比 Bitbucket 要高，项目放在 GitHub 会受到更多关注。</p></li>
+<li>GitHub 的私有项目需要按月收费，而 Bitbucket 则为至多 5 人的团队提供免费的私有项目。</li>
+<li>但是 GitHub 的人气比 Bitbucket 要高，项目放在 GitHub 会受到更多关注。</li>
 </ul>
 <p>如果想节约一些私有项目的托管费用，
 但又想项目获得更多关注，
@@ -219,7 +230,7 @@ Graphviz 的图片是用文本来表示的 ——
 <img alt="../../_images/graphviz-show.png" src="../../_images/graphviz-show.png" />
 <p>作为例子，
 上面的这个示意图就是用以下源码写出来的：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">digraph</span> <span class="n">show</span> <span class="p">{</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">digraph</span> <span class="n">show</span> <span class="p">{</span>
 
     <span class="o">//</span> <span class="n">node</span>
 
@@ -241,8 +252,8 @@ Graphviz 的图片是用文本来表示的 ——
 而是像编程一样写出来的，
 这种做法有两个明显的好处：</p>
 <ol class="arabic simple">
-<li><p>因为“画图”是由 Graphviz 负责的，所以你只需要负责定义“这个图片应该是什么样子”，至于“怎么画这个图”，就交给 Graphviz 来思考就可以了。</p></li>
-<li><p>因为图片的源码是文本，所以源码中的内容可以重用，并且这些源码文件可以用 git 来管理。</p></li>
+<li>因为“画图”是由 Graphviz 负责的，所以你只需要负责定义“这个图片应该是什么样子”，至于“怎么画这个图”，就交给 Graphviz 来思考就可以了。</li>
+<li>因为图片的源码是文本，所以源码中的内容可以重用，并且这些源码文件可以用 git 来管理。</li>
 </ol>
 <p>多得这两个好处，
 在编写《设计与实现》时，
@@ -266,10 +277,10 @@ Graphviz 提供了大量的功能和参数，
 我会修改并对代码进行测试。
 测试代码使用的是源码本身配套的、用 TCL 语言编写的 test suit ：
 每次做了实验性的修改之后，
-我都会 <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">test</span></code> 一下，
+我都会 <code class="docutils literal"><span class="pre">make</span> <span class="pre">test</span></code> 一下，
 看会产生什么结果。</p>
 <p>测试代码没有用到 GDB 之类的调试工具：
-<code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">test</span></code> 、 Redis 的断言函数，
+<code class="docutils literal"><span class="pre">make</span> <span class="pre">test</span></code> 、 Redis 的断言函数，
 以及服务器打印的 log 输出，
 已经能很好地满足我的需求。</p>
 <p>我用圆珠笔和空白的 A4 纸捕捉有趣的想法，
@@ -349,7 +360,7 @@ ReadTheDocs 应该是你的不二之选。</p>
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.0.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
     </p>
   </div>
 </footer>

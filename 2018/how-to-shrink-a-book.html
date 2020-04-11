@@ -2,16 +2,23 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>如何精简一本书 &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     'present',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Redis 5 新功能介绍：ZPOPMAX、ZPOPMIN 以及它们的阻塞变种" href="zpopmax-zpopmin-in-redis-5.html" />
@@ -25,7 +32,8 @@
 <script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
 
-  </head><body>
+  </head>
+  <body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -127,19 +135,19 @@
 <p>跟我之前已经出版的作品相比，
 《Redis使用教程》（后简称《教程》）在篇幅方面有了显著的增加：</p>
 <ul class="simple">
-<li><p>以《Redis设计与实现》（后简称《实现》）为例子，
+<li>以《Redis设计与实现》（后简称《实现》）为例子，
 我在写《实现》的时候，
 Redis 才刚进入 3.0 版本，
 并且因为《实现》关注的是功能的内部实现，
 只要把内部实现特别是数据结构说清楚就行了，
 具体的功能并不需要一一介绍，
-所以整本书的篇幅限制在了 400 页之内。</p></li>
-<li><p>另一方面，
+所以整本书的篇幅限制在了 400 页之内。</li>
+<li>另一方面，
 对于现在的《教程》来说，
 因为是面向新手和使用者写的一本入门书和参考书，
 所以每个功能都需要巨细无遗地覆盖到，
 而且 Redis 5.0 本身功能就比 3.0 要多得多，
-因此这次《教程》的篇幅应该会在 500 至 600 页左右。</p></li>
+因此这次《教程》的篇幅应该会在 500 至 600 页左右。</li>
 </ul>
 <p>因为《教程》本身篇幅已经不少了，
 所以为了保证该书的可读性，
@@ -163,7 +171,7 @@ Redis 才刚进入 3.0 版本，
 我却有了相反的想法，
 其中的原因大概可以归纳为以下几点：</p>
 <ol class="arabic simple">
-<li><p><strong>不是每个人都喜欢做练习。</strong>
+<li><strong>不是每个人都喜欢做练习。</strong>
 必须承认，
 并不是每个人都喜欢做练习，
 据我所知，
@@ -174,28 +182,28 @@ Redis 才刚进入 3.0 版本，
 编程练习中最为重要的“编程”部分就缺失了，
 整个题目在读者脑海中过一下就没了，
 效果不大，
-更别说有些读者还会直接跳过习题。</p></li>
-<li><p><strong>书本的习题没有做到一视同仁。</strong>
+更别说有些读者还会直接跳过习题。</li>
+<li><strong>书本的习题没有做到一视同仁。</strong>
 因为内容的问题，
 书本有些大章是没有《编程练习》部分的，
 这样一来的话，
 读者在阅读的时候可能就会产生这样的疑问“为什么上一章有习题，而这章却没有呢？”。
 但我也不希望为了让每章都有练习而去给某些大章加上一些没有用的练习题，
-这跟我想要为书本“瘦身”的想法是完全相左的。</p></li>
-<li><p><strong>书本的篇幅有限。</strong>
+这跟我想要为书本“瘦身”的想法是完全相左的。</li>
+<li><strong>书本的篇幅有限。</strong>
 正如之前所说，
 介绍 Redis 本身的功能已经占用了相当大的篇幅，
 书本目前的编程练习起码要占用二三十页，
-这并不是一个小数字。</p></li>
+这并不是一个小数字。</li>
 </ol>
 <p>综合来说，
 编程练习并不属于书本的核心内容，
 这个部分从某种程度上来说对于书本是可有可无的。
 因此为了保证书本的简洁性，
 我决定从书本中移除各章的《编程练习》部分。</p>
-<div class="figure align-default" id="id2">
+<div class="figure" id="id2">
 <img alt="../_images/remove-exercises.png" src="../_images/remove-exercises.png" />
-<p class="caption"><span class="caption-text">移除各章的《编程练习》部分</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-text">移除各章的《编程练习》部分</span></p>
 </div>
 <p>当然，
 对《编程练习》部分的移除工作并不是简单粗暴地完成的：
@@ -253,7 +261,7 @@ Redis 才刚进入 3.0 版本，
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.0.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
     </p>
   </div>
 </footer>

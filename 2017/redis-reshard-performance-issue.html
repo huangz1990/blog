@@ -2,16 +2,23 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>重分片对 Redis 集群的性能影响分析 &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     'present',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="2016" href="../diary/2016/index.html" />
@@ -25,7 +32,8 @@
 <script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
 
-  </head><body>
+  </head>
+  <body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -128,7 +136,7 @@
 <p>关于 Redis 集群，
 存在着一种非常常见的说法，
 那就是：
-因为 <code class="docutils literal notranslate"><span class="pre">MOVED</span></code> 转向和 <code class="docutils literal notranslate"><span class="pre">ASK</span></code> 转向的存在，
+因为 <code class="docutils literal"><span class="pre">MOVED</span></code> 转向和 <code class="docutils literal"><span class="pre">ASK</span></code> 转向的存在，
 一个客户端可能需要访问不止一个节点才能获取到它想要的键，
 因此 Redis 集群在进行重分片的时候会有性能损耗，
 并且 Redis 集群单个节点的访问性能也比不上 Redis 单机服务器的性能。</p>
@@ -155,35 +163,35 @@
 <p>Redis 集群在重分片操作执行的过程中，
 就会产生 ASK 转向：</p>
 <ul class="simple">
-<li><p>对于槽 s 包含的键 k 来说，
+<li>对于槽 s 包含的键 k 来说，
 它在进行重分片的过程中，
 既可能存在于原节点里面，
-也有可能存在于新节点里面。</p></li>
-<li><p>当客户端想要获取键 k 时，
+也有可能存在于新节点里面。</li>
+<li>当客户端想要获取键 k 时，
 它首先会访问原节点，
-如果找到就直接返回键 k 的值。</p></li>
-<li><p>如果客户端没有在原节点找到键 k ，
+如果找到就直接返回键 k 的值。</li>
+<li>如果客户端没有在原节点找到键 k ，
 那么原节点就会向客户端返回一个 ASK 转向，
-让它尝试到新节点里面进行寻找。</p></li>
-<li><p>因此，
+让它尝试到新节点里面进行寻找。</li>
+<li>因此，
 如果一个客户端在访问时遇到了 ASK 转向，
-那么它可能需要访问两个节点才能找到它想要找的键。</p></li>
+那么它可能需要访问两个节点才能找到它想要找的键。</li>
 </ul>
 <p>另一方面，
 当 Redis 集群的重分片操作执行完毕之后，
 集群中就会产生 MOVED 转向：</p>
 <ul class="simple">
-<li><p>在重分片之后，
-原来位于槽 s 的键 k 已经从原节点迁移到了新节点。</p></li>
-<li><p>如果一个没有察觉到集群槽分配情况已经发生了变化的客户端继续尝试向原节点获取槽 s 的键 k ，
+<li>在重分片之后，
+原来位于槽 s 的键 k 已经从原节点迁移到了新节点。</li>
+<li>如果一个没有察觉到集群槽分配情况已经发生了变化的客户端继续尝试向原节点获取槽 s 的键 k ，
 那么原节点就会向客户端返回一个 MOVED 转向，
 告知客户端，
 槽 s 已经被转移到了新节点，
 而得到这一信息的客户端则会重新向新节点发送一个命令请求，
-尝试获取键 k 。</p></li>
-<li><p>因此，
+尝试获取键 k 。</li>
+<li>因此，
 如果一个客户端在访问时遇到了 MOVED 转向，
-那么它也可能需要访问两个节点才能找到它想要的键。</p></li>
+那么它也可能需要访问两个节点才能找到它想要的键。</li>
 </ul>
 <p>总的来说，
 当 ASK 转向和 MOVED 转向出现时，
@@ -195,25 +203,25 @@
 <p>在一般情况下，
 Redis 集群的客户端都会在内部缓存集群的槽分配情况，
 比如这样：</p>
-<table class="docutils align-default">
+<table border="1" class="docutils">
 <colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
+<col width="50%" />
+<col width="50%" />
 </colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>槽</p></th>
-<th class="head"><p>负责的节点</p></th>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">槽</th>
+<th class="head">负责的节点</th>
 </tr>
 </thead>
-<tbody>
-<tr class="row-even"><td><p>0~5461</p></td>
-<td><p>node_a</p></td>
+<tbody valign="top">
+<tr class="row-even"><td>0~5461</td>
+<td>node_a</td>
 </tr>
-<tr class="row-odd"><td><p>5462~10922</p></td>
-<td><p>node_b</p></td>
+<tr class="row-odd"><td>5462~10922</td>
+<td>node_b</td>
 </tr>
-<tr class="row-even"><td><p>10923~16383</p></td>
-<td><p>node_c</p></td>
+<tr class="row-even"><td>10923~16383</td>
+<td>node_c</td>
 </tr>
 </tbody>
 </table>
@@ -221,49 +229,49 @@ Redis 集群的客户端都会在内部缓存集群的槽分配情况，
 每当用户想要访问键 k 时，
 客户端都会通过以下公式，
 计算出键 k 所在的槽：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">slot</span> <span class="o">=</span> <span class="n">CRC16</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">%</span> <span class="mi">16384</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">slot</span> <span class="o">=</span> <span class="n">CRC16</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">%</span> <span class="mi">16384</span>
 </pre></div>
 </div>
-<p>然后客户端就可以根据 <code class="docutils literal notranslate"><span class="pre">slot</span></code> 的值以及槽分配的表格，
+<p>然后客户端就可以根据 <code class="docutils literal"><span class="pre">slot</span></code> 的值以及槽分配的表格，
 直接对槽所在的节点进行访问，
 在这种情况下，
 客户端只需要一次访问就可以获取到键 k 的值。</p>
 <p>另一方面，
 当集群完成了重分片操作之后，
 它的槽分配情况就会发生变化，
-这时客户端的访问就可能会遇到 <code class="docutils literal notranslate"><span class="pre">MOVED</span></code> 转向。
-在第一次遇到 <code class="docutils literal notranslate"><span class="pre">MOVED</span></code> 转向之后，
+这时客户端的访问就可能会遇到 <code class="docutils literal"><span class="pre">MOVED</span></code> 转向。
+在第一次遇到 <code class="docutils literal"><span class="pre">MOVED</span></code> 转向之后，
 客户端就可以通过发送 <a class="reference external" href="https://redis.io/commands/cluster-slots">CLUSTER SLOTS</a> 来获取并更新自己内部缓存的槽分配情况，
 就像这样：</p>
-<table class="docutils align-default">
+<table border="1" class="docutils">
 <colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
+<col width="50%" />
+<col width="50%" />
 </colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>槽</p></th>
-<th class="head"><p>负责的节点</p></th>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">槽</th>
+<th class="head">负责的节点</th>
 </tr>
 </thead>
-<tbody>
-<tr class="row-even"><td><p>0~5461</p></td>
-<td><p>node_a</p></td>
+<tbody valign="top">
+<tr class="row-even"><td>0~5461</td>
+<td>node_a</td>
 </tr>
-<tr class="row-odd"><td><p>5462~10922</p></td>
-<td><p>node_b</p></td>
+<tr class="row-odd"><td>5462~10922</td>
+<td>node_b</td>
 </tr>
-<tr class="row-even"><td><p>10923~13000</p></td>
-<td><p>node_c</p></td>
+<tr class="row-even"><td>10923~13000</td>
+<td>node_c</td>
 </tr>
-<tr class="row-odd"><td><p>13001~16383</p></td>
-<td><p>node_d</p></td>
+<tr class="row-odd"><td>13001~16383</td>
+<td>node_d</td>
 </tr>
 </tbody>
 </table>
 <p>在此之后，
 客户端就可以跟之前一样，
 通过一次访问来获取指定的键了。</p>
-<p>因为 <code class="docutils literal notranslate"><span class="pre">MOVED</span></code> 转向对于每个客户端最多只会带来一次额外的访问，
+<p>因为 <code class="docutils literal"><span class="pre">MOVED</span></code> 转向对于每个客户端最多只会带来一次额外的访问，
 所以这个转向毫无疑问是不会对性能产生影响的。</p>
 </div>
 <div class="section" id="ask">
@@ -276,25 +284,25 @@ Redis 集群的客户端都会在内部缓存集群的槽分配情况，
 但是如果我们实际地考察 ASK 转向出现的条件，
 就会发现 ASK 转向在实际中对集群的影响是很小的：</p>
 <ol class="arabic simple">
-<li><p>重分片并不是一个常见的操作，
+<li>重分片并不是一个常见的操作，
 这个操作通常需要间隔一段时间才执行一次，
 至少是一个月，
 甚至更长的时间。
 如果你需要频繁地对集群进行重分片，
-那么说明你没有仔细地规划各个节点的槽分配情况。</p></li>
-<li><p>跟集群的上线时间相比，
+那么说明你没有仔细地规划各个节点的槽分配情况。</li>
+<li>跟集群的上线时间相比，
 集群进行重分片所需的时间通常很短暂，
 也即是，
-ASK 转向在集群里面出现的时间是很短的。</p></li>
+ASK 转向在集群里面出现的时间是很短的。</li>
 </ol>
 <p>举个例子，
 假设一个 Redis 集群，
 它在运行一个月之后进行了一次时长为 15 分钟的重分片操作，
 那么 ASK 转向出现的时长在整个集群的运行时长中所占的比例可以通过以下计算得出：</p>
 <ul class="simple">
-<li><p>整个集群的运行时长为： 30天 * 24小时 * 60分钟 = 43200 分钟</p></li>
-<li><p>重分片时长在集群运行时长中所占的比例为： 15 / 43200 = 0.00034722222222222224</p></li>
-<li><p>这也就是说，集群进行重分片的时长只占整个集群运行时长的约 0.035%</p></li>
+<li>整个集群的运行时长为： 30天 * 24小时 * 60分钟 = 43200 分钟</li>
+<li>重分片时长在集群运行时长中所占的比例为： 15 / 43200 = 0.00034722222222222224</li>
+<li>这也就是说，集群进行重分片的时长只占整个集群运行时长的约 0.035%</li>
 </ul>
 <p>最后，
 根据概率，
@@ -306,10 +314,10 @@ ASK 转向在集群里面出现的时间是很短的。</p></li>
 也即是 7.5 分钟，
 这也就是说：</p>
 <ul class="simple">
-<li><p>在集群进行重分片的过程中，
+<li>在集群进行重分片的过程中，
 ASK 转向真正对集群产生影响的时长只有 7.5 分钟，
 这段时间只占整个集群运行时长比例的 0.00017361111111111112 ，
-也即是 0.017% 。</p></li>
+也即是 0.017% 。</li>
 </ul>
 <p>如果用户进行重分片的间隔更长一些，
 比如几个月才重分片一次，
@@ -331,11 +339,11 @@ ASK 转向并不会对集群的性能产生影响。</p>
 会使用 <a class="reference external" href="http://redisdoc.com/key/migrate.html">MIGRATE</a> 命令，
 将被迁移的槽包含的每个键从原节点移动到新节点，
 就像这样：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>for key in all_keys_in_target_slot:
+<div class="highlight-default"><div class="highlight"><pre><span></span>for key in all_keys_in_target_slot:
     使用 MIGRATE 将键 key 从当前节点（原节点）移动到新节点
 </pre></div>
 </div>
-<p>并且在每个 <code class="docutils literal notranslate"><span class="pre">MIGRATE</span></code> 命令执行的过程中，
+<p>并且在每个 <code class="docutils literal"><span class="pre">MIGRATE</span></code> 命令执行的过程中，
 原节点和新节点都会被阻塞，
 直到命令执行完毕为止。
 因此如果你直接对生产环境中的集群执行重分片操作，
@@ -345,17 +353,17 @@ ASK 转向并不会对集群的性能产生影响。</p>
 重分片的确会对 Redis 集群的性能带来影响，
 最起码会对正在进行重分片的两个节点带来影响，
 但这种性能影响不是因为转向而引起的，
-而是因为 <code class="docutils literal notranslate"><span class="pre">MIGRATE</span></code> 命令引起的。</p>
+而是因为 <code class="docutils literal"><span class="pre">MIGRATE</span></code> 命令引起的。</p>
 <p>另外，
 这里再说一个也许很多人都没有注意到的问题 ——
-如果你认真地去看 <code class="docutils literal notranslate"><span class="pre">redis-trib.rb</span></code> 里面的重分片操作实现，
+如果你认真地去看 <code class="docutils literal"><span class="pre">redis-trib.rb</span></code> 里面的重分片操作实现，
 就会发现这个操作是有一个竞争条件在里面的：
 如果客户端在重分片的过程中，
 仍然对原节点正在迁移的槽进行写入，
 那么就可能会导致重分片操作因为出错而失败，
 这时你就只能自己写脚本去把这个节点未完成的迁移工作做完。
 因此，
-即使你不在乎 <code class="docutils literal notranslate"><span class="pre">MIGRATE</span></code> 命令带来的性能问题，
+即使你不在乎 <code class="docutils literal"><span class="pre">MIGRATE</span></code> 命令带来的性能问题，
 但如果你不想给自己找麻烦的话，
 也请不要对正在被频繁访问的 Redis 集群进行重分片。</p>
 <p>总的来说，
@@ -390,14 +398,14 @@ ASK 转向并不会对集群的性能产生影响。</p>
 如果你对 Redis 集群的重分片机制的了解不够，
 那么当你看到集群性能在重分片时出现了下降，
 你可能就会认为这是转向带来的问题，
-但是却没有意识到罪魁祸首实际上是 <code class="docutils literal notranslate"><span class="pre">MIGRATE</span></code> 命令。
+但是却没有意识到罪魁祸首实际上是 <code class="docutils literal"><span class="pre">MIGRATE</span></code> 命令。
 又或者说，
-如果你对 <code class="docutils literal notranslate"><span class="pre">redis-trib.rb</span></code> 中的重分片操作的实现不够了解，
+如果你对 <code class="docutils literal"><span class="pre">redis-trib.rb</span></code> 中的重分片操作的实现不够了解，
 那么你就可能会一边对集群进行重分片，
 一边对集群进行写入，
 然后一个偶然的机会，
 嘭的一下，
-<code class="docutils literal notranslate"><span class="pre">redis-trib.rb</span></code> 就因为错误而退出了，
+<code class="docutils literal"><span class="pre">redis-trib.rb</span></code> 就因为错误而退出了，
 只留下一个灰溜溜的、重分片了一半的集群给你。</p>
 <p>真实世界中的软件从来都不是一个黑箱，
 无论是哪个软件，
@@ -428,7 +436,7 @@ ASK 转向并不会对集群的性能产生影响。</p>
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.0.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
     </p>
   </div>
 </footer>
