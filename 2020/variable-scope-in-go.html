@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Go 语言中的 for 关键字 &#8212; blog.huangz.me</title>
+    <title>Go 语言的变量作用域 &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -21,8 +21,8 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Go 语言中的 switch 语句" href="switch-in-go.html" />
-    <link rel="prev" title="Go 语言的变量作用域" href="variable-scope-in-go.html" />
+    <link rel="next" title="Go 语言中的 for 关键字" href="for-in-go.html" />
+    <link rel="prev" title="2020" href="index.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -83,7 +83,7 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">Go 语言中的 <code class="docutils literal"><span class="pre">for</span></code> 关键字</a></li>
+<li><a class="reference internal" href="#">Go 语言的变量作用域</a></li>
 </ul>
 </ul>
 </li>
@@ -93,11 +93,11 @@
               
                 
   <li>
-    <a href="variable-scope-in-go.html" title="Previous Chapter: Go 语言的变量作用域"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Go 语言的变量作用域</span>
+    <a href="index.html" title="Previous Chapter: 2020"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; 2020</span>
     </a>
   </li>
   <li>
-    <a href="switch-in-go.html" title="Next Chapter: Go 语言中的 switch 语句"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Go 语言中的 switch 语句 &raquo;</span>
+    <a href="for-in-go.html" title="Next Chapter: Go 语言中的 for 关键字"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Go 语言中的 for 关键字 &raquo;</span>
     </a>
   </li>
               
@@ -124,66 +124,56 @@
   <div class="row">
     <div class="body col-md-12 content" role="main">
       
-  <div class="section" id="go-for">
-<h1>Go 语言中的 <code class="docutils literal"><span class="pre">for</span></code> 关键字<a class="headerlink" href="#go-for" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="go">
+<h1>Go 语言的变量作用域<a class="headerlink" href="#go" title="Permalink to this headline">¶</a></h1>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p>本文摘录自《Go语言趣学指南》第 3 章，
+<p>本文摘录自《Go语言趣学指南》第 4 章，
 请访问 <a class="reference external" href="http://gpwgcn.com">gpwgcn.com</a>  以获取更多相关信息。</p>
 <a class="last reference internal image-reference" href="../_images/gpwgcn1.jpg"><img alt="../_images/gpwgcn1.jpg" src="../_images/gpwgcn1.jpg" style="width: 149.6px; height: 188.0px;" /></a>
 </div>
-<p>当你需要重复执行同一段代码的时候，比起一遍又一遍键入相同的代码，更好的办法是使用
-<code class="docutils literal"><span class="pre">for</span></code> 关键字。 比如代码清单 3-8 就展示了如何重复执行同一段代码直到
-<code class="docutils literal"><span class="pre">count</span></code> 变量的值等于 <code class="docutils literal"><span class="pre">0</span></code> 。</p>
-<img alt="../_images/rocket.jpg" class="align-right" src="../_images/rocket.jpg" />
+<p>变量从声明之时开始就处于<em>作用域</em>当中，换句话来说变量就是从那时开始变为可见的（visible）。
+只要变量仍然存在于作用域当中，程序就可以随时访问它，然而变量一旦离开作用域，尝试继续访问它将引发错误。</p>
+<p>变量作用域的其中一个好处是让我们可以为不同的变量重用相同的名字。
+因为除了极少数小型程序之外，程序的变量几乎不可能不出现重名。</p>
+<p>除此之外，变量作用域还能够帮助我们更好地阅读代码，让我们无需在脑海里记住所有变量。
+毕竟一旦某个变量离开了作用域，我们就不必再关心它了。</p>
+<p>Go 的作用域通常会随着大括号 <code class="docutils literal"><span class="pre">{}</span></code> 的出现而开启和结束。
+在接下来展示的代码清单 4-1 中，<code class="docutils literal"><span class="pre">main</span></code> 函数开启了一个作用域，而
+<code class="docutils literal"><span class="pre">for</span></code> 循环则开启了一个嵌套作用域。</p>
+<img alt="../_images/watch1.jpg" class="align-right" src="../_images/watch1.jpg" />
 <hr class="docutils" />
-<p>代码清单 3-8 倒数循环： <code class="docutils literal"><span class="pre">countdown.go</span></code></p>
+<p>代码清单 4-1 作用域规则： <code class="docutils literal"><span class="pre">scope.go</span></code></p>
 <div class="highlight-go"><div class="highlight"><pre><span></span><span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="p">(</span>
     <span class="s">&quot;fmt&quot;</span>
-    <span class="s">&quot;time&quot;</span>
+    <span class="s">&quot;math/rand&quot;</span>
 <span class="p">)</span>
 
 <span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">count</span> <span class="p">=</span> <span class="mi">10</span>              <span class="c1">// 声明并初始化</span>
+    <span class="kd">var</span> <span class="nx">count</span> <span class="p">=</span> <span class="mi">0</span>
 
-    <span class="k">for</span> <span class="nx">count</span> <span class="p">&gt;</span> <span class="mi">0</span> <span class="p">{</span>             <span class="c1">// 为循环设置条件</span>
-        <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">count</span><span class="p">)</span>
-        <span class="nx">time</span><span class="p">.</span><span class="nx">Sleep</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
-        <span class="nx">count</span><span class="o">--</span>                 <span class="c1">// 每次循环之后将计数器的值减一，以免产生无限循环</span>
-    <span class="p">}</span>
-    <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Liftoff!&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="nx">count</span> <span class="p">&lt;</span> <span class="mi">10</span> <span class="p">{</span>    <span class="c1">// 开启新的作用域</span>
+        <span class="kd">var</span> <span class="nx">num</span> <span class="p">=</span> <span class="nx">rand</span><span class="p">.</span><span class="nx">Intn</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">num</span><span class="p">)</span>
+
+        <span class="nx">count</span><span class="o">++</span>
+    <span class="p">}</span>   <span class="c1">// 作用域结束</span>
 <span class="p">}</span>
 </pre></div>
 </div>
 <hr class="docutils" />
-<p>在每次迭代开始之前，表达式 <code class="docutils literal"><span class="pre">count</span> <span class="pre">&gt;</span> <span class="pre">0</span></code> 都会被求值并产生一个布尔值：
-当该值为 <code class="docutils literal"><span class="pre">false</span></code> 也即是 <code class="docutils literal"><span class="pre">count</span></code> 变量等于 <code class="docutils literal"><span class="pre">0</span></code>
-的时候，循环就会停止；
-反之，如果布尔值为真，那么程序将继续执行循环的体（body），也即是被 <code class="docutils literal"><span class="pre">{</span></code>
-和 <code class="docutils literal"><span class="pre">}</span></code> 包裹的那部分代码。</p>
-<p>此外，我们还可以通过不为 <code class="docutils literal"><span class="pre">for</span></code>
-语句设置任何条件来产生<em>无限</em>循环，然后在有需要的时候通过在循环体内使用
-<code class="docutils literal"><span class="pre">break</span></code> 语句来跳出循环。 比如接下来的代码清单 3-9 就会持续地进行 360°
-旋转，直到随机触发停止条件为止。</p>
-<hr class="docutils" />
-<p>代码清单 3-9 超越无限： <code class="docutils literal"><span class="pre">infinity.go</span></code></p>
-<div class="highlight-go"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">degrees</span> <span class="p">=</span> <span class="mi">0</span>
-
-<span class="k">for</span> <span class="p">{</span>
-    <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">degrees</span><span class="p">)</span>
-
-    <span class="nx">degrees</span><span class="o">++</span>
-    <span class="k">if</span> <span class="nx">degrees</span> <span class="o">&gt;=</span> <span class="mi">360</span> <span class="p">{</span>
-        <span class="nx">degrees</span> <span class="p">=</span> <span class="mi">0</span>
-        <span class="k">if</span> <span class="nx">rand</span><span class="p">.</span><span class="nx">Intn</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">{</span>
-            <span class="k">break</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-</div>
+<p>因为 <code class="docutils literal"><span class="pre">count</span></code> 变量的声明位于 <code class="docutils literal"><span class="pre">main</span></code>
+函数的<em>函数作用域</em>之内，所以它在 <code class="docutils literal"><span class="pre">main</span></code> 函数结束之前将一直可见。
+反观 <code class="docutils literal"><span class="pre">num</span></code> 变量，因为它的声明位于 <code class="docutils literal"><span class="pre">for</span></code>
+循环的作用域之内，所以它在循环结束之后便不再可见。</p>
+<p>尝试在循环结束之后访问 <code class="docutils literal"><span class="pre">num</span></code> 变量将引发 Go 编译器报错。
+与之相对的是，因为 <code class="docutils literal"><span class="pre">count</span></code> 变量的声明位于 <code class="docutils literal"><span class="pre">for</span></code>
+循环之外，所以即使在循环结束之后，程序也可以在有需要的时候继续访问
+<code class="docutils literal"><span class="pre">count</span></code> 变量。 另一方面，如果我们想要把 <code class="docutils literal"><span class="pre">count</span></code>
+变量也限制在循环的作用域之内，那么就需要用到在 Go
+中声明变量的另一种方式。</p>
 </div>
 
 
