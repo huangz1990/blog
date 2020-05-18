@@ -1,24 +1,17 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Go 语言简述 &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     'present',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="《Go语言趣学指南》适合你吗？" href="gpwg-target-reader.html" />
@@ -32,8 +25,7 @@
 <script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -127,10 +119,10 @@
   <div class="section" id="go">
 <h1>Go 语言简述<a class="headerlink" href="#go" title="Permalink to this headline">¶</a></h1>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
+<p class="admonition-title">Note</p>
 <p>本文摘录自《Go语言趣学指南》的第 1 章《各就各位，预备，Go！》，
 请访问 <a class="reference external" href="http://gpwgcn.com">gpwgcn.com</a>  以获取更多相关信息。</p>
-<a class="last reference internal image-reference" href="../_images/gpwgcn1.jpg"><img alt="../_images/gpwgcn1.jpg" src="../_images/gpwgcn1.jpg" style="width: 149.6px; height: 188.0px;" /></a>
+<a class="reference internal image-reference" href="../_images/gpwgcn1.jpg"><img alt="../_images/gpwgcn1.jpg" src="../_images/gpwgcn1.jpg" style="width: 149.6px; height: 188.0px;" /></a>
 </div>
 <p>Go 是一门<em>编译</em>语言。 在运行程序之前，Go
 首先需要使用<em>编译器</em>将用户编写的代码转化为计算机能够理解的 0 和 1 。
@@ -143,18 +135,20 @@ bug 可能会隐藏在测试尚未尝触及到的代码当中。</p>
 <p>不过换个角度来看，解释器不仅能够让开发过程变得迅速且具有交互性，还能够让语言本身变得灵活、轻松和令人愉快。
 相反地，编译语言却常常因为像机器人一样顽固不化、墨守成规而广为人知，并且缓慢的编译速度也常常为人所诟病，然而实际上并非所有编译语言都是如此。</p>
 <blockquote>
-<div>我们想要构造出这样一种语言， 它不仅可以像 C++ 和 Java
+<div><p>我们想要构造出这样一种语言， 它不仅可以像 C++ 和 Java
 这类静态编译语言一样安全、高效， 并且还可以像 Python
 这类动态类型解释语言一样身轻如燕并且充满乐趣。 —— Rob
-Pike，《极客周刊》（详情请见 <a class="reference external" href="mng.bz/jr8y">mng.bz/jr8y</a>）</div></blockquote>
+Pike，《极客周刊》（详情请见 <a class="reference external" href="mng.bz/jr8y">mng.bz/jr8y</a>）</p>
+</div></blockquote>
 <p>Go 在考虑软件开发的<em>体验</em>方面可谓煞费苦心。
 首先，即使是大型程序的编译也可以在极短的时间内完成，并且只需要用到一条命令。
 其次，语言排除了那些可能会导致歧义的特性，鼓励可预测和简明易懂的代码。
 最后，Go 为 Java 等传统语言死板的数据结构提供了轻量级的替代品。</p>
 <blockquote>
-<div>Java 避免了 C++ 当中许多不常见、难懂和令人迷惑的特性，
+<div><p>Java 避免了 C++ 当中许多不常见、难懂和令人迷惑的特性，
 根据我们的经验， 这些特性带来的麻烦要比好处多得多。 —— James
-Gosling，《Java：概述》</div></blockquote>
+Gosling，《Java：概述》</p>
+</div></blockquote>
 <p>每一种新编程语言都会对以往想法进行改良。 与早期语言相比，在 Go
 里面高效地使用内存将变得更为容易，出错的可能性也更低，并且 Go
 还能利用多核机器上的每个核心获得额外的性能优势。
@@ -173,12 +167,13 @@ Gosling，《Java：概述》</div></blockquote>
 Go 是一门只包含几种简单概念的小型语言，所以它学习起来也相对比较快。
 终上所述，我们就得出了以下 Go 箴言：</p>
 <blockquote>
-<div>Go 是一门开源编程语言，
+<div><p>Go 是一门开源编程语言，
 它可以大规模地生产出<strong>简单</strong>、<strong>高效</strong>并且<strong>可信赖</strong>的软件。
-—— 《Go 品牌手册》（Go Brand Book）</div></blockquote>
+—— 《Go 品牌手册》（Go Brand Book）</p>
+</div></blockquote>
 <div class="admonition tip">
-<p class="first admonition-title">Tip</p>
-<p class="last">当你在互联网上搜索 Go 的相关话题时， 可以使用关键字 golang
+<p class="admonition-title">Tip</p>
+<p>当你在互联网上搜索 Go 的相关话题时， 可以使用关键字 golang
 来代表 Go 语言。 这种将 -lang
 后缀添加到语言名字之后的做法也适用于其他编程语言， 比如 Ruby 、 Rust
 等。</p>
@@ -198,7 +193,7 @@ Go 是一门只包含几种简单概念的小型语言，所以它学习起来�
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.<br/>
     </p>
   </div>
 </footer>

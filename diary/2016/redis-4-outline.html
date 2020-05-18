@@ -1,24 +1,17 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Redis 4.0 新功能简介 &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     'present',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="翻译笔记之十一：简化非必要技术名词" href="notes-about-translation-11.html" />
@@ -32,8 +25,7 @@
 <script type="text/javascript" src="../../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../../_static/bootstrap-sphinx.js "></script>
 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -153,8 +145,8 @@
 <p>因为模块系统是通过高层次 API 实现的，
 它与 Redis 内核本身完全分离、互不干扰，
 所以用户可以在有需要的情况下才启用这个功能，
-以下是 <code class="docutils literal"><span class="pre">redis.conf</span></code> 中记载的模块载入方法：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1">################################## MODULES #####################################</span>
+以下是 <code class="docutils literal notranslate"><span class="pre">redis.conf</span></code> 中记载的模块载入方法：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">################################## MODULES #####################################</span>
 
 <span class="c1"># Load modules at startup. If the server is not able to load modules</span>
 <span class="c1"># it will abort. It is possible to use multiple loadmodule directives.</span>
@@ -173,20 +165,20 @@
 </div>
 <div class="section" id="psync-2-0">
 <h2>PSYNC 2.0<a class="headerlink" href="#psync-2-0" title="Permalink to this headline">¶</a></h2>
-<p>新版本的 <code class="docutils literal"><span class="pre">PSYNC</span></code> 命令解决了旧版本的 Redis 在复制时的一些不够优化的地方：</p>
+<p>新版本的 <code class="docutils literal notranslate"><span class="pre">PSYNC</span></code> 命令解决了旧版本的 Redis 在复制时的一些不够优化的地方：</p>
 <ul class="simple">
-<li>在旧版本 Redis 中，
+<li><p>在旧版本 Redis 中，
 如果一个从服务器在 FAILOVER 之后成为了新的主节点，
 那么其他从节点在复制这个新主的时候就必须进行全量复制。
 在 Redis 4.0 中，
 新主和从服务器在处理这种情况时，
-将在条件允许的情况下使用部分复制。</li>
-<li>在旧版本 Redis 中，
+将在条件允许的情况下使用部分复制。</p></li>
+<li><p>在旧版本 Redis 中，
 一个从服务器如果重启了，
 那么它就必须与主服务器重新进行全量复制，
 在 Redis 4.0 中，
 只要条件允许，
-主从在处理这种情况时将使用部分复制。</li>
+主从在处理这种情况时将使用部分复制。</p></li>
 </ul>
 </div>
 <div class="section" id="id2">
@@ -199,24 +191,24 @@
 <div class="section" id="del-flushdb-flushall">
 <h2>非阻塞 DEL 、 FLUSHDB 和 FLUSHALL<a class="headerlink" href="#del-flushdb-flushall" title="Permalink to this headline">¶</a></h2>
 <p>在 Redis 4.0 之前，
-用户在使用 <code class="docutils literal"><span class="pre">DEL</span></code> 命令删除体积较大的键，
-又或者在使用 <code class="docutils literal"><span class="pre">FLUSHDB</span></code> 和 <code class="docutils literal"><span class="pre">FLUSHALL</span></code> 删除包含大量键的数据库时，
+用户在使用 <code class="docutils literal notranslate"><span class="pre">DEL</span></code> 命令删除体积较大的键，
+又或者在使用 <code class="docutils literal notranslate"><span class="pre">FLUSHDB</span></code> 和 <code class="docutils literal notranslate"><span class="pre">FLUSHALL</span></code> 删除包含大量键的数据库时，
 都可能会造成服务器阻塞。</p>
 <p>为了解决以上问题，
-Redis 4.0 新添加了 <code class="docutils literal"><span class="pre">UNLINK</span></code> 命令，
-这个命令是 <code class="docutils literal"><span class="pre">DEL</span></code> 命令的异步版本，
+Redis 4.0 新添加了 <code class="docutils literal notranslate"><span class="pre">UNLINK</span></code> 命令，
+这个命令是 <code class="docutils literal notranslate"><span class="pre">DEL</span></code> 命令的异步版本，
 它可以将删除指定键的操作放在后台线程里面执行，
 从而尽可能地避免服务器阻塞：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">UNLINK</span> <span class="n">fruits</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">UNLINK</span> <span class="n">fruits</span>
 <span class="p">(</span><span class="n">integer</span><span class="p">)</span> <span class="mi">1</span>
 </pre></div>
 </div>
 <p>因为一些历史原因，
-执行同步删除操作的 <code class="docutils literal"><span class="pre">DEL</span></code> 命令将会继续保留。</p>
+执行同步删除操作的 <code class="docutils literal notranslate"><span class="pre">DEL</span></code> 命令将会继续保留。</p>
 <p>此外，
-Redis 4.0 中的 <code class="docutils literal"><span class="pre">FLUSHDB</span></code> 和 <code class="docutils literal"><span class="pre">FLUSHALL</span></code> 这两个命令都新添加了 <code class="docutils literal"><span class="pre">ASYNC</span></code> 选项，
+Redis 4.0 中的 <code class="docutils literal notranslate"><span class="pre">FLUSHDB</span></code> 和 <code class="docutils literal notranslate"><span class="pre">FLUSHALL</span></code> 这两个命令都新添加了 <code class="docutils literal notranslate"><span class="pre">ASYNC</span></code> 选项，
 带有这个选项的数据库删除操作将在后台线程进行：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">FLUSHDB</span> <span class="n">ASYNC</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">FLUSHDB</span> <span class="n">ASYNC</span>
 <span class="n">OK</span>
 
 <span class="n">redis</span><span class="o">&gt;</span> <span class="n">FLUSHALL</span> <span class="n">ASYNC</span>
@@ -226,14 +218,14 @@ Redis 4.0 中的 <code class="docutils literal"><span class="pre">FLUSHDB</span>
 </div>
 <div class="section" id="id3">
 <h2>交换数据库<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
-<p>Redis 4.0 对数据库命令的另外一个修改是新增了 <code class="docutils literal"><span class="pre">SWAPDB</span></code> 命令，
+<p>Redis 4.0 对数据库命令的另外一个修改是新增了 <code class="docutils literal notranslate"><span class="pre">SWAPDB</span></code> 命令，
 这个命令可以对指定的两个数据库进行互换：
 比如说，
-通过执行命令 <code class="docutils literal"><span class="pre">SWAPDB</span> <span class="pre">0</span> <span class="pre">1</span></code> ，
+通过执行命令 <code class="docutils literal notranslate"><span class="pre">SWAPDB</span> <span class="pre">0</span> <span class="pre">1</span></code> ，
 我们可以将原来的数据库 0 变成数据库 1 ，
 而原来的数据库 1 则变成数据库 0 。</p>
-<p>以下是一个使用 <code class="docutils literal"><span class="pre">SWAPDB</span></code> 的例子：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">SET</span> <span class="n">your_name</span> <span class="s2">&quot;huangz&quot;</span>  <span class="o">--</span> <span class="n">在数据库</span> <span class="mi">0</span> <span class="n">中设置一个键</span>
+<p>以下是一个使用 <code class="docutils literal notranslate"><span class="pre">SWAPDB</span></code> 的例子：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">SET</span> <span class="n">your_name</span> <span class="s2">&quot;huangz&quot;</span>  <span class="o">--</span> <span class="n">在数据库</span> <span class="mi">0</span> <span class="n">中设置一个键</span>
 <span class="n">OK</span>
 
 <span class="n">redis</span><span class="o">&gt;</span> <span class="n">GET</span> <span class="n">your_name</span>
@@ -265,9 +257,9 @@ AOF 重写产生的文件将同时包含 RDB 格式的内容和 AOF 格式的内
 既能够快速地生成重写文件，
 也能够在出现问题时，
 快速地载入数据。</p>
-<p>这个功能可以通过 <code class="docutils literal"><span class="pre">aof-use-rdb-preamble</span></code> 选项进行开启，
-<code class="docutils literal"><span class="pre">redis.conf</span></code> 文件中记录了这个选项的使用方法：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># When rewriting the AOF file, Redis is able to use an RDB preamble in the</span>
+<p>这个功能可以通过 <code class="docutils literal notranslate"><span class="pre">aof-use-rdb-preamble</span></code> 选项进行开启，
+<code class="docutils literal notranslate"><span class="pre">redis.conf</span></code> 文件中记录了这个选项的使用方法：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># When rewriting the AOF file, Redis is able to use an RDB preamble in the</span>
 <span class="c1"># AOF file for faster rewrites and recoveries. When this option is turned</span>
 <span class="c1"># on the rewritten AOF file is composed of two different stanzas:</span>
 <span class="c1">#</span>
@@ -285,10 +277,10 @@ AOF 重写产生的文件将同时包含 RDB 格式的内容和 AOF 格式的内
 </div>
 <div class="section" id="id4">
 <h2>内存命令<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
-<p>新添加了一个 <code class="docutils literal"><span class="pre">MEMORY</span></code> 命令，
+<p>新添加了一个 <code class="docutils literal notranslate"><span class="pre">MEMORY</span></code> 命令，
 这个命令可以用于视察内存使用情况，
 并进行相应的内存管理操作：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">MEMORY</span> <span class="n">HELP</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">MEMORY</span> <span class="n">HELP</span>
 <span class="mi">1</span><span class="p">)</span> <span class="s2">&quot;MEMORY USAGE &lt;key&gt; [SAMPLES &lt;count&gt;] - Estimate memory usage of key&quot;</span>
 <span class="mi">2</span><span class="p">)</span> <span class="s2">&quot;MEMORY STATS                         - Show memory usage details&quot;</span>
 <span class="mi">3</span><span class="p">)</span> <span class="s2">&quot;MEMORY PURGE                         - Ask the allocator to release memory&quot;</span>
@@ -296,8 +288,8 @@ AOF 重写产生的文件将同时包含 RDB 格式的内容和 AOF 格式的内
 </pre></div>
 </div>
 <p>其中，
-使用 <code class="docutils literal"><span class="pre">MEMORY</span> <span class="pre">USAGE</span></code> 子命令可以估算储存给定键所需的内存：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">SET</span> <span class="n">msg</span> <span class="s2">&quot;hello world&quot;</span>
+使用 <code class="docutils literal notranslate"><span class="pre">MEMORY</span> <span class="pre">USAGE</span></code> 子命令可以估算储存给定键所需的内存：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">SET</span> <span class="n">msg</span> <span class="s2">&quot;hello world&quot;</span>
 <span class="n">OK</span>
 
 <span class="n">redis</span><span class="o">&gt;</span> <span class="n">SADD</span> <span class="n">fruits</span> <span class="n">apple</span> <span class="n">banana</span> <span class="n">cherry</span>
@@ -310,8 +302,8 @@ AOF 重写产生的文件将同时包含 RDB 格式的内容和 AOF 格式的内
 <span class="p">(</span><span class="n">integer</span><span class="p">)</span> <span class="mi">375</span>
 </pre></div>
 </div>
-<p>使用 <code class="docutils literal"><span class="pre">MEMORY</span> <span class="pre">STATS</span></code> 子命令可以查看 Redis 当前的内存使用情况：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">MEMORY</span> <span class="n">STATS</span>
+<p>使用 <code class="docutils literal notranslate"><span class="pre">MEMORY</span> <span class="pre">STATS</span></code> 子命令可以查看 Redis 当前的内存使用情况：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">MEMORY</span> <span class="n">STATS</span>
 <span class="mi">1</span><span class="p">)</span> <span class="s2">&quot;peak.allocated&quot;</span>
 <span class="mi">2</span><span class="p">)</span> <span class="p">(</span><span class="n">integer</span><span class="p">)</span> <span class="mi">1014480</span>
 <span class="mi">3</span><span class="p">)</span> <span class="s2">&quot;total.allocated&quot;</span>
@@ -347,13 +339,13 @@ AOF 重写产生的文件将同时包含 RDB 格式的内容和 AOF 格式的内
 <span class="mi">30</span><span class="p">)</span> <span class="s2">&quot;2.1193723678588867&quot;</span>
 </pre></div>
 </div>
-<p>使用 <code class="docutils literal"><span class="pre">MEMORY</span> <span class="pre">PURGE</span></code> 子命令可以要求分配器释放更多内存：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">MEMORY</span> <span class="n">PURGE</span>
+<p>使用 <code class="docutils literal notranslate"><span class="pre">MEMORY</span> <span class="pre">PURGE</span></code> 子命令可以要求分配器释放更多内存：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">MEMORY</span> <span class="n">PURGE</span>
 <span class="n">OK</span>
 </pre></div>
 </div>
-<p>使用 <code class="docutils literal"><span class="pre">MEMORY</span> <span class="pre">MALLOC-STATS</span></code> 子命令可以展示分配器内部状态：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">MEMORY</span> <span class="n">MALLOC</span><span class="o">-</span><span class="n">STATS</span>
+<p>使用 <code class="docutils literal notranslate"><span class="pre">MEMORY</span> <span class="pre">MALLOC-STATS</span></code> 子命令可以展示分配器内部状态：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">MEMORY</span> <span class="n">MALLOC</span><span class="o">-</span><span class="n">STATS</span>
 <span class="n">Stats</span> <span class="ow">not</span> <span class="n">supported</span> <span class="k">for</span> <span class="n">the</span> <span class="n">current</span> <span class="n">allocator</span>
 </pre></div>
 </div>
@@ -361,8 +353,8 @@ AOF 重写产生的文件将同时包含 RDB 格式的内容和 AOF 格式的内
 <div class="section" id="nat-docker">
 <h2>兼容 NAT 和 Docker<a class="headerlink" href="#nat-docker" title="Permalink to this headline">¶</a></h2>
 <p>Redis 4.0 将兼容 NAT 和 Docker ，
-具体的使用方法在 <code class="docutils literal"><span class="pre">redis.conf</span></code> 中有记载：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1">########################## CLUSTER DOCKER/NAT support  ########################</span>
+具体的使用方法在 <code class="docutils literal notranslate"><span class="pre">redis.conf</span></code> 中有记载：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">########################## CLUSTER DOCKER/NAT support  ########################</span>
 
 <span class="c1"># In certain deployments, Redis Cluster nodes address discovery fails, because</span>
 <span class="c1"># addresses are NAT-ted or because ports are forwarded (the typical case is</span>
@@ -424,7 +416,7 @@ AOF 重写产生的文件将同时包含 RDB 格式的内容和 AOF 格式的内
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.<br/>
     </p>
   </div>
 </footer>

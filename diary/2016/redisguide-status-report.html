@@ -1,24 +1,17 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>《Redis使用教程》进度报告 &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     'present',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="《Redis实战》一周年回顾" href="riacn-one-year-anniversary.html" />
@@ -32,8 +25,7 @@
 <script type="text/javascript" src="../../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../../_static/bootstrap-sphinx.js "></script>
 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -132,13 +124,13 @@
 在完成了《Redis设计与实现》之后又接到了《Redis实战》的翻译委托，因此《Redis使用教程》的写作计划就又再延迟了，然后在前后经历了两三年之后，我终于实际地开始写我一直计划的这本 Redis 教程书了。</p>
 <p>虽然有些人可能没有察觉，但是在这几年间，Redis 实际上已经发生了很大的变化：</p>
 <ul class="simple">
-<li>在我刚开始接触 Redis 的时候，Redis 还只有字符串、散列、有序集合这几种通用结构，
+<li><p>在我刚开始接触 Redis 的时候，Redis 还只有字符串、散列、有序集合这几种通用结构，
 但现在已经增加了 HyperLogLog 、 bitmap 、GEO 等专用结构，
-甚至还可以通过模块系统来进行功能扩展；</li>
-<li>与此同时，
+甚至还可以通过模块系统来进行功能扩展；</p></li>
+<li><p>与此同时，
 Redis 也从一个只有单机功能的简单数据库 —— 有些人甚至把 Redis 戏称为玩具数据库 —— 变成了一个拥有复制、Sentinel和集群功能的“庞然大物”，
 因此想要完整地描述和介绍这个数据库的难度比前几年已经大了很多，
-并且也需要更多的篇幅。</li>
+并且也需要更多的篇幅。</p></li>
 </ul>
 <p>我以前在看 C++、JAVA、MySQL 等技术的书籍时，
 常常会感叹为什么这些书会写得这么厚，
@@ -167,17 +159,17 @@ Redis 也从一个只有单机功能的简单数据库 —— 有些人甚至把
 接下来就要开始进行第二部分的修正工作了，
 在此之后还有第三部分的修正工作等着我：</p>
 <ul class="simple">
-<li>第二部分的功能比较简单，
+<li><p>第二部分的功能比较简单，
 除了《Lua脚本》一章目前想来需要重写之外，
 其他章节应该都会比较容易搞定，
-所以这一部分的修正工作应该会比较快地完成。</li>
-<li>至于第三部分，
+所以这一部分的修正工作应该会比较快地完成。</p></li>
+<li><p>至于第三部分，
 因为涉及到复制、Sentinel和集群，
 而我对于这三个部分也有很多新想法，
 并且我也打算将 Redis 最近的一些新功能添加到这个部分里面，
 所以这些章节应该会进行大量的修改和重写，
 因此这个部分的修正工作应该会花比较大的时间，
-而这个部分也是本书接下来的工作重点。</li>
+而这个部分也是本书接下来的工作重点。</p></li>
 </ul>
 <p>跟以往一样，
 我接下来也会继续在微博和twitter上发布《Redis使用教程》的最新进度，
@@ -203,7 +195,7 @@ Redis 也从一个只有单机功能的简单数据库 —— 有些人甚至把
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.<br/>
     </p>
   </div>
 </footer>

@@ -1,24 +1,17 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>使用 Redis 实现登录会话 &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     'present',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="使用 Redis 构建短网址生成程序" href="redis-shorty-url.html" />
@@ -32,8 +25,7 @@
 <script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -127,8 +119,8 @@
   <div class="section" id="redis">
 <h1>使用 Redis 实现登录会话<a class="headerlink" href="#redis" title="Permalink to this headline">¶</a></h1>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">本文摘录自即将出版的《Redis使用手册》，
+<p class="admonition-title">Note</p>
+<p>本文摘录自即将出版的《Redis使用手册》，
 详情请见： <a class="reference external" href="http://RedisGuide.com">RedisGuide.com</a> 。</p>
 </div>
 <p>为了方便用户，
@@ -148,8 +140,8 @@
 通过使用 Redis 的散列，
 我们可以构建出代码清单 3-4 所示的登录会话程序。</p>
 <hr class="docutils" />
-<p>代码清单 3-4 使用散列实现的登录会话程序：<code class="docutils literal"><span class="pre">/hash/login_session.py</span></code></p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">random</span>
+<p>代码清单 3-4 使用散列实现的登录会话程序：<code class="docutils literal notranslate"><span class="pre">/hash/login_session.py</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">random</span>
 <span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>  <span class="c1"># 获取浮点数格式的 unix 时间戳</span>
 <span class="kn">from</span> <span class="nn">hashlib</span> <span class="kn">import</span> <span class="n">sha256</span>
 
@@ -234,23 +226,23 @@
 </pre></div>
 </div>
 <hr class="docutils" />
-<p><code class="docutils literal"><span class="pre">LoginSession</span></code> 的 <code class="docutils literal"><span class="pre">create()</span></code> 方法首先会计算出随机的会话令牌以及会话的过期时间戳，
+<p><code class="docutils literal notranslate"><span class="pre">LoginSession</span></code> 的 <code class="docutils literal notranslate"><span class="pre">create()</span></code> 方法首先会计算出随机的会话令牌以及会话的过期时间戳，
 然后使用用户 ID 作为字段，
 将令牌和过期时间戳分别储存到两个散列里面。</p>
 <p>在此之后，
 每当客户端向服务器发送请求并提交令牌的时候，
-程序就会使用 <code class="docutils literal"><span class="pre">validate()</span></code> 方法验证被提交令牌的正确性：
-<code class="docutils literal"><span class="pre">validate()</span></code> 方法会根据用户的 ID ，
+程序就会使用 <code class="docutils literal notranslate"><span class="pre">validate()</span></code> 方法验证被提交令牌的正确性：
+<code class="docutils literal notranslate"><span class="pre">validate()</span></code> 方法会根据用户的 ID ，
 从两个散列里面分别取出用户的会话令牌以及会话的过期时间戳，
 然后通过一系列检查判断令牌是否正确以及会话是否过期。</p>
 <p>最后，
-<code class="docutils literal"><span class="pre">destroy()</span></code> 方法可以在用户手动登出（logout）时调用，
+<code class="docutils literal notranslate"><span class="pre">destroy()</span></code> 方法可以在用户手动登出（logout）时调用，
 它可以删除用户的会话令牌以及会话的过期时间戳，
 让用户重新回到未登录状态。</p>
-<p>在拥有 <code class="docutils literal"><span class="pre">LoginSession</span></code> 程序之后，
+<p>在拥有 <code class="docutils literal notranslate"><span class="pre">LoginSession</span></code> 程序之后，
 我们可以通过执行以下代码，
 为用户 peter 创建出相应的会话令牌：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">redis</span> <span class="kn">import</span> <span class="n">Redis</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">redis</span> <span class="kn">import</span> <span class="n">Redis</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">login_session</span> <span class="kn">import</span> <span class="n">LoginSession</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">client</span> <span class="o">=</span> <span class="n">Redis</span><span class="p">(</span><span class="n">decode_responses</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -263,7 +255,7 @@
 </div>
 <p>并通过以下代码，
 验证给定令牌的正确性：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">session</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="s2">&quot;wrong_token&quot;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">session</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="s2">&quot;wrong_token&quot;</span><span class="p">)</span>
 <span class="go">&#39;SESSION_TOKEN_INCORRECT&#39;</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">session</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
@@ -272,13 +264,13 @@
 </div>
 <p>然后在会话使用完毕之后，
 通过执行以下代码来销毁会话：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">session</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">session</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">session</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
 <span class="go">&#39;SESSION_NOT_LOGIN&#39;</span>
 </pre></div>
 </div>
-<p>图 3-16 展示了使用 <code class="docutils literal"><span class="pre">LoginSession</span></code> 程序在数据库里面创建多个会话时的样子。</p>
+<p>图 3-16 展示了使用 <code class="docutils literal notranslate"><span class="pre">LoginSession</span></code> 程序在数据库里面创建多个会话时的样子。</p>
 <hr class="docutils" />
 <p>图 3-16 登录会话程序数据结构示意图</p>
 <img alt="../_images/IMAGE_SESSION_HASHS.png" src="../_images/IMAGE_SESSION_HASHS.png" />
@@ -297,7 +289,7 @@
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.<br/>
     </p>
   </div>
 </footer>

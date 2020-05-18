@@ -1,24 +1,17 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Go 语言的布尔值 &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     'present',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="使用 Go 语言生成伪随机数" href="random-number-in-go.html" />
@@ -32,8 +25,7 @@
 <script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -127,37 +119,38 @@
   <div class="section" id="go">
 <h1>Go 语言的布尔值<a class="headerlink" href="#go" title="Permalink to this headline">¶</a></h1>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
+<p class="admonition-title">Note</p>
 <p>本文摘录自《Go语言趣学指南》第 3 章，
 请访问 <a class="reference external" href="http://gpwgcn.com">gpwgcn.com</a>  以获取更多相关信息。</p>
-<a class="last reference internal image-reference" href="../_images/gpwgcn1.jpg"><img alt="../_images/gpwgcn1.jpg" src="../_images/gpwgcn1.jpg" style="width: 149.6px; height: 188.0px;" /></a>
+<a class="reference internal image-reference" href="../_images/gpwgcn1.jpg"><img alt="../_images/gpwgcn1.jpg" src="../_images/gpwgcn1.jpg" style="width: 149.6px; height: 188.0px;" /></a>
 </div>
 <p>在阅读能够自选结局的故事书时，你会碰到类似以下这样的选择：</p>
 <blockquote>
-<div>如果你选择走出洞穴， 那么请翻到第 21 页。 —— Edward
-Packard，《时间的洞穴》</div></blockquote>
-<p>在 Go 中，诸如“是否走出洞穴”这样的问题可以用 <code class="docutils literal"><span class="pre">true</span></code> 和 <code class="docutils literal"><span class="pre">false</span></code>
+<div><p>如果你选择走出洞穴， 那么请翻到第 21 页。 —— Edward
+Packard，《时间的洞穴》</p>
+</div></blockquote>
+<p>在 Go 中，诸如“是否走出洞穴”这样的问题可以用 <code class="docutils literal notranslate"><span class="pre">true</span></code> 和 <code class="docutils literal notranslate"><span class="pre">false</span></code>
 这两个预定义常量来回答。 你可以像这样使用这两个常量：</p>
-<div class="highlight-go"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">walkOutside</span> <span class="p">=</span> <span class="kc">true</span>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">walkOutside</span> <span class="p">=</span> <span class="kc">true</span>
 <span class="kd">var</span> <span class="nx">takeTheBluePill</span> <span class="p">=</span> <span class="kc">false</span>
 </pre></div>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">某些编程语言对于“真”的定义比较宽松。 比如 Python 和 JavaScript
-就把空文本 <code class="docutils literal"><span class="pre">&quot;&quot;</span></code> 和数字零看作是“假”， 但是 Ruby 和 Elixir
-却把这两个值看作是“真”。 对于 Go 来说， <code class="docutils literal"><span class="pre">true</span></code> 是唯一的真值， 而
-<code class="docutils literal"><span class="pre">false</span></code> 则是唯一的假值。</p>
+<p class="admonition-title">Note</p>
+<p>某些编程语言对于“真”的定义比较宽松。 比如 Python 和 JavaScript
+就把空文本 <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code> 和数字零看作是“假”， 但是 Ruby 和 Elixir
+却把这两个值看作是“真”。 对于 Go 来说， <code class="docutils literal notranslate"><span class="pre">true</span></code> 是唯一的真值， 而
+<code class="docutils literal notranslate"><span class="pre">false</span></code> 则是唯一的假值。</p>
 </div>
 <p>为了纪念 19 世纪时的数学家乔治·布尔，我们把“真”和“假”称为<em>布尔</em>值。
 Go 的标准库里面有好些函数都会返回布尔值。 比如在接下来的代码清单 3-1
-里面，程序就使用了 <code class="docutils literal"><span class="pre">strings</span></code> 包中的 <code class="docutils literal"><span class="pre">Contains</span></code> 函数来检查
-<code class="docutils literal"><span class="pre">command</span></code>
+里面，程序就使用了 <code class="docutils literal notranslate"><span class="pre">strings</span></code> 包中的 <code class="docutils literal notranslate"><span class="pre">Contains</span></code> 函数来检查
+<code class="docutils literal notranslate"><span class="pre">command</span></code>
 变量是否包含单词“outside”，并且由于这一问题的答案为真，所以函数将返回
-<code class="docutils literal"><span class="pre">true</span></code> 作为结果。</p>
+<code class="docutils literal notranslate"><span class="pre">true</span></code> 作为结果。</p>
 <hr class="docutils" />
-<p>代码清单 3-1 返回布尔值的函数： <code class="docutils literal"><span class="pre">contains.go</span></code></p>
-<div class="highlight-go"><div class="highlight"><pre><span></span><span class="kn">package</span> <span class="nx">main</span>
+<p>代码清单 3-1 返回布尔值的函数： <code class="docutils literal notranslate"><span class="pre">contains.go</span></code></p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="p">(</span>
     <span class="s">&quot;fmt&quot;</span>
@@ -189,7 +182,7 @@ Go 的标准库里面有好些函数都会返回布尔值。 比如在接下来�
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.<br/>
     </p>
   </div>
 </footer>

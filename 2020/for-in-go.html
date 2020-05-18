@@ -1,24 +1,17 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Go 语言中的 for 关键字 &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     'present',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Go 语言中的 switch 语句" href="switch-in-go.html" />
@@ -32,8 +25,7 @@
 <script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -83,7 +75,7 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">Go 语言中的 <code class="docutils literal"><span class="pre">for</span></code> 关键字</a></li>
+<li><a class="reference internal" href="#">Go 语言中的 <code class="docutils literal notranslate"><span class="pre">for</span></code> 关键字</a></li>
 </ul>
 </ul>
 </li>
@@ -125,20 +117,20 @@
     <div class="body col-md-12 content" role="main">
       
   <div class="section" id="go-for">
-<h1>Go 语言中的 <code class="docutils literal"><span class="pre">for</span></code> 关键字<a class="headerlink" href="#go-for" title="Permalink to this headline">¶</a></h1>
+<h1>Go 语言中的 <code class="docutils literal notranslate"><span class="pre">for</span></code> 关键字<a class="headerlink" href="#go-for" title="Permalink to this headline">¶</a></h1>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
+<p class="admonition-title">Note</p>
 <p>本文摘录自《Go语言趣学指南》第 3 章，
 请访问 <a class="reference external" href="http://gpwgcn.com">gpwgcn.com</a>  以获取更多相关信息。</p>
-<a class="last reference internal image-reference" href="../_images/gpwgcn1.jpg"><img alt="../_images/gpwgcn1.jpg" src="../_images/gpwgcn1.jpg" style="width: 149.6px; height: 188.0px;" /></a>
+<a class="reference internal image-reference" href="../_images/gpwgcn1.jpg"><img alt="../_images/gpwgcn1.jpg" src="../_images/gpwgcn1.jpg" style="width: 149.6px; height: 188.0px;" /></a>
 </div>
 <p>当你需要重复执行同一段代码的时候，比起一遍又一遍键入相同的代码，更好的办法是使用
-<code class="docutils literal"><span class="pre">for</span></code> 关键字。 比如代码清单 3-8 就展示了如何重复执行同一段代码直到
-<code class="docutils literal"><span class="pre">count</span></code> 变量的值等于 <code class="docutils literal"><span class="pre">0</span></code> 。</p>
+<code class="docutils literal notranslate"><span class="pre">for</span></code> 关键字。 比如代码清单 3-8 就展示了如何重复执行同一段代码直到
+<code class="docutils literal notranslate"><span class="pre">count</span></code> 变量的值等于 <code class="docutils literal notranslate"><span class="pre">0</span></code> 。</p>
 <img alt="../_images/rocket.jpg" class="align-right" src="../_images/rocket.jpg" />
 <hr class="docutils" />
-<p>代码清单 3-8 倒数循环： <code class="docutils literal"><span class="pre">countdown.go</span></code></p>
-<div class="highlight-go"><div class="highlight"><pre><span></span><span class="kn">package</span> <span class="nx">main</span>
+<p>代码清单 3-8 倒数循环： <code class="docutils literal notranslate"><span class="pre">countdown.go</span></code></p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="p">(</span>
     <span class="s">&quot;fmt&quot;</span>
@@ -158,18 +150,18 @@
 </pre></div>
 </div>
 <hr class="docutils" />
-<p>在每次迭代开始之前，表达式 <code class="docutils literal"><span class="pre">count</span> <span class="pre">&gt;</span> <span class="pre">0</span></code> 都会被求值并产生一个布尔值：
-当该值为 <code class="docutils literal"><span class="pre">false</span></code> 也即是 <code class="docutils literal"><span class="pre">count</span></code> 变量等于 <code class="docutils literal"><span class="pre">0</span></code>
+<p>在每次迭代开始之前，表达式 <code class="docutils literal notranslate"><span class="pre">count</span> <span class="pre">&gt;</span> <span class="pre">0</span></code> 都会被求值并产生一个布尔值：
+当该值为 <code class="docutils literal notranslate"><span class="pre">false</span></code> 也即是 <code class="docutils literal notranslate"><span class="pre">count</span></code> 变量等于 <code class="docutils literal notranslate"><span class="pre">0</span></code>
 的时候，循环就会停止；
-反之，如果布尔值为真，那么程序将继续执行循环的体（body），也即是被 <code class="docutils literal"><span class="pre">{</span></code>
-和 <code class="docutils literal"><span class="pre">}</span></code> 包裹的那部分代码。</p>
-<p>此外，我们还可以通过不为 <code class="docutils literal"><span class="pre">for</span></code>
+反之，如果布尔值为真，那么程序将继续执行循环的体（body），也即是被 <code class="docutils literal notranslate"><span class="pre">{</span></code>
+和 <code class="docutils literal notranslate"><span class="pre">}</span></code> 包裹的那部分代码。</p>
+<p>此外，我们还可以通过不为 <code class="docutils literal notranslate"><span class="pre">for</span></code>
 语句设置任何条件来产生<em>无限</em>循环，然后在有需要的时候通过在循环体内使用
-<code class="docutils literal"><span class="pre">break</span></code> 语句来跳出循环。 比如接下来的代码清单 3-9 就会持续地进行 360°
+<code class="docutils literal notranslate"><span class="pre">break</span></code> 语句来跳出循环。 比如接下来的代码清单 3-9 就会持续地进行 360°
 旋转，直到随机触发停止条件为止。</p>
 <hr class="docutils" />
-<p>代码清单 3-9 超越无限： <code class="docutils literal"><span class="pre">infinity.go</span></code></p>
-<div class="highlight-go"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">degrees</span> <span class="p">=</span> <span class="mi">0</span>
+<p>代码清单 3-9 超越无限： <code class="docutils literal notranslate"><span class="pre">infinity.go</span></code></p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">degrees</span> <span class="p">=</span> <span class="mi">0</span>
 
 <span class="k">for</span> <span class="p">{</span>
     <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">degrees</span><span class="p">)</span>
@@ -199,7 +191,7 @@
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.<br/>
     </p>
   </div>
 </footer>

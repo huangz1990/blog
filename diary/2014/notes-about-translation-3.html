@@ -1,24 +1,17 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>翻译笔记之三：消除不恰当的括号 &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     'present',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="翻译笔记之二：翻译的定义" href="notes-about-translation-2.html" />
@@ -32,8 +25,7 @@
 <script type="text/javascript" src="../../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../../_static/bootstrap-sphinx.js "></script>
 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -134,18 +126,20 @@
 争取让译文的表述变得更自然一些。</p>
 <p>比如在《Redis in Action》第 147 页“AGGREGATING DATA LOCALLY”一节中：</p>
 <blockquote>
-<div>If we perform the aggregates locally on a per-country basis for the entire day
+<div><p>If we perform the aggregates locally on a per-country basis for the entire day
 (being that there are around 300 countries),
-we can instead write 300 values to Redis.</div></blockquote>
+we can instead write 300 values to Redis.</p>
+</div></blockquote>
 <p>这里的“(being that there are around 300 countries)”就是一个括号用得不好的例子 —— “there are around 300 countries”这个陈述应该出现在最前面，这样之后的条件“if we perform … the entire day”和之后的结果“we can instead … to Redis”就会来得更自然一些。</p>
 <p>为此，
 我在翻译时就将括号的内容提到了句子的前面，
 这样这个句子就有完整的因果关系了。</p>
 <p>以下为修改后的译文：</p>
 <blockquote>
-<div>因为只有大约 300 个国家，
+<div><p>因为只有大约 300 个国家，
 所以如果执行……，
-那么只需要对 Redis 写入大约 300 个值就可以了。</div></blockquote>
+那么只需要对 Redis 写入大约 300 个值就可以了。</p>
+</div></blockquote>
 <p>可以看到，
 句子的表述在修改之后变得更自然了，
 而原文要表达的意思也没有变化。</p>
@@ -168,7 +162,7 @@ we can instead write 300 values to Redis.</div></blockquote>
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.<br/>
     </p>
   </div>
 </footer>

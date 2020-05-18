@@ -1,24 +1,17 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>使用 Redis 实现自动补全 &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     'present',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="使用 Redis 储存社交关系" href="redis-sns-relationship.html" />
@@ -32,8 +25,7 @@
 <script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -127,15 +119,15 @@
   <div class="section" id="redis">
 <h1>使用 Redis 实现自动补全<a class="headerlink" href="#redis" title="Permalink to this headline">¶</a></h1>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">本文摘录自即将出版的《Redis使用手册》，
+<p class="admonition-title">Note</p>
+<p>本文摘录自即将出版的《Redis使用手册》，
 详情请见： <a class="reference external" href="http://RedisGuide.com">RedisGuide.com</a> 。</p>
 </div>
 <p>包含大量信息的网站常常会在搜索或者查找功能上提供自动补全特性，
 这一特性可以帮助用户更快速地找到他们想要的信息。
 比如说，
-当我们在搜索引擎上输入 <code class="docutils literal"><span class="pre">&quot;黄&quot;</span></code> 字的时候，
-搜索引擎的自动补全特性就会向我们列出一些比较著名的以 <code class="docutils literal"><span class="pre">&quot;黄&quot;</span></code> 字开头的人或者物，
+当我们在搜索引擎上输入 <code class="docutils literal notranslate"><span class="pre">&quot;黄&quot;</span></code> 字的时候，
+搜索引擎的自动补全特性就会向我们列出一些比较著名的以 <code class="docutils literal notranslate"><span class="pre">&quot;黄&quot;</span></code> 字开头的人或者物，
 从而使得我们可以更快速地找到与这些人或物相关的信息，
 如图 6-39 所示。</p>
 <hr class="docutils" />
@@ -145,8 +137,8 @@
 <p>代码清单 6-4 展示了一个使用有序集合实现的自动补全程序，
 这个程序可以提供类似图 6-39 所示的自动补全效果。</p>
 <hr class="docutils" />
-<p>代码清单 6-4 使用有序集合实现的自动补全程序：<code class="docutils literal"><span class="pre">/sorted_set/auto_complete.py</span></code></p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">AutoComplete</span><span class="p">:</span>
+<p>代码清单 6-4 使用有序集合实现的自动补全程序：<code class="docutils literal notranslate"><span class="pre">/sorted_set/auto_complete.py</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">AutoComplete</span><span class="p">:</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">client</span> <span class="o">=</span> <span class="n">client</span>
@@ -169,35 +161,35 @@
 </pre></div>
 </div>
 <hr class="docutils" />
-<p>这个自动补全程序的 <code class="docutils literal"><span class="pre">feed()</span></code> 方法接受给定的内容和权重值作为参数，
+<p>这个自动补全程序的 <code class="docutils literal notranslate"><span class="pre">feed()</span></code> 方法接受给定的内容和权重值作为参数，
 并以此来构建自动补全结果。
 比如说，
-如果我们调用 <code class="docutils literal"><span class="pre">feed(&quot;黄晓明&quot;,</span> <span class="pre">5000)</span></code> ，
+如果我们调用 <code class="docutils literal notranslate"><span class="pre">feed(&quot;黄晓明&quot;,</span> <span class="pre">5000)</span></code> ，
 那么程序将拼接出以下三个键：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">auto_complete</span><span class="p">::</span><span class="n">黄</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">auto_complete</span><span class="p">::</span><span class="n">黄</span>
 <span class="n">auto_complete</span><span class="p">::</span><span class="n">黄晓</span>
 <span class="n">auto_complete</span><span class="p">::</span><span class="n">黄晓明</span>
 </pre></div>
 </div>
 <p>然后通过执行以下这三个命令，
-将自动补全结果 <code class="docutils literal"><span class="pre">&quot;黄晓明&quot;</span></code> 及其权重 <code class="docutils literal"><span class="pre">5000</span></code> 添加到相应的有序集合里面：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ZINCRBY</span>  <span class="n">auto_complete</span><span class="p">::</span><span class="n">黄</span>  <span class="mi">5000</span>  <span class="s2">&quot;黄晓明&quot;</span>
+将自动补全结果 <code class="docutils literal notranslate"><span class="pre">&quot;黄晓明&quot;</span></code> 及其权重 <code class="docutils literal notranslate"><span class="pre">5000</span></code> 添加到相应的有序集合里面：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ZINCRBY</span>  <span class="n">auto_complete</span><span class="p">::</span><span class="n">黄</span>  <span class="mi">5000</span>  <span class="s2">&quot;黄晓明&quot;</span>
 <span class="n">ZINCRBY</span>  <span class="n">auto_complete</span><span class="p">::</span><span class="n">黄晓</span>  <span class="mi">5000</span>  <span class="s2">&quot;黄晓明&quot;</span>
 <span class="n">ZINCRBY</span>  <span class="n">auto_complete</span><span class="p">::</span><span class="n">黄晓明</span>  <span class="mi">5000</span>  <span class="s2">&quot;黄晓明&quot;</span>
 </pre></div>
 </div>
 <p>这样做的结果是，
-程序会把所有 <code class="docutils literal"><span class="pre">&quot;黄&quot;</span></code> 字开头的名字按权重大小有序地储存到 <code class="docutils literal"><span class="pre">auto_complete::黄</span></code> 这个有序集合里面，
-而以 <code class="docutils literal"><span class="pre">&quot;黄晓&quot;</span></code> 开头的名字则会按照权重大小有序地储存在 <code class="docutils literal"><span class="pre">auto_complete::黄晓</span></code> 这个有序集合里面，
+程序会把所有 <code class="docutils literal notranslate"><span class="pre">&quot;黄&quot;</span></code> 字开头的名字按权重大小有序地储存到 <code class="docutils literal notranslate"><span class="pre">auto_complete::黄</span></code> 这个有序集合里面，
+而以 <code class="docutils literal notranslate"><span class="pre">&quot;黄晓&quot;</span></code> 开头的名字则会按照权重大小有序地储存在 <code class="docutils literal notranslate"><span class="pre">auto_complete::黄晓</span></code> 这个有序集合里面，
 诸如此类。</p>
 <p>相对的，
-当我们想要找出所有以 <code class="docutils literal"><span class="pre">&quot;黄&quot;</span></code> 字开头的名字时，
-只需要调用 <code class="docutils literal"><span class="pre">hint()</span></code> 方法，
-程序就会使用 <code class="docutils literal"><span class="pre">ZREVRANGE</span></code> 命令，
-从 <code class="docutils literal"><span class="pre">auto_complete::黄</span></code> 有序集合中取出相应的自动补全结果。</p>
+当我们想要找出所有以 <code class="docutils literal notranslate"><span class="pre">&quot;黄&quot;</span></code> 字开头的名字时，
+只需要调用 <code class="docutils literal notranslate"><span class="pre">hint()</span></code> 方法，
+程序就会使用 <code class="docutils literal notranslate"><span class="pre">ZREVRANGE</span></code> 命令，
+从 <code class="docutils literal notranslate"><span class="pre">auto_complete::黄</span></code> 有序集合中取出相应的自动补全结果。</p>
 <p>作为例子，
 现在让我们载入这个自动补全程序：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">redis</span> <span class="kn">import</span> <span class="n">Redis</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">redis</span> <span class="kn">import</span> <span class="n">Redis</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">auto_complete</span> <span class="kn">import</span> <span class="n">AutoComplete</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">client</span> <span class="o">=</span> <span class="n">Redis</span><span class="p">(</span><span class="n">decode_responses</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ac</span> <span class="o">=</span> <span class="n">AutoComplete</span><span class="p">(</span><span class="n">client</span><span class="p">)</span>
@@ -205,7 +197,7 @@
 </div>
 <p>然后向程序输入一些名字，
 以及这些名字的权重：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ac</span><span class="o">.</span><span class="n">feed</span><span class="p">(</span><span class="s2">&quot;黄健宏&quot;</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ac</span><span class="o">.</span><span class="n">feed</span><span class="p">(</span><span class="s2">&quot;黄健宏&quot;</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ac</span><span class="o">.</span><span class="n">feed</span><span class="p">(</span><span class="s2">&quot;黄健翔&quot;</span><span class="p">,</span> <span class="mi">3000</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ac</span><span class="o">.</span><span class="n">feed</span><span class="p">(</span><span class="s2">&quot;黄晓明&quot;</span><span class="p">,</span> <span class="mi">5000</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ac</span><span class="o">.</span><span class="n">feed</span><span class="p">(</span><span class="s2">&quot;张三&quot;</span><span class="p">,</span> <span class="mi">2500</span><span class="p">)</span>
@@ -213,9 +205,9 @@
 </pre></div>
 </div>
 <p>在此之后，
-如果我们以 <code class="docutils literal"><span class="pre">&quot;黄&quot;</span></code> 字为前缀调用 <code class="docutils literal"><span class="pre">hint()</span></code> 方法，
-程序就会列出所有以 <code class="docutils literal"><span class="pre">&quot;黄&quot;</span></code> 字开头的名字：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">ac</span><span class="o">.</span><span class="n">hint</span><span class="p">(</span><span class="s2">&quot;黄&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">):</span>
+如果我们以 <code class="docutils literal notranslate"><span class="pre">&quot;黄&quot;</span></code> 字为前缀调用 <code class="docutils literal notranslate"><span class="pre">hint()</span></code> 方法，
+程序就会列出所有以 <code class="docutils literal notranslate"><span class="pre">&quot;黄&quot;</span></code> 字开头的名字：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">ac</span><span class="o">.</span><span class="n">hint</span><span class="p">(</span><span class="s2">&quot;黄&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">):</span>
 <span class="gp">... </span>  <span class="nb">print</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 <span class="gp">...</span>
 <span class="go">黄晓明</span>
@@ -224,9 +216,9 @@
 </pre></div>
 </div>
 <p>接着，
-如果我们以 <code class="docutils literal"><span class="pre">&quot;黄健&quot;</span></code> 二字为前缀调用 <code class="docutils literal"><span class="pre">hint()</span></code> 方法，
-那么程序将列出两个以 <code class="docutils literal"><span class="pre">&quot;黄健&quot;</span></code> 二字为开头的名字：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">ac</span><span class="o">.</span><span class="n">hint</span><span class="p">(</span><span class="s2">&quot;黄健&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">):</span>
+如果我们以 <code class="docutils literal notranslate"><span class="pre">&quot;黄健&quot;</span></code> 二字为前缀调用 <code class="docutils literal notranslate"><span class="pre">hint()</span></code> 方法，
+那么程序将列出两个以 <code class="docutils literal notranslate"><span class="pre">&quot;黄健&quot;</span></code> 二字为开头的名字：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">ac</span><span class="o">.</span><span class="n">hint</span><span class="p">(</span><span class="s2">&quot;黄健&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">):</span>
 <span class="gp">... </span>  <span class="nb">print</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 <span class="gp">...</span>
 <span class="go">黄健翔</span>
@@ -234,9 +226,9 @@
 </pre></div>
 </div>
 <p>再次提醒一下，
-因为 <code class="docutils literal"><span class="pre">hint()</span></code> 方法是按照权重的大小有序地返回结果的，
-所以权重较高的 <code class="docutils literal"><span class="pre">&quot;黄健翔&quot;</span></code> 会排在前面，
-而权重较低的 <code class="docutils literal"><span class="pre">&quot;黄健宏&quot;</span></code> 则会排在后面。</p>
+因为 <code class="docutils literal notranslate"><span class="pre">hint()</span></code> 方法是按照权重的大小有序地返回结果的，
+所以权重较高的 <code class="docutils literal notranslate"><span class="pre">&quot;黄健翔&quot;</span></code> 会排在前面，
+而权重较低的 <code class="docutils literal notranslate"><span class="pre">&quot;黄健宏&quot;</span></code> 则会排在后面。</p>
 </div>
 
 
@@ -252,7 +244,7 @@
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.<br/>
     </p>
   </div>
 </footer>

@@ -1,27 +1,20 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>2020 &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     'present',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Go 语言中的变量作用域范围" href="different-scopes-in-go.html" />
+    <link rel="next" title="Go 语言中的浮点数" href="floating-point-in-go.html" />
     <link rel="prev" title="huangz/blog" href="../index.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
@@ -32,8 +25,7 @@
 <script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -97,7 +89,7 @@
     </a>
   </li>
   <li>
-    <a href="different-scopes-in-go.html" title="Next Chapter: Go 语言中的变量作用域范围"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Go 语言中的变量作用域范围 &raquo;</span>
+    <a href="floating-point-in-go.html" title="Next Chapter: Go 语言中的浮点数"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Go 语言中的浮点数 &raquo;</span>
     </a>
   </li>
               
@@ -128,11 +120,12 @@
 <h1>2020<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="floating-point-in-go.html">Go 语言中的浮点数</a></li>
 <li class="toctree-l1"><a class="reference internal" href="different-scopes-in-go.html">Go 语言中的变量作用域范围</a></li>
 <li class="toctree-l1"><a class="reference internal" href="short-declaration-in-go.html">Go语言的简短声明</a></li>
 <li class="toctree-l1"><a class="reference internal" href="variable-scope-in-go.html">Go 语言的变量作用域</a></li>
-<li class="toctree-l1"><a class="reference internal" href="for-in-go.html">Go 语言中的 <code class="docutils literal"><span class="pre">for</span></code> 关键字</a></li>
-<li class="toctree-l1"><a class="reference internal" href="switch-in-go.html">Go 语言中的 <code class="docutils literal"><span class="pre">switch</span></code> 语句</a></li>
+<li class="toctree-l1"><a class="reference internal" href="for-in-go.html">Go 语言中的 <code class="docutils literal notranslate"><span class="pre">for</span></code> 关键字</a></li>
+<li class="toctree-l1"><a class="reference internal" href="switch-in-go.html">Go 语言中的 <code class="docutils literal notranslate"><span class="pre">switch</span></code> 语句</a></li>
 <li class="toctree-l1"><a class="reference internal" href="check-leap-year-in-go.html">使用 Go 语言的逻辑运算符判断闰年</a></li>
 <li class="toctree-l1"><a class="reference internal" href="boolean-in-go.html">Go 语言的布尔值</a></li>
 <li class="toctree-l1"><a class="reference internal" href="random-number-in-go.html">使用 Go 语言生成伪随机数</a></li>
@@ -178,7 +171,7 @@
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.<br/>
     </p>
   </div>
 </footer>

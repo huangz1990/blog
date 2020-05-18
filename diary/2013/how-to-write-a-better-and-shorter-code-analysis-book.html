@@ -1,24 +1,17 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>怎么样写出更好、也更简短的源码分析书 &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     'present',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="2012" href="../2012/index.html" />
@@ -32,8 +25,7 @@
 <script type="text/javascript" src="../../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../../_static/bootstrap-sphinx.js "></script>
 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -166,9 +158,9 @@
 <p>只有在源码和伪代码一样简单/简短的时候，才考虑直接贴源码。</p>
 <p>当然了，使用伪代码也有它自己的缺点 —— 伪代码是无法验证是正确还是错误的，所以需要对伪代码多进行检查，确保：</p>
 <ol class="arabic simple">
-<li>伪代码正确地反映了源码的行为</li>
-<li>伪代码在逻辑上是正确的</li>
-<li>伪代码正确地关注了源码的高层次动作，而不是低层次细节。比如说，如果你在遍历一个列表时，使用了 <code class="docutils literal"><span class="pre">while</span></code> 而不是 <code class="docutils literal"><span class="pre">map</span></code> 或者 <code class="docutils literal"><span class="pre">for</span></code> ，那么你的伪代码所关注的层次就很可能不够高。</li>
+<li><p>伪代码正确地反映了源码的行为</p></li>
+<li><p>伪代码在逻辑上是正确的</p></li>
+<li><p>伪代码正确地关注了源码的高层次动作，而不是低层次细节。比如说，如果你在遍历一个列表时，使用了 <code class="docutils literal notranslate"><span class="pre">while</span></code> 而不是 <code class="docutils literal notranslate"><span class="pre">map</span></code> 或者 <code class="docutils literal notranslate"><span class="pre">for</span></code> ，那么你的伪代码所关注的层次就很可能不够高。</p></li>
 </ol>
 </div>
 <div class="section" id="id5">
@@ -176,8 +168,8 @@
 <p>如果你在写一本关于数据库的书，那么你会在书中介绍数据结构吗？会介绍算法吗？会介绍设计模式吗？</p>
 <p>实际上，数据结构、算法、设计模式这些知识，在我写《Redis 设计与实现》的时候都有碰到，但我没有自己去介绍这些知识，我也没有假设读者是否已经懂得这些知识，我所做的，就是将这些知识的关键词链接到一些资料上：</p>
 <ul class="simple">
-<li>如果读者需要这些知识，他们可以通过链接找到这些资料，这可以防止部分读者因为缺失前提知识，而没办法了解下文的情况出现。</li>
-<li>另一方面，如果读者不需要这些知识，他们也可以安全地忽略这些链接，而不会被不需要的内容影响自己的阅读体验。这也可以保证书本本身的主题不被其他主题所干扰。</li>
+<li><p>如果读者需要这些知识，他们可以通过链接找到这些资料，这可以防止部分读者因为缺失前提知识，而没办法了解下文的情况出现。</p></li>
+<li><p>另一方面，如果读者不需要这些知识，他们也可以安全地忽略这些链接，而不会被不需要的内容影响自己的阅读体验。这也可以保证书本本身的主题不被其他主题所干扰。</p></li>
 </ul>
 <p>如果需要在书中介绍一些主题以外的知识时，用一个链接，将读者带到更权威、也更详细地介绍这些知识的地方（比如维基百科），而不是自己写一些这些知识的简化、也可能出错的版本。</p>
 </div>
@@ -186,9 +178,9 @@
 <p>文字可能是传达信息最传统、也最低效的方式之一，多考虑使用图片、表格、列表、流程图等多样化的方式来表示信息，而不要单单依靠文字。</p>
 <p>当你写上一段长长的文字时，考虑能否用</p>
 <ol class="arabic simple">
-<li>xxx</li>
-<li>yyy</li>
-<li>zzz</li>
+<li><p>xxx</p></li>
+<li><p>yyy</p></li>
+<li><p>zzz</p></li>
 </ol>
 <p>这样的列表方式来表示它。</p>
 <p>当你写了一大段文字来表示程序的执行动作，或者判断条件时，考虑能否用一个流程图或者伪代码来代替它。</p>
@@ -232,7 +224,7 @@
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.<br/>
     </p>
   </div>
 </footer>

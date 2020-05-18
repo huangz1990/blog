@@ -1,24 +1,17 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Go 语言中的 switch 语句 &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     'present',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="使用 Go 语言的逻辑运算符判断闰年" href="check-leap-year-in-go.html" />
@@ -32,8 +25,7 @@
 <script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -83,7 +75,7 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">Go 语言中的 <code class="docutils literal"><span class="pre">switch</span></code> 语句</a></li>
+<li><a class="reference internal" href="#">Go 语言中的 <code class="docutils literal notranslate"><span class="pre">switch</span></code> 语句</a></li>
 </ul>
 </ul>
 </li>
@@ -125,18 +117,18 @@
     <div class="body col-md-12 content" role="main">
       
   <div class="section" id="go-switch">
-<h1>Go 语言中的 <code class="docutils literal"><span class="pre">switch</span></code> 语句<a class="headerlink" href="#go-switch" title="Permalink to this headline">¶</a></h1>
+<h1>Go 语言中的 <code class="docutils literal notranslate"><span class="pre">switch</span></code> 语句<a class="headerlink" href="#go-switch" title="Permalink to this headline">¶</a></h1>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
+<p class="admonition-title">Note</p>
 <p>本文摘录自《Go语言趣学指南》第 3 章，
 请访问 <a class="reference external" href="http://gpwgcn.com">gpwgcn.com</a>  以获取更多相关信息。</p>
-<a class="last reference internal image-reference" href="../_images/gpwgcn1.jpg"><img alt="../_images/gpwgcn1.jpg" src="../_images/gpwgcn1.jpg" style="width: 149.6px; height: 188.0px;" /></a>
+<a class="reference internal image-reference" href="../_images/gpwgcn1.jpg"><img alt="../_images/gpwgcn1.jpg" src="../_images/gpwgcn1.jpg" style="width: 149.6px; height: 188.0px;" /></a>
 </div>
-<p>正如代码清单 3-6 所示，Go 提供了 <code class="docutils literal"><span class="pre">switch</span></code>
+<p>正如代码清单 3-6 所示，Go 提供了 <code class="docutils literal notranslate"><span class="pre">switch</span></code>
 语句，它可以将一个值和多个值进行比较。</p>
 <hr class="docutils" />
-<p>代码清单 3-6 <code class="docutils literal"><span class="pre">switch</span></code> 语句： <code class="docutils literal"><span class="pre">concise-switch.go</span></code></p>
-<div class="highlight-go"><div class="highlight"><pre><span></span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;There is a cavern entrance here and a path to the east.&quot;</span><span class="p">)</span>
+<p>代码清单 3-6 <code class="docutils literal notranslate"><span class="pre">switch</span></code> 语句： <code class="docutils literal notranslate"><span class="pre">concise-switch.go</span></code></p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;There is a cavern entrance here and a path to the east.&quot;</span><span class="p">)</span>
 <span class="kd">var</span> <span class="nx">command</span> <span class="p">=</span> <span class="s">&quot;go inside&quot;</span>
 
 <span class="k">switch</span> <span class="nx">command</span> <span class="p">{</span>    <span class="c1">// 将命令和给定的多个分支进行比较</span>
@@ -153,20 +145,20 @@
 </div>
 <hr class="docutils" />
 <p>执行这个程序将产生以下输出：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">There</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">cavern</span> <span class="n">entrance</span> <span class="n">here</span> <span class="ow">and</span> <span class="n">a</span> <span class="n">path</span> <span class="n">to</span> <span class="n">the</span> <span class="n">east</span><span class="o">.</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">There</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">cavern</span> <span class="n">entrance</span> <span class="n">here</span> <span class="ow">and</span> <span class="n">a</span> <span class="n">path</span> <span class="n">to</span> <span class="n">the</span> <span class="n">east</span><span class="o">.</span>
 <span class="n">You</span> <span class="n">find</span> <span class="n">yourself</span> <span class="ow">in</span> <span class="n">a</span> <span class="n">dimly</span> <span class="n">lit</span> <span class="n">cavern</span><span class="o">.</span>
 </pre></div>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">除了文字以外， <code class="docutils literal"><span class="pre">switch</span></code> 语句还可以接受数字作为条件。</p>
+<p class="admonition-title">Note</p>
+<p>除了文字以外， <code class="docutils literal notranslate"><span class="pre">switch</span></code> 语句还可以接受数字作为条件。</p>
 </div>
-<p><code class="docutils literal"><span class="pre">switch</span></code> 的另一种用法是像 <code class="docutils literal"><span class="pre">if...else</span></code>
-那样，在每个分支中单独设置比较条件。 正如代码清单 3-7 所示，<code class="docutils literal"><span class="pre">switch</span></code>
-还拥有独特的 <code class="docutils literal"><span class="pre">fallthrough</span></code> 关键字，它可以用于执行下一分支的代码。</p>
+<p><code class="docutils literal notranslate"><span class="pre">switch</span></code> 的另一种用法是像 <code class="docutils literal notranslate"><span class="pre">if...else</span></code>
+那样，在每个分支中单独设置比较条件。 正如代码清单 3-7 所示，<code class="docutils literal notranslate"><span class="pre">switch</span></code>
+还拥有独特的 <code class="docutils literal notranslate"><span class="pre">fallthrough</span></code> 关键字，它可以用于执行下一分支的代码。</p>
 <hr class="docutils" />
-<p>代码清单 3-7 <code class="docutils literal"><span class="pre">switch</span></code> 语句： <code class="docutils literal"><span class="pre">switch.go</span></code></p>
-<div class="highlight-go"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">room</span> <span class="p">=</span> <span class="s">&quot;lake&quot;</span>
+<p>代码清单 3-7 <code class="docutils literal notranslate"><span class="pre">switch</span></code> 语句： <code class="docutils literal notranslate"><span class="pre">switch.go</span></code></p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">room</span> <span class="p">=</span> <span class="s">&quot;lake&quot;</span>
 
 <span class="k">switch</span> <span class="p">{</span>    <span class="c1">// 比较表达式将被放置到单独的分支里面。</span>
 <span class="k">case</span> <span class="nx">room</span> <span class="o">==</span> <span class="s">&quot;cave&quot;</span><span class="p">:</span>
@@ -181,15 +173,15 @@
 </div>
 <hr class="docutils" />
 <p>执行这段代码将产生以下输出：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">The</span> <span class="n">ice</span> <span class="n">seems</span> <span class="n">solid</span> <span class="n">enough</span><span class="o">.</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">The</span> <span class="n">ice</span> <span class="n">seems</span> <span class="n">solid</span> <span class="n">enough</span><span class="o">.</span>
 <span class="n">The</span> <span class="n">water</span> <span class="ow">is</span> <span class="n">freezing</span> <span class="n">cold</span><span class="o">.</span>
 </pre></div>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">在 C、Java、JavaScript 等语言中， 下降是 <code class="docutils literal"><span class="pre">switch</span></code>
+<p class="admonition-title">Note</p>
+<p>在 C、Java、JavaScript 等语言中， 下降是 <code class="docutils literal notranslate"><span class="pre">switch</span></code>
 语句各个分支的默认行为。 Go 对此采取了更为谨慎的做法，
-用户需要显式地使用 <code class="docutils literal"><span class="pre">fallthrough</span></code> 关键字才会引发下降。</p>
+用户需要显式地使用 <code class="docutils literal notranslate"><span class="pre">fallthrough</span></code> 关键字才会引发下降。</p>
 </div>
 </div>
 
@@ -206,7 +198,7 @@
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.<br/>
     </p>
   </div>
 </footer>

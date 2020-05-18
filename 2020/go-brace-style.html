@@ -1,24 +1,17 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>为什么 Go 语言只允许一种大括号放置风格？ &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     'present',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Go Playground 与 Hello World" href="hello-world-in-go.html" />
@@ -32,8 +25,7 @@
 <script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -127,14 +119,14 @@
   <div class="section" id="go">
 <h1>为什么 Go 语言只允许一种大括号放置风格？<a class="headerlink" href="#go" title="Permalink to this headline">¶</a></h1>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
+<p class="admonition-title">Note</p>
 <p>本文摘录自《Go语言趣学指南》第 1 章，
 请访问 <a class="reference external" href="http://gpwgcn.com">gpwgcn.com</a>  以获取更多相关信息。</p>
-<a class="last reference internal image-reference" href="../_images/gpwgcn1.jpg"><img alt="../_images/gpwgcn1.jpg" src="../_images/gpwgcn1.jpg" style="width: 149.6px; height: 188.0px;" /></a>
+<a class="reference internal image-reference" href="../_images/gpwgcn1.jpg"><img alt="../_images/gpwgcn1.jpg" src="../_images/gpwgcn1.jpg" style="width: 149.6px; height: 188.0px;" /></a>
 </div>
 <hr class="docutils" />
-<p>代码清单 1-1 与 Go Playground 的初次见面： <code class="docutils literal"><span class="pre">playground.go</span></code></p>
-<div class="highlight-go"><div class="highlight"><pre><span></span><span class="kn">package</span> <span class="nx">main</span>                            <span class="c1">// 声明本代码所属的包</span>
+<p>代码清单 1-1 与 Go Playground 的初次见面： <code class="docutils literal notranslate"><span class="pre">playground.go</span></code></p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span> <span class="nx">main</span>                            <span class="c1">// 声明本代码所属的包</span>
 
 <span class="kn">import</span> <span class="p">(</span>
     <span class="s">&quot;fmt&quot;</span>                               <span class="c1">// 导入 fmt 包，使其可用（fmt是format的缩写）</span>
@@ -147,8 +139,8 @@
 </div>
 <hr class="docutils" />
 <a class="reference internal image-reference" href="../_images/kongfu_gopher1.jpg"><img alt="../_images/kongfu_gopher1.jpg" class="align-right" src="../_images/kongfu_gopher1.jpg" style="width: 250.6px; height: 268.79999999999995px;" /></a>
-<p>Go 对于大括号 <code class="docutils literal"><span class="pre">{}</span></code> 的摆放位置非常挑剔。 在代码清单 1-1 中，左大括号
-<code class="docutils literal"><span class="pre">{</span></code> 跟 <code class="docutils literal"><span class="pre">func</span></code> 关键字位于同一行，而右大括号 <code class="docutils literal"><span class="pre">}</span></code> 则独占一行。 这是
+<p>Go 对于大括号 <code class="docutils literal notranslate"><span class="pre">{}</span></code> 的摆放位置非常挑剔。 在代码清单 1-1 中，左大括号
+<code class="docutils literal notranslate"><span class="pre">{</span></code> 跟 <code class="docutils literal notranslate"><span class="pre">func</span></code> 关键字位于同一行，而右大括号 <code class="docutils literal notranslate"><span class="pre">}</span></code> 则独占一行。 这是
 Go
 语言<em>唯一允许的大括号放置风格</em>，除此之外的其他风格都是不被允许的。
 作为参考，<a class="reference external" href="http://mng.bz/NdE2">mng.bz/NdE2</a>
@@ -157,19 +149,19 @@ Go
 之所以如此严格地限制大括号的放置风格，跟这门语言刚刚诞生时发生的一些事情有关。
 在早期，使用 Go
 编写的代码总是无一幸免地带有分号，它们就像迷路的小狗一样跟在每条单独的语句后面，比如这样：</p>
-<div class="code go highlight-default"><div class="highlight"><pre><span></span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s2">&quot;Hello, fire hydrant&quot;</span><span class="p">);</span>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Hello, fire hydrant&quot;</span><span class="p">);</span>
 </pre></div>
 </div>
 <p>到了 2009 年 12 月，一群忍者 gopher 决定把分号从语言中驱逐出去。
 好吧，这么说也不太准确。 实际上，Go
 编译器将为你代劳，自动地插入那些可爱的分号。
 这种机制运行得非常完美，但它的代价就是要求用户必须遵守上面提到的<em>唯一无二的大括号放置风格</em>。</p>
-<p>如果用户尝试将左大括号和 <code class="docutils literal"><span class="pre">func</span></code> 关键字放在不同的行里面，那么 Go
+<p>如果用户尝试将左大括号和 <code class="docutils literal notranslate"><span class="pre">func</span></code> 关键字放在不同的行里面，那么 Go
 将报告一个语法错误：</p>
 <hr class="docutils" />
-<div class="code go highlight-default"><div class="highlight"><pre><span></span>func main()      // 函数体缺失
-{                // 语法错误：在 { 之前发现了意料之外的分号或新行
-}
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="kd">func</span> <span class="nx">main</span><span class="p">()</span>      <span class="c1">// 函数体缺失</span>
+<span class="p">{</span>                <span class="c1">// 语法错误：在 { 之前发现了意料之外的分号或新行</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 <hr class="docutils" />
@@ -189,7 +181,7 @@ Go
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.<br/>
     </p>
   </div>
 </footer>

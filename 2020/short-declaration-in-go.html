@@ -1,24 +1,17 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Go语言的简短声明 &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     'present',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Go 语言的变量作用域" href="variable-scope-in-go.html" />
@@ -32,8 +25,7 @@
 <script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -127,27 +119,27 @@
   <div class="section" id="go">
 <h1>Go语言的简短声明<a class="headerlink" href="#go" title="Permalink to this headline">¶</a></h1>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
+<p class="admonition-title">Note</p>
 <p>本文摘录自《Go语言趣学指南》第 4 章，
 请访问 <a class="reference external" href="http://gpwgcn.com">gpwgcn.com</a>  以获取更多相关信息。</p>
-<a class="last reference internal image-reference" href="../_images/gpwgcn1.jpg"><img alt="../_images/gpwgcn1.jpg" src="../_images/gpwgcn1.jpg" style="width: 149.6px; height: 188.0px;" /></a>
+<a class="reference internal image-reference" href="../_images/gpwgcn1.jpg"><img alt="../_images/gpwgcn1.jpg" src="../_images/gpwgcn1.jpg" style="width: 149.6px; height: 188.0px;" /></a>
 </div>
-<p>简短声明为 <code class="docutils literal"><span class="pre">var</span></code> 关键字提供了另一种备选语法。
+<p>简短声明为 <code class="docutils literal notranslate"><span class="pre">var</span></code> 关键字提供了另一种备选语法。
 以下两行代码是完全等效的：</p>
-<div class="highlight-go"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">count</span> <span class="p">=</span> <span class="mi">10</span>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">count</span> <span class="p">=</span> <span class="mi">10</span>
 <span class="nx">count</span> <span class="o">:=</span> <span class="mi">10</span>
 </pre></div>
 </div>
 <p>初看上去，少键入两三个字符似乎不算什么，但小数怕长计，所以简短声明还是要比
-<code class="docutils literal"><span class="pre">var</span></code> 关键字流行得多。 更重要的是，简短声明还可以用在一些 <code class="docutils literal"><span class="pre">var</span></code>
+<code class="docutils literal notranslate"><span class="pre">var</span></code> 关键字流行得多。 更重要的是，简短声明还可以用在一些 <code class="docutils literal notranslate"><span class="pre">var</span></code>
 关键字无法使用的地方。</p>
-<p>代码清单 4-2 展示了 <code class="docutils literal"><span class="pre">for</span></code>
-循环的另一种形式，它包含了初始化语句、比较条件语句以及对 <code class="docutils literal"><span class="pre">count</span></code>
-变量执行减法运算的后置语句。 在使用这种形式的 <code class="docutils literal"><span class="pre">for</span></code>
+<p>代码清单 4-2 展示了 <code class="docutils literal notranslate"><span class="pre">for</span></code>
+循环的另一种形式，它包含了初始化语句、比较条件语句以及对 <code class="docutils literal notranslate"><span class="pre">count</span></code>
+变量执行减法运算的后置语句。 在使用这种形式的 <code class="docutils literal notranslate"><span class="pre">for</span></code>
 循环时，我们需要依次向循环提供初始化语句、比较条件语句和后置语句。</p>
 <hr class="docutils" />
-<p>代码清单 4-2 更简洁的倒数程序： <code class="docutils literal"><span class="pre">loop.go</span></code></p>
-<div class="highlight-go"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">count</span> <span class="p">=</span> <span class="mi">0</span>
+<p>代码清单 4-2 更简洁的倒数程序： <code class="docutils literal notranslate"><span class="pre">loop.go</span></code></p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">count</span> <span class="p">=</span> <span class="mi">0</span>
 
 <span class="k">for</span> <span class="nx">count</span> <span class="p">=</span> <span class="mi">10</span><span class="p">;</span> <span class="nx">count</span> <span class="p">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">count</span><span class="o">--</span> <span class="p">{</span>
     <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">count</span><span class="p">)</span>
@@ -157,31 +149,31 @@
 </pre></div>
 </div>
 <hr class="docutils" />
-<p>在不使用简短声明的情况下，<code class="docutils literal"><span class="pre">count</span></code>
-变量的声明必须放置在循环之外，这意味着 <code class="docutils literal"><span class="pre">count</span></code>
+<p>在不使用简短声明的情况下，<code class="docutils literal notranslate"><span class="pre">count</span></code>
+变量的声明必须放置在循环之外，这意味着 <code class="docutils literal notranslate"><span class="pre">count</span></code>
 变量将在循环结束之后继续存在于作用域。</p>
-<p>但是正如代码清单 4-3 所示，在使用简短声明的情况下，<code class="docutils literal"><span class="pre">count</span></code>
-变量的声明和初始化将成为 <code class="docutils literal"><span class="pre">for</span></code>
+<p>但是正如代码清单 4-3 所示，在使用简短声明的情况下，<code class="docutils literal notranslate"><span class="pre">count</span></code>
+变量的声明和初始化将成为 <code class="docutils literal notranslate"><span class="pre">for</span></code>
 循环的一部分，并且该变量将在循环结束之后脱离作用域，而尝试在循环之外访问
-<code class="docutils literal"><span class="pre">count</span></code> 变量将导致 Go 编译器报告 <code class="docutils literal"><span class="pre">undefined:</span> <span class="pre">count</span></code> 错误。</p>
+<code class="docutils literal notranslate"><span class="pre">count</span></code> 变量将导致 Go 编译器报告 <code class="docutils literal notranslate"><span class="pre">undefined:</span> <span class="pre">count</span></code> 错误。</p>
 <hr class="docutils" />
-<p>代码清单 4-3 在 <code class="docutils literal"><span class="pre">for</span></code> 循环中使用简短声明： <code class="docutils literal"><span class="pre">short-loop.go</span></code></p>
-<div class="highlight-go"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="nx">count</span> <span class="o">:=</span> <span class="mi">10</span><span class="p">;</span> <span class="nx">count</span> <span class="p">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">count</span><span class="o">--</span> <span class="p">{</span>
+<p>代码清单 4-3 在 <code class="docutils literal notranslate"><span class="pre">for</span></code> 循环中使用简短声明： <code class="docutils literal notranslate"><span class="pre">short-loop.go</span></code></p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="nx">count</span> <span class="o">:=</span> <span class="mi">10</span><span class="p">;</span> <span class="nx">count</span> <span class="p">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">count</span><span class="o">--</span> <span class="p">{</span>
     <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">count</span><span class="p">)</span>
 <span class="p">}</span>    <span class="c1">// 随着循环结束，count 变量将不再处于作用域之内。</span>
 </pre></div>
 </div>
 <hr class="docutils" />
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">为了代码的可读性考虑，
+<p class="admonition-title">Note</p>
+<p>为了代码的可读性考虑，
 声明变量的位置和使用变量的位置应该尽可能地贴近。</p>
 </div>
-<p>除了 <code class="docutils literal"><span class="pre">for</span></code> 循环之外，简短声明还可以在 <code class="docutils literal"><span class="pre">if</span></code> 语句里面声明新的变量。
-比如代码清单 4-4 中的 <code class="docutils literal"><span class="pre">num</span></code> 变量就可以用在 <code class="docutils literal"><span class="pre">if</span></code> 语句的所有分支当中。</p>
+<p>除了 <code class="docutils literal notranslate"><span class="pre">for</span></code> 循环之外，简短声明还可以在 <code class="docutils literal notranslate"><span class="pre">if</span></code> 语句里面声明新的变量。
+比如代码清单 4-4 中的 <code class="docutils literal notranslate"><span class="pre">num</span></code> 变量就可以用在 <code class="docutils literal notranslate"><span class="pre">if</span></code> 语句的所有分支当中。</p>
 <hr class="docutils" />
-<p>代码清单 4-4 在 <code class="docutils literal"><span class="pre">if</span></code> 语句中使用简短声明： <code class="docutils literal"><span class="pre">short-if.go</span></code></p>
-<div class="highlight-go"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="nx">num</span> <span class="o">:=</span> <span class="nx">rand</span><span class="p">.</span><span class="nx">Intn</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span> <span class="nx">num</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">{</span>
+<p>代码清单 4-4 在 <code class="docutils literal notranslate"><span class="pre">if</span></code> 语句中使用简短声明： <code class="docutils literal notranslate"><span class="pre">short-if.go</span></code></p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="nx">num</span> <span class="o">:=</span> <span class="nx">rand</span><span class="p">.</span><span class="nx">Intn</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span> <span class="nx">num</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">{</span>
     <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Space Adventures&quot;</span><span class="p">)</span>
 <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="nx">num</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">{</span>
     <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;SpaceX&quot;</span><span class="p">)</span>
@@ -191,11 +183,11 @@
 </pre></div>
 </div>
 <hr class="docutils" />
-<p>正如代码清单 4-5 所示，跟 <code class="docutils literal"><span class="pre">if</span></code> 语言一样，简短声明也可以用在 <code class="docutils literal"><span class="pre">switch</span></code>
+<p>正如代码清单 4-5 所示，跟 <code class="docutils literal notranslate"><span class="pre">if</span></code> 语言一样，简短声明也可以用在 <code class="docutils literal notranslate"><span class="pre">switch</span></code>
 语句里面。</p>
 <hr class="docutils" />
-<p>代码清单 4-5 在 <code class="docutils literal"><span class="pre">switch</span></code> 语句中使用简短声明： <code class="docutils literal"><span class="pre">short-switch.go</span></code></p>
-<div class="highlight-go"><div class="highlight"><pre><span></span><span class="k">switch</span> <span class="nx">num</span> <span class="o">:=</span> <span class="nx">rand</span><span class="p">.</span><span class="nx">Intn</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span> <span class="nx">num</span> <span class="p">{</span>
+<p>代码清单 4-5 在 <code class="docutils literal notranslate"><span class="pre">switch</span></code> 语句中使用简短声明： <code class="docutils literal notranslate"><span class="pre">short-switch.go</span></code></p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="k">switch</span> <span class="nx">num</span> <span class="o">:=</span> <span class="nx">rand</span><span class="p">.</span><span class="nx">Intn</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span> <span class="nx">num</span> <span class="p">{</span>
 <span class="k">case</span> <span class="mi">0</span><span class="p">:</span>
     <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Space Adventures&quot;</span><span class="p">)</span>
 <span class="k">case</span> <span class="mi">1</span><span class="p">:</span>
@@ -222,7 +214,7 @@
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.<br/>
     </p>
   </div>
 </footer>

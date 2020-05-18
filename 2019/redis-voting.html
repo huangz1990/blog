@@ -1,24 +1,17 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>使用 Redis 实现投票功能 &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     'present',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="使用 Redis 构建先进先出队列解决秒杀问题" href="redis-fifo-queue.html" />
@@ -32,8 +25,7 @@
 <script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -127,21 +119,21 @@
   <div class="section" id="redis">
 <h1>使用 Redis 实现投票功能<a class="headerlink" href="#redis" title="Permalink to this headline">¶</a></h1>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">本文摘录自即将出版的《Redis使用手册》，
+<p class="admonition-title">Note</p>
+<p>本文摘录自即将出版的《Redis使用手册》，
 详情请见： <a class="reference external" href="http://RedisGuide.com">RedisGuide.com</a> 。</p>
 </div>
 <p>问答网站、文章推荐网站、论坛这类注重内容质量的网站上通常都会提供投票功能，
 用户可以通过投票来支持一项内容或者反对一项内容：</p>
 <ul class="simple">
-<li>一项内容获得的支持票数越多，
+<li><p>一项内容获得的支持票数越多，
 它就会被网站安排到越显眼的位置，
-使得网站的用户可以更快速地浏览到高质量的内容。</li>
-<li>与此相反，
+使得网站的用户可以更快速地浏览到高质量的内容。</p></li>
+<li><p>与此相反，
 一项内容获得的反对票数越多，
 它就会被网站安排到越不显眼的位置，
 甚至被当作广告或者无用内容而被隐藏起来，
-使得用户可以忽略这些低质量的内容。</li>
+使得用户可以忽略这些低质量的内容。</p></li>
 </ul>
 <p>根据网站性质的不同，
 不同的网站可能会为投票功能设置不同的称呼，
@@ -162,8 +154,8 @@
 这个程序都会使用两个集合来分别储存投支持票的用户以及投反对票的用户，
 然后通过对这两个集合执行命令来实现投票、取消投票、统计投票数量、获取已投票用户名单等功能。</p>
 <hr class="docutils" />
-<p>代码清单 5-4 使用集合实现的投票程序，用户可以选择支持或者反对一项内容：<code class="docutils literal"><span class="pre">/set/vote.py</span></code></p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">vote_up_key</span><span class="p">(</span><span class="n">vote_target</span><span class="p">):</span>
+<p>代码清单 5-4 使用集合实现的投票程序，用户可以选择支持或者反对一项内容：<code class="docutils literal notranslate"><span class="pre">/set/vote.py</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">vote_up_key</span><span class="p">(</span><span class="n">vote_target</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">vote_target</span> <span class="o">+</span> <span class="s2">&quot;::vote_up&quot;</span>
 
 <span class="k">def</span> <span class="nf">vote_down_key</span><span class="p">(</span><span class="n">vote_target</span><span class="p">):</span>
@@ -240,7 +232,7 @@
 </div>
 <hr class="docutils" />
 <p>以下代码展示了如何使用这个投票程序去记录一个问题的投票信息：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">redis</span> <span class="kn">import</span> <span class="n">Redis</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">redis</span> <span class="kn">import</span> <span class="n">Redis</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">vote</span> <span class="kn">import</span> <span class="n">Vote</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">client</span> <span class="o">=</span> <span class="n">Redis</span><span class="p">(</span><span class="n">decode_responses</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">question_vote</span> <span class="o">=</span> <span class="n">Vote</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="s1">&#39;question::10086&#39;</span><span class="p">)</span>  <span class="c1"># 记录问题的投票信息</span>
@@ -283,7 +275,7 @@
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.<br/>
     </p>
   </div>
 </footer>

@@ -1,24 +1,17 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>翻译笔记之五：译文的正确性与流畅性 &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     'present',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="《Redis in Action》翻译记事" href="memories-of-redis-in-action-translation.html" />
@@ -32,8 +25,7 @@
 <script type="text/javascript" src="../../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../../_static/bootstrap-sphinx.js "></script>
 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -129,29 +121,29 @@
 <p>让我们来做一个翻译游戏。</p>
 <p>下面有三句译文：</p>
 <ol class="arabic simple">
-<li>这是一支笔。</li>
-<li>“这是笔一支”或者“一支笔这是”。</li>
-<li>这一笔是支。</li>
+<li><p>这是一支笔。</p></li>
+<li><p>“这是笔一支”或者“一支笔这是”。</p></li>
+<li><p>这一笔是支。</p></li>
 </ol>
 <p>第一句译文无论词句都没有问题。</p>
 <p>第二句译文将名词“笔”放在了量词“一支”的前面，让这个句子读起来有点奇怪，但我们还是能理解句子想要表达的意思。</p>
 <p>至于第三个句子，很明显，它是一个病句，如果不看前面两个译文，我们根本不知道这个句子想要表达的是什么意思，所以我们有充分的理由可以怀疑这个句子的翻译出现了问题。</p>
 <p>现在，来看这三个译文的原文以及它的正确译文：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>“This is a pan.” —— 这是一只平底锅。
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>“This is a pan.” —— 这是一只平底锅。
 </pre></div>
 </div>
 <p>在之前展示的三个译文里面，我们只认为第三个译文是错误的，而第二个译文则有语序问题，但是在看了原文之后，我们才知道，原来前面的三个译文都是错误的，不管它们读起来是否通顺。</p>
 <p>实际上，读者在阅读一本译文书的时候，情况也和上面这个例子展示的情况一样：</p>
 <ul class="simple">
-<li>在绝大多数情况下，读者只会根据译文来判断翻译是否有问题，如果译文通顺且没有明显错误，那么即使译文没有正确表达原文的意思，读者也不会有任何怀疑。</li>
-<li>正如第二个译文所示，即使译文有一些细微的问题，但读者还是可以大概地推测出译文想要表达的意思，只是这种问题会让读者感觉不太舒服，极少成多，读者就会对书本的翻译产生意见。</li>
+<li><p>在绝大多数情况下，读者只会根据译文来判断翻译是否有问题，如果译文通顺且没有明显错误，那么即使译文没有正确表达原文的意思，读者也不会有任何怀疑。</p></li>
+<li><p>正如第二个译文所示，即使译文有一些细微的问题，但读者还是可以大概地推测出译文想要表达的意思，只是这种问题会让读者感觉不太舒服，极少成多，读者就会对书本的翻译产生意见。</p></li>
 </ul>
 <p>这个现象说明了，比起译文是否正确，读者对于译文是否通顺更为敏感，如果要做一个比较的话，那么译文的级别应该是：</p>
 <ol class="arabic simple">
-<li>语句通顺且正确地表达了原文的意思 —— 最好的译文。</li>
-<li>语句不（太）通顺，但正确地表达了原文的意思 —— 可以接受的译文。</li>
-<li>语句通顺，但是未能正确地表达原文的意思 —— 具有欺骗性的译文。</li>
-<li>语句不通顺，且没有正确地表达原文的意思 —— 最差的译文。</li>
+<li><p>语句通顺且正确地表达了原文的意思 —— 最好的译文。</p></li>
+<li><p>语句不（太）通顺，但正确地表达了原文的意思 —— 可以接受的译文。</p></li>
+<li><p>语句通顺，但是未能正确地表达原文的意思 —— 具有欺骗性的译文。</p></li>
+<li><p>语句不通顺，且没有正确地表达原文的意思 —— 最差的译文。</p></li>
 </ol>
 <p>第 1 种情况和第 4 种情况是最典型的，所以不用分析。</p>
 <p>而第 2 种的情况则说明了为什么有的译者花了很多心思去进行翻译，
@@ -194,7 +186,7 @@
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.<br/>
     </p>
   </div>
 </footer>

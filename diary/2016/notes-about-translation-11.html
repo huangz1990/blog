@@ -1,24 +1,17 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>翻译笔记之十一：简化非必要技术名词 &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     'present',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="守望先锋小美对抗突击英雄的经验分享，另附突击英雄对抗小美的 tips" href="overwatch-mei-against-offense-heros.html" />
@@ -32,8 +25,7 @@
 <script type="text/javascript" src="../../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../../_static/bootstrap-sphinx.js "></script>
 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -133,13 +125,15 @@
 而有些则是非必要或者不容易理解的。</p>
 <p>比如对于以下这段原文：</p>
 <blockquote>
-<div>Although a number of frameworks have embedded template engines,
-many frameworks use a mix-and-match strategy that allows programmers to choose the template engine they prefer.</div></blockquote>
+<div><p>Although a number of frameworks have embedded template engines,
+many frameworks use a mix-and-match strategy that allows programmers to choose the template engine they prefer.</p>
+</div></blockquote>
 <p>我们可以把它翻译为：</p>
 <blockquote>
-<div>虽然有些框架拥有内置的模板引擎，
+<div><p>虽然有些框架拥有内置的模板引擎，
 但大多数框架都采用混合搭配策略，
-允许用户根据自己的喜好选择相应的模板引擎。</div></blockquote>
+允许用户根据自己的喜好选择相应的模板引擎。</p>
+</div></blockquote>
 <p>根据词典，
 这里的“mix-and-match”被翻译成了“混合搭配”，
 又或者简称“混搭”，
@@ -166,9 +160,10 @@ many frameworks use a mix-and-match strategy that allows programmers to choose t
 读者就能够一下子明白译文想要传达的意思。</p>
 <p>以下是修改后的译文：</p>
 <blockquote>
-<div>虽然有些框架拥有内置的模板引擎，
+<div><p>虽然有些框架拥有内置的模板引擎，
 但大多数框架都允许用户像吃自助餐一样，
-根据自己的喜好选择相应的模板引擎。</div></blockquote>
+根据自己的喜好选择相应的模板引擎。</p>
+</div></blockquote>
 <p>跟原来的译文相比，
 新的译文理解起来是不是简单多了呢？</p>
 <p>当然，
@@ -198,7 +193,7 @@ many frameworks use a mix-and-match strategy that allows programmers to choose t
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.<br/>
     </p>
   </div>
 </footer>

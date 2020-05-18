@@ -1,24 +1,17 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>使用 V2Ray 代理访问外网 &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     'present',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="通过 Linux 子系统在 Windows 10 上安装 Ubuntu" href="windows-subsystem-for-linux.html" />
@@ -32,8 +25,7 @@
 <script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -140,36 +132,32 @@
 <div class="section" id="id1">
 <h2>步骤<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic">
-<li><p class="first">访问 <a class="reference external" href="https://github.com/v2ray/v2ray-core/releases">https://github.com/v2ray/v2ray-core/releases</a> ，
-根据你使用的系统下载并解压相应的 v2ray-core （本例中为 <code class="docutils literal"><span class="pre">v2ray-linux-64.zip</span></code> ）。</p>
-</li>
-<li><p class="first">同样地，
+<li><p>访问 <a class="reference external" href="https://github.com/v2ray/v2ray-core/releases">https://github.com/v2ray/v2ray-core/releases</a> ，
+根据你使用的系统下载并解压相应的 v2ray-core （本例中为 <code class="docutils literal notranslate"><span class="pre">v2ray-linux-64.zip</span></code> ）。</p></li>
+<li><p>同样地，
 访问 <a class="reference external" href="https://github.com/Qv2ray/Qv2ray/releases">https://github.com/Qv2ray/Qv2ray/releases</a> ，
 根据你使用的系统下载并解压相应的 Qv2ray
-（本例中为 <code class="docutils literal"><span class="pre">Qv2ray.v2.1.2.linux-x64.qt5.13.2.AppImage</span></code> ）。</p>
-</li>
-<li><p class="first">执行命令 <code class="docutils literal"><span class="pre">chmod</span> <span class="pre">+x</span> <span class="pre">Qv2ray.v2.1.2.linux-x64.qt5.13.2.AppImage</span></code> ，
+（本例中为 <code class="docutils literal notranslate"><span class="pre">Qv2ray.v2.1.2.linux-x64.qt5.13.2.AppImage</span></code> ）。</p></li>
+<li><p>执行命令 <code class="docutils literal notranslate"><span class="pre">chmod</span> <span class="pre">+x</span> <span class="pre">Qv2ray.v2.1.2.linux-x64.qt5.13.2.AppImage</span></code> ，
 为 Qv2ray 赋予执行权限。
-（macOS 和 Windows 可能也需要执行类似的操作，未测试，不确定。）</p>
-</li>
-<li><p class="first">运行 <code class="docutils literal"><span class="pre">Qv2ray.v2.1.2.linux-x64.qt5.13.2.AppImage</span></code> ，
+（macOS 和 Windows 可能也需要执行类似的操作，未测试，不确定。）</p></li>
+<li><p>运行 <code class="docutils literal notranslate"><span class="pre">Qv2ray.v2.1.2.linux-x64.qt5.13.2.AppImage</span></code> ，
 看到下图所示的界面，
 点击上方的“Preferences”按钮打开配置菜单。</p>
 <img alt="../_images/v2ray-main.png" src="../_images/v2ray-main.png" />
 </li>
-<li><p class="first">在“General Setting”标签页的“V2ray Settings“设置中指定 v2ray-core 文件的路径及其目录，
+<li><p>在“General Setting”标签页的“V2ray Settings“设置中指定 v2ray-core 文件的路径及其目录，
 如下图所示（具体细节根据你的实际情况进行修改）。
 设置完毕之后请通过点击“Check V2ray Core Settings“按钮来检查设置是否成功。</p>
 <img alt="../_images/v2ray-general.png" src="../_images/v2ray-general.png" />
 </li>
-<li><p class="first">在“Inbound Settings”标签页设置代理选项，
+<li><p>在“Inbound Settings”标签页设置代理选项，
 如下图所示（具体细节根据你的实际情况进行修改）。</p>
 <img alt="../_images/v2ray-proxy.png" src="../_images/v2ray-proxy.png" />
 </li>
-<li><p class="first">修改完配置之后，
-点击“OK”保存并回到主界面。</p>
-</li>
-<li><p class="first">点击主界面的“Subscriptions”按钮，
+<li><p>修改完配置之后，
+点击“OK”保存并回到主界面。</p></li>
+<li><p>点击主界面的“Subscriptions”按钮，
 在弹出界面的左下方点击“Add Subscription”，
 新建一个订阅。
 接着在右半边订阅界面的“Subscription Address”框中填入你的 V2Ray 服务商提供的订阅地址，
@@ -178,17 +166,15 @@
 回到主界面。</p>
 <img alt="../_images/v2ray-sub-data.png" src="../_images/v2ray-sub-data.png" />
 </li>
-<li><p class="first">在主界面的“Host List”中选择一个距离你较近的服务器，
+<li><p>在主界面的“Host List”中选择一个距离你较近的服务器，
 然后点击上方的“Connect”按钮来连接服务器
 （也可以右键点击服务器然后选择“Connect to this”）。</p>
 <img alt="../_images/v2ray-connect.png" src="../_images/v2ray-connect.png" />
 </li>
-<li><p class="first">配置你的软件或者浏览器，
+<li><p>配置你的软件或者浏览器，
 让它们通过 V2Ray 而不是默认的网络来进行访问
-（比如为Chrome浏览器安装并设置SwitchyOmega插件）。</p>
-</li>
-<li><p class="first">大功告成！</p>
-</li>
+（比如为Chrome浏览器安装并设置SwitchyOmega插件）。</p></li>
+<li><p>大功告成！</p></li>
 </ol>
 <div class="line-block">
 <div class="line">因为无法正常访问GitHub.com而苦恼不已的黄健宏</div>
@@ -210,7 +196,7 @@
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.<br/>
     </p>
   </div>
 </footer>

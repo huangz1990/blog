@@ -1,24 +1,17 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>在 Manjaro Linux 系统使用 Docker &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     'present',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="使用 V2Ray 代理访问外网" href="across-the-wall.html" />
@@ -32,8 +25,7 @@
 <script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -139,7 +131,7 @@
 <div class="section" id="id1">
 <h2>安装并启动<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <p>安装 Docker ：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ sudo pacman -S docker
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo pacman -S docker
 正在解析依赖关系...
 正在查找软件包冲突...
 
@@ -166,12 +158,12 @@ docker 的可选依赖
 </pre></div>
 </div>
 <p>启动 Docker 服务：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ sudo systemctl start docker.service
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo systemctl start docker.service
 </pre></div>
 </div>
 <p>如果有需要的话还可以把 Docker 添加到启动项，
 让 Docker 在每次系统启动时自动运行：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ sudo systemctl enable docker.service
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo systemctl enable docker.service
 Created symlink /etc/systemd/system/multi-user.target.wants/docker.service → /usr/lib/systemd/system/docker.service.
 </pre></div>
 </div>
@@ -179,8 +171,8 @@ Created symlink /etc/systemd/system/multi-user.target.wants/docker.service → /
 <div class="section" id="docker">
 <h2>将用户添加到 Docker 组中<a class="headerlink" href="#docker" title="Permalink to this headline">¶</a></h2>
 <p>Docker 默认只能通过 root 权限执行操作，
-但通过将用户添加到 <code class="docutils literal"><span class="pre">docker</span></code> 用户组可以规避这一点：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">usermod</span> <span class="o">-</span><span class="n">aG</span> <span class="n">docker</span> <span class="n">huangz</span>
+但通过将用户添加到 <code class="docutils literal notranslate"><span class="pre">docker</span></code> 用户组可以规避这一点：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">usermod</span> <span class="o">-</span><span class="n">aG</span> <span class="n">docker</span> <span class="n">huangz</span>
 </pre></div>
 </div>
 <p>注销然后重新登录之后就可以直接执行 Docker 命令了。</p>
@@ -190,47 +182,47 @@ Created symlink /etc/systemd/system/multi-user.target.wants/docker.service → /
 <p>Docker 默认使用的是外国源，
 访问速度很慢而且很容易断线，
 为此我们可以使用国内的镜像来代替默认的源。</p>
-<p>打开或创建 <code class="docutils literal"><span class="pre">/etc/docker/daemon.json</span></code> 文件，
-将选中的镜像地址添加到 <code class="docutils literal"><span class="pre">registry-mirrors</span></code> 数组里面（可同时填入多个镜像）：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+<p>打开或创建 <code class="docutils literal notranslate"><span class="pre">/etc/docker/daemon.json</span></code> 文件，
+将选中的镜像地址添加到 <code class="docutils literal notranslate"><span class="pre">registry-mirrors</span></code> 数组里面（可同时填入多个镜像）：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="s2">&quot;registry-mirrors&quot;</span><span class="p">:</span> <span class="p">[</span>
         <span class="s2">&quot;https://registry.docker-cn.com&quot;</span>
     <span class="p">]</span>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>这里的 <code class="docutils literal"><span class="pre">registry.docker-cn.com</span></code> 是 Docker 的官方中国镜像，
+<p>这里的 <code class="docutils literal notranslate"><span class="pre">registry.docker-cn.com</span></code> 是 Docker 的官方中国镜像，
 除此之外还有其他一些第三方镜像可选：</p>
-<table border="1" class="docutils">
+<table class="docutils align-default">
 <colgroup>
-<col width="19%" />
-<col width="81%" />
+<col style="width: 19%" />
+<col style="width: 81%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">镜像</th>
-<th class="head">地址</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>镜像</p></th>
+<th class="head"><p>地址</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>Azure 中国</td>
-<td><code class="docutils literal"><span class="pre">https://dockerhub.azk8s.cn</span></code></td>
+<tbody>
+<tr class="row-even"><td><p>Azure 中国</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">https://dockerhub.azk8s.cn</span></code></p></td>
 </tr>
-<tr class="row-odd"><td>中科大</td>
-<td><code class="docutils literal"><span class="pre">https://docker.mirrors.ustc.edu.cn</span></code></td>
+<tr class="row-odd"><td><p>中科大</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">https://docker.mirrors.ustc.edu.cn</span></code></p></td>
 </tr>
-<tr class="row-even"><td>七牛云</td>
-<td><code class="docutils literal"><span class="pre">https://reg-mirror.qiniu.com</span></code></td>
+<tr class="row-even"><td><p>七牛云</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">https://reg-mirror.qiniu.com</span></code></p></td>
 </tr>
-<tr class="row-odd"><td>网易云</td>
-<td><code class="docutils literal"><span class="pre">https://hub-mirror.c.163.com</span></code></td>
+<tr class="row-odd"><td><p>网易云</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">https://hub-mirror.c.163.com</span></code></p></td>
 </tr>
-<tr class="row-even"><td>腾讯云</td>
-<td><code class="docutils literal"><span class="pre">https://mirror.ccs.tencentyun.com</span></code></td>
+<tr class="row-even"><td><p>腾讯云</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">https://mirror.ccs.tencentyun.com</span></code></p></td>
 </tr>
 </tbody>
 </table>
 <p>保存文件之后重启一下 Docker 服务：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">systemctl</span> <span class="n">daemon</span><span class="o">-</span><span class="n">reload</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">systemctl</span> <span class="n">daemon</span><span class="o">-</span><span class="n">reload</span>
 <span class="n">sudo</span> <span class="n">systemctl</span> <span class="n">restart</span> <span class="n">docker</span>
 </pre></div>
 </div>
@@ -239,7 +231,7 @@ Created symlink /etc/systemd/system/multi-user.target.wants/docker.service → /
 <div class="section" id="image">
 <h2>搜索和拉取映像（image）<a class="headerlink" href="#image" title="Permalink to this headline">¶</a></h2>
 <p>查找“redis”相关的映像：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ docker search redis
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ docker search redis
 NAME                             DESCRIPTION                                     STARS               OFFICIAL            AUTOMATED
 redis                            Redis is an open source key-value store that…   7827                [OK]
 bitnami/redis                    Bitnami Redis Docker Image                      136                                     [OK]
@@ -268,8 +260,8 @@ xetamus/redis-resource           forked redis-resource                          
 cflondonservices/redis           Docker image for running redis                  0
 </pre></div>
 </div>
-<p>拉取 <code class="docutils literal"><span class="pre">redis</span></code> 映像（默认标签为 <code class="docutils literal"><span class="pre">latest</span></code>）：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ docker pull redis
+<p>拉取 <code class="docutils literal notranslate"><span class="pre">redis</span></code> 映像（默认标签为 <code class="docutils literal notranslate"><span class="pre">latest</span></code>）：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ docker pull redis
 Using default tag: latest
 latest: Pulling from library/redis
 bc51dd8edc1b: Already exists
@@ -283,8 +275,8 @@ Status: Downloaded newer image for redis:latest
 docker.io/library/redis:latest
 </pre></div>
 </div>
-<p>拉取标签（版本）为 <code class="docutils literal"><span class="pre">rc</span></code> 的 <code class="docutils literal"><span class="pre">redis</span></code> 映像：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ docker pull redis:rc
+<p>拉取标签（版本）为 <code class="docutils literal notranslate"><span class="pre">rc</span></code> 的 <code class="docutils literal notranslate"><span class="pre">redis</span></code> 映像：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ docker pull redis:rc
 rc: Pulling from library/redis
 bc51dd8edc1b: Already exists
 37d80eb324ee: Already exists
@@ -298,7 +290,7 @@ docker.io/library/redis:rc
 </pre></div>
 </div>
 <p>查看已有映像：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ docker images
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ docker images
 REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
 redis               latest              44d36d2c2374        2 weeks ago         98.2MB
 redis               rc                  9220658d0dd7        2 weeks ago         104MB
@@ -309,27 +301,27 @@ ubuntu              latest              ccc6e87d482b        5 weeks ago         
 <div class="section" id="id3">
 <h2>运行映像创建容器<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
 <p>根据映像创建容器（实例）：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ docker run --name myredis -d redis
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ docker run --name myredis -d redis
 f6b2ed42676c8f8e6499fc14a41ce188701d47f1bd2fac4db735455f24264096
 </pre></div>
 </div>
 <p>每个容器的使用方法都不完全一样，
 在使用前需要查看文档。</p>
 <p>查看正在运行的容器的状态：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ docker ps
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ docker ps
 CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
 f6b2ed42676c        redis               &quot;docker-entrypoint.s…&quot;   9 seconds ago       Up 7 seconds        6379/tcp            myredis
 </pre></div>
 </div>
 <p>停止并移除容器：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ docker stop myredis
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ docker stop myredis
 $ docker rm myredis
 </pre></div>
 </div>
 </div>
 <div class="section" id="id4">
 <h2>查看相关信息<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ docker info
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ docker info
 Client:
  Debug Mode: false
 
@@ -385,9 +377,9 @@ Server:
 <div class="section" id="id5">
 <h2>参考资料<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><a class="reference external" href="https://linuxhint.com/docker_arch_linux/">https://linuxhint.com/docker_arch_linux/</a></li>
-<li><a class="reference external" href="https://hub.docker.com/_/redis/">https://hub.docker.com/_/redis/</a></li>
-<li><a class="reference external" href="https://docs.docker.com/">https://docs.docker.com/</a></li>
+<li><p><a class="reference external" href="https://linuxhint.com/docker_arch_linux/">https://linuxhint.com/docker_arch_linux/</a></p></li>
+<li><p><a class="reference external" href="https://hub.docker.com/_/redis/">https://hub.docker.com/_/redis/</a></p></li>
+<li><p><a class="reference external" href="https://docs.docker.com/">https://docs.docker.com/</a></p></li>
 </ul>
 <div class="line-block">
 <div class="line">觉得 Docker 就是套娃的黄健宏</div>
@@ -409,7 +401,7 @@ Server:
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.<br/>
     </p>
   </div>
 </footer>

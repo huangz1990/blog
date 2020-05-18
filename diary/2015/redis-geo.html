@@ -1,24 +1,17 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Redis GEO 特性简介 &#8212; blog.huangz.me</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     'present',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="翻译笔记之九：如何避免被机器翻译取代？" href="notes-about-translation-9.html" />
@@ -32,8 +25,7 @@
 <script type="text/javascript" src="../../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../../_static/bootstrap-sphinx.js "></script>
 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -156,18 +148,18 @@
 <h2>添加位置和获取位置<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
 <p>为了进行地理位置相关操作，
 我们首先需要将具体的地理位置记录起来，
-这一点可以通过执行 <code class="docutils literal"><span class="pre">GEOADD</span></code> 命令来完成，
+这一点可以通过执行 <code class="docutils literal notranslate"><span class="pre">GEOADD</span></code> 命令来完成，
 该命令的基本格式如下：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">GEOADD</span> <span class="n">location</span><span class="o">-</span><span class="nb">set</span> <span class="n">longitude</span> <span class="n">latitude</span> <span class="n">name</span> <span class="p">[</span><span class="n">longitude</span> <span class="n">latitude</span> <span class="n">name</span> <span class="o">...</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GEOADD</span> <span class="n">location</span><span class="o">-</span><span class="nb">set</span> <span class="n">longitude</span> <span class="n">latitude</span> <span class="n">name</span> <span class="p">[</span><span class="n">longitude</span> <span class="n">latitude</span> <span class="n">name</span> <span class="o">...</span><span class="p">]</span>
 </pre></div>
 </div>
-<p><code class="docutils literal"><span class="pre">GEOADD</span></code> 命令每次可以添加一个或多个经纬度地理位置。
-其中 <code class="docutils literal"><span class="pre">location-set</span></code> 为储存地理位置的集合，
-而 <code class="docutils literal"><span class="pre">longitude</span></code> 、 <code class="docutils literal"><span class="pre">latitude</span></code> 和 <code class="docutils literal"><span class="pre">name</span></code> 则分别为地理位置的经度、纬度、名字。</p>
+<p><code class="docutils literal notranslate"><span class="pre">GEOADD</span></code> 命令每次可以添加一个或多个经纬度地理位置。
+其中 <code class="docutils literal notranslate"><span class="pre">location-set</span></code> 为储存地理位置的集合，
+而 <code class="docutils literal notranslate"><span class="pre">longitude</span></code> 、 <code class="docutils literal notranslate"><span class="pre">latitude</span></code> 和 <code class="docutils literal notranslate"><span class="pre">name</span></code> 则分别为地理位置的经度、纬度、名字。</p>
 <p>举个例子，
-以下代码展示了如何通过 <code class="docutils literal"><span class="pre">GEOADD</span></code> 命令，
-将清远、广州、佛山、东莞、深圳等数个广东省的市添加到位置集合 <code class="docutils literal"><span class="pre">Guangdong-cities</span></code> 里面：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">GEOADD</span> <span class="n">Guangdong</span><span class="o">-</span><span class="n">cities</span> <span class="mf">113.2099647</span> <span class="mf">23.593675</span> <span class="n">Qingyuan</span>
+以下代码展示了如何通过 <code class="docutils literal notranslate"><span class="pre">GEOADD</span></code> 命令，
+将清远、广州、佛山、东莞、深圳等数个广东省的市添加到位置集合 <code class="docutils literal notranslate"><span class="pre">Guangdong-cities</span></code> 里面：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">GEOADD</span> <span class="n">Guangdong</span><span class="o">-</span><span class="n">cities</span> <span class="mf">113.2099647</span> <span class="mf">23.593675</span> <span class="n">Qingyuan</span>
 <span class="mi">1</span>    <span class="o">--</span> <span class="n">成功添加一个位置</span>
 
 <span class="n">redis</span><span class="o">&gt;</span> <span class="n">GEOADD</span> <span class="n">Guangdong</span><span class="o">-</span><span class="n">cities</span> <span class="mf">113.2278442</span> <span class="mf">23.1255978</span> <span class="n">Guangzhou</span> <span class="mf">113.106308</span> <span class="mf">23.0088312</span> <span class="n">Foshan</span> <span class="mf">113.7943267</span> <span class="mf">22.9761989</span> <span class="n">Dongguan</span> <span class="mf">114.0538788</span> <span class="mf">22.5551603</span> <span class="n">Shenzhen</span>
@@ -175,15 +167,15 @@
 </pre></div>
 </div>
 <p>在将位置记录到位置集合之后，
-我们可以使用 <code class="docutils literal"><span class="pre">GEOPOS</span></code> 命令，
+我们可以使用 <code class="docutils literal notranslate"><span class="pre">GEOPOS</span></code> 命令，
 输入位置的名字并取得位置的具体经纬度：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">GEOPOS</span> <span class="n">location</span><span class="o">-</span><span class="nb">set</span> <span class="n">name</span> <span class="p">[</span><span class="n">name</span> <span class="o">...</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GEOPOS</span> <span class="n">location</span><span class="o">-</span><span class="nb">set</span> <span class="n">name</span> <span class="p">[</span><span class="n">name</span> <span class="o">...</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>比如说，
 如果我们想要获取清远、广州和佛山的经纬度，
 那么可以执行以下代码：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">GEOPOS</span> <span class="n">Guangdong</span><span class="o">-</span><span class="n">cities</span> <span class="n">Qingyuan</span> <span class="n">Guangzhou</span> <span class="n">Foshan</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">GEOPOS</span> <span class="n">Guangdong</span><span class="o">-</span><span class="n">cities</span> <span class="n">Qingyuan</span> <span class="n">Guangzhou</span> <span class="n">Foshan</span>
 <span class="mi">1</span><span class="p">)</span> <span class="mi">1</span><span class="p">)</span> <span class="s2">&quot;113.20996731519699&quot;</span>    <span class="o">--</span> <span class="n">清远的经度</span>
    <span class="mi">2</span><span class="p">)</span> <span class="s2">&quot;23.593675019671288&quot;</span>    <span class="o">--</span> <span class="n">清远的纬度</span>
 <span class="mi">2</span><span class="p">)</span> <span class="mi">1</span><span class="p">)</span> <span class="s2">&quot;113.22784155607224&quot;</span>    <span class="o">--</span> <span class="n">广州的经度</span>
@@ -200,35 +192,35 @@
 针对地理位置信息的其中一个最简单的操作，
 就是计算两个位置之间的距离。</p>
 <p>在 Redis 里面，
-计算两个位置之间的距离可以通过 <code class="docutils literal"><span class="pre">GEODIST</span></code> 命令来实现：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">GEODIST</span> <span class="n">location</span><span class="o">-</span><span class="nb">set</span> <span class="n">location</span><span class="o">-</span><span class="n">x</span> <span class="n">location</span><span class="o">-</span><span class="n">y</span> <span class="p">[</span><span class="n">unit</span><span class="p">]</span>
+计算两个位置之间的距离可以通过 <code class="docutils literal notranslate"><span class="pre">GEODIST</span></code> 命令来实现：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GEODIST</span> <span class="n">location</span><span class="o">-</span><span class="nb">set</span> <span class="n">location</span><span class="o">-</span><span class="n">x</span> <span class="n">location</span><span class="o">-</span><span class="n">y</span> <span class="p">[</span><span class="n">unit</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>在调用这个命令时，
-用户需要给定想要计算差距的地点 <code class="docutils literal"><span class="pre">location-x</span></code> 和 <code class="docutils literal"><span class="pre">location-y</span></code> ，
+用户需要给定想要计算差距的地点 <code class="docutils literal notranslate"><span class="pre">location-x</span></code> 和 <code class="docutils literal notranslate"><span class="pre">location-y</span></code> ，
 以及储存这两个地点的地理位置集合。</p>
-<p>可选参数 <code class="docutils literal"><span class="pre">unit</span></code> 用于指定计算距离时的单位，
+<p>可选参数 <code class="docutils literal notranslate"><span class="pre">unit</span></code> 用于指定计算距离时的单位，
 它的值可以是以下单位的其中一个：</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">m</span></code> 表示单位为米。</li>
-<li><code class="docutils literal"><span class="pre">km</span></code> 表示单位为千米。</li>
-<li><code class="docutils literal"><span class="pre">mi</span></code> 表示单位为英里。</li>
-<li><code class="docutils literal"><span class="pre">ft</span></code> 表示单位为英尺。</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">m</span></code> 表示单位为米。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">km</span></code> 表示单位为千米。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mi</span></code> 表示单位为英里。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ft</span></code> 表示单位为英尺。</p></li>
 </ul>
-<p>如果用户没有指定 <code class="docutils literal"><span class="pre">unit</span></code> 参数，
-那么 <code class="docutils literal"><span class="pre">GEODIST</span></code> 默认使用米为单位。</p>
+<p>如果用户没有指定 <code class="docutils literal notranslate"><span class="pre">unit</span></code> 参数，
+那么 <code class="docutils literal notranslate"><span class="pre">GEODIST</span></code> 默认使用米为单位。</p>
 <p>作为例子，
 以下代码展示了如何计算清远和广州之间的距离：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">GEODIST</span> <span class="n">Guangdong</span><span class="o">-</span><span class="n">cities</span> <span class="n">Qingyuan</span> <span class="n">Guangzhou</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">GEODIST</span> <span class="n">Guangdong</span><span class="o">-</span><span class="n">cities</span> <span class="n">Qingyuan</span> <span class="n">Guangzhou</span>
 <span class="s2">&quot;52094.433840356309&quot;</span>    <span class="o">--</span> <span class="n">两地相距</span> <span class="mi">52094</span> <span class="n">米</span>
 </pre></div>
 </div>
 <p>上面的计算结果使用了米来表示清远和广州两地的距离，
 不过在表示比较长的距离时，
 我们更习惯采用公里（km）作为单位。
-通过显式地给定 <code class="docutils literal"><span class="pre">km</span></code> （千米）作为单位，
-我们可以让 <code class="docutils literal"><span class="pre">GEODIST</span></code> 显示两个地点之间相距的公里数：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">GEODIST</span> <span class="n">Guangdong</span><span class="o">-</span><span class="n">cities</span> <span class="n">Qingyuan</span> <span class="n">Guangzhou</span> <span class="n">km</span>
+通过显式地给定 <code class="docutils literal notranslate"><span class="pre">km</span></code> （千米）作为单位，
+我们可以让 <code class="docutils literal notranslate"><span class="pre">GEODIST</span></code> 显示两个地点之间相距的公里数：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">GEODIST</span> <span class="n">Guangdong</span><span class="o">-</span><span class="n">cities</span> <span class="n">Qingyuan</span> <span class="n">Guangzhou</span> <span class="n">km</span>
 <span class="s2">&quot;52.094433840356309&quot;</span>    <span class="o">--</span> <span class="n">两地相距</span> <span class="mi">52</span> <span class="n">公里</span>
 </pre></div>
 </div>
@@ -239,33 +231,33 @@
 另一个常见的地理位置操作就是找出特定范围之内的其他存在的地点。
 比如找出地点 x 范围 100 米之内的所有地点，
 找出地点 y 范围 50 公里之内的所有地点等等。</p>
-<p>Redis 提供了 <code class="docutils literal"><span class="pre">GEORADIUS</span></code> 和 <code class="docutils literal"><span class="pre">GEORADIUSBYMEMBER</span></code> 两个命令来实现查找特定范围内地点的功能，
+<p>Redis 提供了 <code class="docutils literal notranslate"><span class="pre">GEORADIUS</span></code> 和 <code class="docutils literal notranslate"><span class="pre">GEORADIUSBYMEMBER</span></code> 两个命令来实现查找特定范围内地点的功能，
 它们的作用一样，
 只是指定中心点的方式不同：
-<code class="docutils literal"><span class="pre">GEORADIUS</span></code> 使用用户给定的经纬度作为计算范围时的中心点，
-而 <code class="docutils literal"><span class="pre">GEORADIUSBYMEMBER</span></code> 则使用储存在位置集合里面的某个地点作为中心点。
+<code class="docutils literal notranslate"><span class="pre">GEORADIUS</span></code> 使用用户给定的经纬度作为计算范围时的中心点，
+而 <code class="docutils literal notranslate"><span class="pre">GEORADIUSBYMEMBER</span></code> 则使用储存在位置集合里面的某个地点作为中心点。
 以下是这两个命令的基本格式：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">GEORADIUS</span> <span class="n">location</span><span class="o">-</span><span class="nb">set</span> <span class="n">longitude</span> <span class="n">latitude</span> <span class="n">radius</span> <span class="n">m</span><span class="o">|</span><span class="n">km</span><span class="o">|</span><span class="n">ft</span><span class="o">|</span><span class="n">mi</span> <span class="p">[</span><span class="n">WITHCOORD</span><span class="p">]</span> <span class="p">[</span><span class="n">WITHDIST</span><span class="p">]</span> <span class="p">[</span><span class="n">ASC</span><span class="o">|</span><span class="n">DESC</span><span class="p">]</span> <span class="p">[</span><span class="n">COUNT</span> <span class="n">count</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GEORADIUS</span> <span class="n">location</span><span class="o">-</span><span class="nb">set</span> <span class="n">longitude</span> <span class="n">latitude</span> <span class="n">radius</span> <span class="n">m</span><span class="o">|</span><span class="n">km</span><span class="o">|</span><span class="n">ft</span><span class="o">|</span><span class="n">mi</span> <span class="p">[</span><span class="n">WITHCOORD</span><span class="p">]</span> <span class="p">[</span><span class="n">WITHDIST</span><span class="p">]</span> <span class="p">[</span><span class="n">ASC</span><span class="o">|</span><span class="n">DESC</span><span class="p">]</span> <span class="p">[</span><span class="n">COUNT</span> <span class="n">count</span><span class="p">]</span>
 
 <span class="n">GEORADIUSBYMEMBER</span> <span class="n">location</span><span class="o">-</span><span class="nb">set</span> <span class="n">location</span> <span class="n">radius</span> <span class="n">m</span><span class="o">|</span><span class="n">km</span><span class="o">|</span><span class="n">ft</span><span class="o">|</span><span class="n">mi</span> <span class="p">[</span><span class="n">WITHCOORD</span><span class="p">]</span> <span class="p">[</span><span class="n">WITHDIST</span><span class="p">]</span> <span class="p">[</span><span class="n">ASC</span><span class="o">|</span><span class="n">DESC</span><span class="p">]</span> <span class="p">[</span><span class="n">COUNT</span> <span class="n">count</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>这两个命令的各个参数的意义如下：</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">m|km|ft|mi</span></code> 指定的是计算范围时的单位；</li>
-<li>如果给定了可选的 <code class="docutils literal"><span class="pre">WITHCOORD</span></code> ，
-那么命令在返回匹配的位置时会将位置的经纬度一并返回；</li>
-<li>如果给定了可选的 <code class="docutils literal"><span class="pre">WITHDIST</span></code> ，
-那么命令在返回匹配的位置时会将位置与中心点之间的距离一并返回；</li>
-<li>在默认情况下，
-<code class="docutils literal"><span class="pre">GEORADIUS</span></code> 和 <code class="docutils literal"><span class="pre">GEORADIUSBYMEMBER</span></code> 的结果是未排序的，
-<code class="docutils literal"><span class="pre">ASC</span></code> 可以让查找结果根据距离从近到远排序，
-而 <code class="docutils literal"><span class="pre">DESC</span></code> 则可以让查找结果根据从远到近排序；</li>
-<li><code class="docutils literal"><span class="pre">COUNT</span></code> 参数指定要返回的结果数量。</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">m|km|ft|mi</span></code> 指定的是计算范围时的单位；</p></li>
+<li><p>如果给定了可选的 <code class="docutils literal notranslate"><span class="pre">WITHCOORD</span></code> ，
+那么命令在返回匹配的位置时会将位置的经纬度一并返回；</p></li>
+<li><p>如果给定了可选的 <code class="docutils literal notranslate"><span class="pre">WITHDIST</span></code> ，
+那么命令在返回匹配的位置时会将位置与中心点之间的距离一并返回；</p></li>
+<li><p>在默认情况下，
+<code class="docutils literal notranslate"><span class="pre">GEORADIUS</span></code> 和 <code class="docutils literal notranslate"><span class="pre">GEORADIUSBYMEMBER</span></code> 的结果是未排序的，
+<code class="docutils literal notranslate"><span class="pre">ASC</span></code> 可以让查找结果根据距离从近到远排序，
+而 <code class="docutils literal notranslate"><span class="pre">DESC</span></code> 则可以让查找结果根据从远到近排序；</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">COUNT</span></code> 参数指定要返回的结果数量。</p></li>
 </ul>
 <p>作为示例，
-我们可以使用 <code class="docutils literal"><span class="pre">GEORADIUSBYMEMBER</span></code> 去找出位于广州 50 公里、 100 公里以及 150 公里以内的城市：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">GEORADIUSBYMEMBER</span> <span class="n">Guangdong</span><span class="o">-</span><span class="n">cities</span> <span class="n">Guangzhou</span> <span class="mi">50</span> <span class="n">km</span>
+我们可以使用 <code class="docutils literal notranslate"><span class="pre">GEORADIUSBYMEMBER</span></code> 去找出位于广州 50 公里、 100 公里以及 150 公里以内的城市：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">&gt;</span> <span class="n">GEORADIUSBYMEMBER</span> <span class="n">Guangdong</span><span class="o">-</span><span class="n">cities</span> <span class="n">Guangzhou</span> <span class="mi">50</span> <span class="n">km</span>
 <span class="mi">1</span><span class="p">)</span> <span class="s2">&quot;Foshan&quot;</span>
 <span class="mi">2</span><span class="p">)</span> <span class="s2">&quot;Guangzhou&quot;</span>
 
@@ -294,7 +286,7 @@
 通过 Redis ，
 我们也可以实现同样的功能，
 以下是实现该功能的伪代码：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">pin</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">longitude</span><span class="p">,</span> <span class="n">latitude</span><span class="p">):</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">pin</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">longitude</span><span class="p">,</span> <span class="n">latitude</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    记录用户的地理位置。</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -316,7 +308,7 @@
 而是随机地返回指定范围内的某个人，
 这也就是非常著名的“摇一摇”功能。
 以下是实现该功能的伪代码：</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">RANDOM_RADIUS</span> <span class="o">=</span> <span class="mi">1</span>    <span class="c1"># 随机查找的范围为 1 公里</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">RANDOM_RADIUS</span> <span class="o">=</span> <span class="mi">1</span>    <span class="c1"># 随机查找的范围为 1 公里</span>
 
 <span class="k">def</span> <span class="nf">find_random</span><span class="p">(</span><span class="n">user</span><span class="p">):</span>
     <span class="c1"># 获取范围内的所有其他用户</span>
@@ -330,31 +322,31 @@
 </div>
 <div class="section" id="id7">
 <h2>效率优化<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h2>
-<p>现在的 <code class="docutils literal"><span class="pre">find_random()</span></code> 函数可以实现“摇一摇”功能，
+<p>现在的 <code class="docutils literal notranslate"><span class="pre">find_random()</span></code> 函数可以实现“摇一摇”功能，
 但它的效率并不高：
-因为程序每次执行这个函数的时候都需要重新执行 <code class="docutils literal"><span class="pre">find_nearby()</span></code> 函数以查找用户附近的位置，
+因为程序每次执行这个函数的时候都需要重新执行 <code class="docutils literal notranslate"><span class="pre">find_nearby()</span></code> 函数以查找用户附近的位置，
 然而大部分用户的位置并不经常改变，
-并且 <code class="docutils literal"><span class="pre">GEORADIUSBYMEMBER</span></code> 命令的执行代价并不低，
-因此每次执行 <code class="docutils literal"><span class="pre">find_random()</span></code> 都重新执行 <code class="docutils literal"><span class="pre">find_nearby()</span></code> 是一种非常低效的做法。</p>
-<p>为了优化 <code class="docutils literal"><span class="pre">find_random()</span></code> 的效率，
-我们可以为 <code class="docutils literal"><span class="pre">find_random()</span></code> 的结果创建缓存：
-把每个执行“摇一摇”的用户的 <code class="docutils literal"><span class="pre">find_nearby()</span></code> 结果储存到一个 Redis 集合里面，
+并且 <code class="docutils literal notranslate"><span class="pre">GEORADIUSBYMEMBER</span></code> 命令的执行代价并不低，
+因此每次执行 <code class="docutils literal notranslate"><span class="pre">find_random()</span></code> 都重新执行 <code class="docutils literal notranslate"><span class="pre">find_nearby()</span></code> 是一种非常低效的做法。</p>
+<p>为了优化 <code class="docutils literal notranslate"><span class="pre">find_random()</span></code> 的效率，
+我们可以为 <code class="docutils literal notranslate"><span class="pre">find_random()</span></code> 的结果创建缓存：
+把每个执行“摇一摇”的用户的 <code class="docutils literal notranslate"><span class="pre">find_nearby()</span></code> 结果储存到一个 Redis 集合里面，
 并设置一个过期时间（比如 5 分钟），
-然后通过对集合使用 <code class="docutils literal"><span class="pre">SRANDMEMBER</span></code> 来随机地获取用户。
-这样用户在指定过期时间内执行的所有“摇一摇”操作都只会引起一次 <code class="docutils literal"><span class="pre">GEORADIUSBYMEMBER</span></code> ，
-这将极大地提高 <code class="docutils literal"><span class="pre">find_random()</span></code> 的执行效率。</p>
+然后通过对集合使用 <code class="docutils literal notranslate"><span class="pre">SRANDMEMBER</span></code> 来随机地获取用户。
+这样用户在指定过期时间内执行的所有“摇一摇”操作都只会引起一次 <code class="docutils literal notranslate"><span class="pre">GEORADIUSBYMEMBER</span></code> ，
+这将极大地提高 <code class="docutils literal notranslate"><span class="pre">find_random()</span></code> 的执行效率。</p>
 <p>另外，
 如果用户密集地聚集在一起，
-那么通过使用 <code class="docutils literal"><span class="pre">GEORADIUSBYMEMBER</span></code> 命令提供的 <code class="docutils literal"><span class="pre">COUNT</span></code> 参数可以有效地减少指定范围内的用户数量，
-这可以提高 <code class="docutils literal"><span class="pre">find_nearby()</span></code> 的效率，
-从而提高 <code class="docutils literal"><span class="pre">find_random()</span></code> 的效率。</p>
+那么通过使用 <code class="docutils literal notranslate"><span class="pre">GEORADIUSBYMEMBER</span></code> 命令提供的 <code class="docutils literal notranslate"><span class="pre">COUNT</span></code> 参数可以有效地减少指定范围内的用户数量，
+这可以提高 <code class="docutils literal notranslate"><span class="pre">find_nearby()</span></code> 的效率，
+从而提高 <code class="docutils literal notranslate"><span class="pre">find_random()</span></code> 的效率。</p>
 <p>因为篇幅关系，
-优化版的 <code class="docutils literal"><span class="pre">find_random()</span></code> 的具体实现这里就不给出了，
+优化版的 <code class="docutils literal notranslate"><span class="pre">find_random()</span></code> 的具体实现这里就不给出了，
 有兴趣的读者可以自己尝试完成这个函数。</p>
 </div>
 <div class="section" id="id8">
 <h2>Redis GEO 命令<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h2>
-<p>想要了解更多关于 <code class="docutils literal"><span class="pre">GEOADD</span></code> 、 <code class="docutils literal"><span class="pre">GEORADIUS</span></code> 等 Redis GEO 特性命令的相关信息，
+<p>想要了解更多关于 <code class="docutils literal notranslate"><span class="pre">GEOADD</span></code> 、 <code class="docutils literal notranslate"><span class="pre">GEORADIUS</span></code> 等 Redis GEO 特性命令的相关信息，
 请访问《Redis命令参考》： <a class="reference external" href="http://redisdoc.com">RedisDoc.com</a></p>
 </div>
 <div class="section" id="id9">
@@ -383,7 +375,7 @@
     </p>
     <p>
         &copy; Copyright 2020, 黄健宏.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.<br/>
     </p>
   </div>
 </footer>
