@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>使用 Etcher 创建可引导 U 盘 &#8212; blog.huangz.me</title>
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="开源构建者的故事：Redis 如何以一己之力颠覆数据库市场" href="upended-the-database-market.html" />
+    <link rel="prev" title="2020" href="index.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js "></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          blog.huangz.me</a>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">全站 <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">2020</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../2019/index.html">2019</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../2018/index.html">2018</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../2017/index.html">2017</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../diary/2016/index.html">2016</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../diary/2015/index.html">2015</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../diary/2014/index.html">2014</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../diary/2013/index.html">2013</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../diary/2012/index.html">2012</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">分页 <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">使用 Etcher 创建可引导 U 盘</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="index.html" title="Previous Chapter: 2020"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; 2020</span>
+    </a>
+  </li>
+  <li>
+    <a href="upended-the-database-market.html" title="Next Chapter: 开源构建者的故事：Redis 如何以一己之力颠覆数据库市场"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">开源构建者的故事：Redi... &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <div class="section" id="etcher-u">
+<h1>使用 Etcher 创建可引导 U 盘<a class="headerlink" href="#etcher-u" title="Permalink to this headline">¶</a></h1>
+<p>Etcher 是一个非常方便的可引导系统 U 盘创建软件，
+它能够在 Windows、macOS 和 Linux 上运行。
+我们只需要向 Etcher 提供一个 U 盘和一个系统镜像，
+它就可以为我们创建一个可引导的系统安装盘。</p>
+<p>以创建 Ubuntu 安装盘为例，
+我们需要执行以下三个步骤：</p>
+<ol class="arabic simple">
+<li><p>在 <a class="reference external" href="https://www.balena.io/etcher/">balena.io/etcher/</a> 下载并安装 Etcher 。</p></li>
+<li><p>打开 Etcher ，
+点击软件界面左边的“+”号按钮，
+选中你想要安装的系统映像，
+比如 <code class="docutils literal notranslate"><span class="pre">ubuntu-20.04-desktop-amd64.iso</span></code> 。</p></li>
+<li><p>点击软件界面中间的 U 盘按钮，
+选择你想要用作系统安装盘的 U 盘
+（软件默认会选择一个，如果不对的话就手动重选）。</p></li>
+<li><p>点击软件界面右边的“Flash！”按钮，
+等待软件将系统映像写入 U 盘。</p></li>
+</ol>
+<p>写入完成之后，
+我们就可以使用刚刚制作的系统盘去安装系统了，
+整个过程非常简单！</p>
+<img alt="../_images/etcher.png" src="../_images/etcher.png" />
+<div class="line-block">
+<div class="line">准备试试 Ubuntu 20.04 的黄健宏</div>
+<div class="line">2020.5.27</div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2020, 黄健宏.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
