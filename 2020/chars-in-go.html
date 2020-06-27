@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Go 语言中的字符、代码点、符文和字节 &#8212; blog.huangz.me</title>
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Go 语言中的字符串" href="string-in-go.html" />
+    <link rel="prev" title="2020" href="index.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js "></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          blog.huangz.me</a>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">全站 <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">2020</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../2019/index.html">2019</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../2018/index.html">2018</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../2017/index.html">2017</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../diary/2016/index.html">2016</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../diary/2015/index.html">2015</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../diary/2014/index.html">2014</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../diary/2013/index.html">2013</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../diary/2012/index.html">2012</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">分页 <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Go 语言中的字符、代码点、符文和字节</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="index.html" title="Previous Chapter: 2020"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; 2020</span>
+    </a>
+  </li>
+  <li>
+    <a href="string-in-go.html" title="Next Chapter: Go 语言中的字符串"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Go 语言中的字符串 &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <div class="section" id="go">
+<h1>Go 语言中的字符、代码点、符文和字节<a class="headerlink" href="#go" title="Permalink to this headline">¶</a></h1>
+<p>统一码联盟(Unicode Consortium)把名为代码点的一系列数值赋值给了上百万个独一无二的字符。
+例如，
+大写字母 <code class="docutils literal notranslate"><span class="pre">A</span></code> 的代码点为 <code class="docutils literal notranslate"><span class="pre">65</span></code> ，
+而笑脸表情😁的代码点则为 <code class="docutils literal notranslate"><span class="pre">128515</span></code> 。</p>
+<p>Go 语言提供了 <code class="docutils literal notranslate"><span class="pre">rune</span></code>(符文)类型用于表示单个统一码代码点，
+该类型是 <code class="docutils literal notranslate"><span class="pre">int32</span></code> 类型的别名。
+除此之外，
+Go 语言还提供了 <code class="docutils literal notranslate"><span class="pre">uint8</span></code> 类型的别名 <code class="docutils literal notranslate"><span class="pre">byte</span></code> ，
+这种类型既可以表示二进制数据，
+又可以表示由美国信息交换标准代码(ASCII)定义的英文字符
+(历史悠久的 ASCII 包含 128 个字符，它是统一码的子集)。</p>
+<p>正如代码清单 9-4 所示，
+<code class="docutils literal notranslate"><span class="pre">byte</span></code> 和 <code class="docutils literal notranslate"><span class="pre">rune</span></code> 跟它们为之创建别名的整数类型具有完全相同的表现。</p>
+<hr class="docutils" />
+<p>代码清单 9-4 <code class="docutils literal notranslate"><span class="pre">rune</span></code> 和 <code class="docutils literal notranslate"><span class="pre">byte</span></code> : <code class="docutils literal notranslate"><span class="pre">rune.go</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>var pi rune = 960
+var alpha rune = 940
+var omega rune = 969
+var bang byte = 33
+fmt.Printf(&quot;%v %v %v %v\n&quot;, pi, alpha, omega, bang)    // 打印出“96094096933”
+</pre></div>
+</div>
+<hr class="docutils" />
+<p>为了打印出字符而不是数字值本身，
+我们可以在 <code class="docutils literal notranslate"><span class="pre">Printf</span></code> 中使用格式化变量 <code class="docutils literal notranslate"><span class="pre">%c</span></code> 而不是 <code class="docutils literal notranslate"><span class="pre">%v</span></code> :</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>fmt.Printf(&quot;%c%c%c%c\n&quot;, pi, alpha, omega, bang)    // 打印出“πάω!”
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>虽然任意一种整数类型都可以使用格式化变量 <code class="docutils literal notranslate"><span class="pre">%c</span></code> ，
+但是通过使用别名 <code class="docutils literal notranslate"><span class="pre">rune</span></code> ，
+表明数字 <code class="docutils literal notranslate"><span class="pre">960</span></code> 代表字符而不是数字。</p>
+</div>
+<p>为了免除用户记忆统一码代码点的烦恼，
+Go 提供了相应的字符字面量句法。
+用户只需要像 <code class="docutils literal notranslate"><span class="pre">'A'</span></code> 这样使用单引号将字符包围起来，
+就可以取得该字符的代码点。
+如果用户声明了一个字符变量却没有为其指定类型，
+那么 Go 将推断该变量的类型为 <code class="docutils literal notranslate"><span class="pre">rune</span></code> ，
+因此以下 3 行代码将是等效的:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">grade</span> <span class="o">:=</span> <span class="s1">&#39;A&#39;</span>
+<span class="n">var</span> <span class="n">grade</span> <span class="o">=</span> <span class="s1">&#39;A&#39;</span>
+<span class="n">var</span> <span class="n">grade</span> <span class="n">rune</span> <span class="o">=</span> <span class="s1">&#39;A&#39;</span>
+</pre></div>
+</div>
+<p>虽然 <code class="docutils literal notranslate"><span class="pre">rune</span></code> 类型代表的是一个字符，
+但它实际存储的仍然是数字值，
+因此 <code class="docutils literal notranslate"><span class="pre">grade</span></code> 变量存储的仍然是大写字母 <code class="docutils literal notranslate"><span class="pre">'A'</span></code> 的代码点，
+也就是数字 <code class="docutils literal notranslate"><span class="pre">65</span></code> 。
+除 <code class="docutils literal notranslate"><span class="pre">rune</span></code> 之外，
+字符字面量也可以搭配别名 <code class="docutils literal notranslate"><span class="pre">byte</span></code> 一同使用:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">var</span> <span class="n">star</span> <span class="n">byte</span> <span class="o">=</span> <span class="s1">&#39;*&#39;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>本文摘录自《Go语言趣学指南》第 9 章，
+请访问 <a class="reference external" href="http://gpwgcn.com">gpwgcn.com</a>  以获取更多相关信息。</p>
+<a class="reference internal image-reference" href="../_images/gpwgcn1.jpg"><img alt="../_images/gpwgcn1.jpg" src="../_images/gpwgcn1.jpg" style="width: 149.6px; height: 188.0px;" /></a>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2020, 黄健宏.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
