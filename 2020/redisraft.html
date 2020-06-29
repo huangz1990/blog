@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>使用 RedisRaft 构建强一致的 Redis 集群 &#8212; blog.huangz.me</title>
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Go 语言中的字符、代码点、符文和字节" href="chars-in-go.html" />
+    <link rel="prev" title="2020" href="index.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js "></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          blog.huangz.me</a>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">全站 <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">2020</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../2019/index.html">2019</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../2018/index.html">2018</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../2017/index.html">2017</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../diary/2016/index.html">2016</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../diary/2015/index.html">2015</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../diary/2014/index.html">2014</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../diary/2013/index.html">2013</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../diary/2012/index.html">2012</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">分页 <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">使用 RedisRaft 构建强一致的 Redis 集群</a><ul>
+<li><a class="reference internal" href="#id2">RedisRaft 的由来</a></li>
+<li><a class="reference internal" href="#id3">RedisRaft 的工作原理</a></li>
+<li><a class="reference internal" href="#id4">访问集群</a></li>
+<li><a class="reference internal" href="#id5">改变集群</a></li>
+<li><a class="reference internal" href="#id6">RedisRaft 的发布状态</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="index.html" title="Previous Chapter: 2020"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; 2020</span>
+    </a>
+  </li>
+  <li>
+    <a href="chars-in-go.html" title="Next Chapter: Go 语言中的字符、代码点、符文和字节"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Go 语言中的字符、代码点、符文和字节 &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <div class="section" id="redisraft-redis">
+<h1>使用 RedisRaft 构建强一致的 Redis 集群<a class="headerlink" href="#redisraft-redis" title="Permalink to this headline">¶</a></h1>
+<img alt="../_images/redisraft.jpg" src="../_images/redisraft.jpg" />
+<p><strong>本文由黄健宏翻译自</strong>
+<a class="reference external" href="https://redislabs.com/blog/redisraft-new-strong-consistency-deployment-option/">RedisLabs.com/blog</a>
+<strong>，首发于</strong>
+<a class="reference external" href="http://blog.huangz.me">blog.huangz.me</a> 。</p>
+<p>正在开发中的 <a class="reference external" href="https://github.com/RedisLabs/redisraft/">RedisRaft</a> 是一个开源的 Redis 模块，
+它可以将多个 Redis 服务器用作一个单一容错且强一致的集群来运行。
+顾名思义，
+这个模块基于 <a class="reference external" href="https://raft.github.io/">Raft 的共识算法</a>并且使用了一个<a class="reference external" href="https://github.com/willemt/raft">实现该算法的开源 C 库</a>。</p>
+<p>RedisRaft 为 Redis 和 Redis 生态系统带来了新的<a class="reference external" href="https://jepsen.io/consistency/models/strict-serializable#:~:text=Informally%2C%20strict%20serializability%20(a.k.a.%20PL,B%20in%20the%20serialization%20order">强一致性与严格的序列化</a>部署方案。
+新模块使 Redis 与 Redis 现有的客户端、库和数据类型一起在需要高可靠性和一致性的超越缓存（beyond-cache）的场景中使用成为可能。</p>
+<div class="section" id="id2">
+<h2>RedisRaft 的由来<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p>RedisRaft 始于 Redis 5 发布之前的一个实验性的”副项目“。
+至于 Redis 模块这一特性则从 Redis 4 开始引入，
+它可以通过模块的方式实现新的数据类型和命令。
+我们想探索我们能够将 API 扩展到什么程度，
+并使用模块以更激进的方式扩展 Redis 。
+但我们也希望最终能得到一些有用的东西 —— 一个可选的强一致的 Redis 。</p>
+<p>RedisRaft 集群能够提供的一致性和可靠性跟 ZooKeeper 、 Etcd 等常见的可靠数据库存储处于同一水平。
+简单来说，
+在 RedisRaft 中：</p>
+<ul class="simple">
+<li><p>已确认的写入保证会被提交并且永不丢失。</p></li>
+<li><p>读取将始终返回最新的已提交写入。</p></li>
+</ul>
+<p>正如人们预期的一样，
+提供这种级别的一致性可靠存储带来了性能和可用性方面的折中。
+在 RedisRaft 中：</p>
+<ul class="simple">
+<li><p>客户端操作依赖于集群节点的消息交换，它们将受到网络延迟的影响。</p></li>
+<li><p>写入必须在完成之前刷新到磁盘上，它们会受到磁盘 I/O 延迟的约束。</p></li>
+<li><p>只有在大多数节点都正常运行、健康并且能够相互通信的情况下，集群才是可用的。</p></li>
+</ul>
+</div>
+<div class="section" id="id3">
+<h2>RedisRaft 的工作原理<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<p>一旦 RedisRaft 模块被加载到 Redis 中，
+它就会接管集群节点之间的通信、Raft 日志或快照的复制、持久化等工作。
+Redis 核心不会察觉到这一点，
+它就像是一个没有启用集群、持久化和复制特性的独立服务器。</p>
+<p>设置一个三节点 RedisRaft 集群就像启动三个 Redis 服务器一样简单，
+我们首先要做的就是执行以下命令，
+载入 RedisRaft 模块：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">-</span><span class="n">server</span> <span class="o">--</span><span class="n">loadmodule</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">redisraft</span><span class="o">.</span><span class="n">so</span>
+</pre></div>
+</div>
+<p>接着，
+执行以下命令能够连接到第一个服务器并且创建 Raft 集群：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mf">10.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">6379</span><span class="o">&gt;</span> <span class="n">RAFT</span><span class="o">.</span><span class="n">CLUSTER</span> <span class="n">INIT</span>
+<span class="n">OK</span> <span class="mi">989645460313</span><span class="n">dd2ddb051f033c791222</span>
+</pre></div>
+</div>
+<p>之后，
+我们可以执行以下两条命令，
+将另外两台服务器加入到集群里面：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mf">10.0</span><span class="o">.</span><span class="mf">0.2</span><span class="p">:</span><span class="mi">6379</span><span class="o">&gt;</span> <span class="n">RAFT</span><span class="o">.</span><span class="n">CLUSTER</span> <span class="n">JOIN</span> <span class="mf">10.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">6379</span>
+<span class="n">OK</span>
+
+<span class="mf">10.0</span><span class="o">.</span><span class="mf">0.3</span><span class="p">:</span><span class="mi">6379</span><span class="o">&gt;</span> <span class="n">RAFT</span><span class="o">.</span><span class="n">CLUSTER</span> <span class="n">JOIN</span> <span class="mf">10.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">6379</span>
+<span class="n">OK</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id4">
+<h2>访问集群<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<p>在设置好 RedisRaft 集群之后，
+我们就可以向它写入数据：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mf">10.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">6379</span><span class="o">&gt;</span> <span class="n">INCR</span> <span class="n">counter</span><span class="p">:</span><span class="mi">1</span>
+<span class="p">(</span><span class="n">integer</span><span class="p">)</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<p>收到回复表明写入已经被复制到<strong>不少于</strong>半数集群节点（在我们的情况下是2个节点），
+并提交到它们的持久化存储中。</p>
+<p>Raft 基于强领导者（strong leader）概念，
+这意味着所有客户端操作都应该发送至领导者节点（leader node）并由它发起。
+在本例中，
+我们的客户端确实连接到了领导者，
+但集群领导力是动态的，
+客户端不一定知道谁是领导者。</p>
+<p>在一个跟随者（非领导者）节点上尝试同样的操作，
+会产生这样的响应：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mf">10.0</span><span class="o">.</span><span class="mf">0.3</span><span class="p">:</span><span class="mi">6379</span><span class="o">&gt;</span> <span class="n">INCR</span> <span class="n">counter</span><span class="p">:</span><span class="mf">1.</span>
+<span class="p">(</span><span class="n">error</span><span class="p">)</span> <span class="n">MOVED</span> <span class="mf">10.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">6379</span>
+</pre></div>
+</div>
+<p>客户端可以捕捉这个错误，
+并按照指示重新连接至领导者节点，
+然后重新执行命令。</p>
+<p>但是，
+如果我们不想修改现有的应用程序怎么办？
+幸运的是，
+RedisRaft 也可以被配置为自动为我们处理这个问题。
+通过启用 follower 代理模式，
+我们可以让集群节点自动将请求转发给领导者，
+并在其可用时提供回复。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mf">10.0</span><span class="o">.</span><span class="mf">0.3</span><span class="p">:</span><span class="mi">6379</span><span class="o">&gt;</span> <span class="n">RAFT</span><span class="o">.</span><span class="n">CONFIG</span> <span class="n">SET</span> <span class="n">follower</span><span class="o">-</span><span class="n">proxy</span> <span class="n">yes</span><span class="o">.</span>
+<span class="n">OK</span>
+
+<span class="mf">10.0</span><span class="o">.</span><span class="mf">0.3</span><span class="p">:</span><span class="mi">6379</span><span class="o">&gt;</span> <span class="n">INCR</span> <span class="n">counter</span><span class="p">:</span><span class="mi">1</span>
+<span class="p">(</span><span class="n">integer</span><span class="p">)</span> <span class="mi">2</span>
+</pre></div>
+</div>
+<p>这种做法要简单得多，
+但是由于访问非领导者节点会产生额外的网络跳数，
+所以对延迟和网络负载都会有影响。</p>
+</div>
+<div class="section" id="id5">
+<h2>改变集群<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
+<p>在设置集群时，
+我们实际上进行了三种不同的操作。</p>
+<ul class="simple">
+<li><p>在一个节点上创建集群。</p></li>
+<li><p>添加了第二个节点。</p></li>
+<li><p>添加第三个节点。</p></li>
+</ul>
+<p>RedisRaft 集群的配置并不是静态的，
+在集群创建之后并且处于活跃状态时，
+我们可以随时往集群里面添加或者移除节点。</p>
+<p>假设现在我们需要替换第三个节点，
+那么我们首先要做的就是加入一个替换该节点的新节点。
+注意，
+为了避免集群和宝贵的数据在数据迁移期间处于退化的冗余状态，
+我们需要”先添加新节点，再移除旧节点“，
+而不是”先移除旧节点再添加新节点“：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mf">10.0</span><span class="o">.</span><span class="mf">0.4</span><span class="p">:</span><span class="mi">6379</span><span class="o">&gt;</span> <span class="n">RAFT</span><span class="o">.</span><span class="n">CLUSTER</span> <span class="n">JOIN</span> <span class="mf">10.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">6379</span>
+<span class="n">OK</span>
+</pre></div>
+</div>
+<p>接下来，
+我们查找随机分配给我们第三个节点的 ID 。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>redis-cli -h 10.0.0.1 --raw RAFT.INFO | grep 10.0.0.3
+node2:id=1739451728,state=connected,voting=yes,addr=10.0.0.3,port=6379。
+last_conn_secs=3537，conn_errors=0，conn_oks=1。
+</pre></div>
+</div>
+<p>然后将第三个节点删除：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mf">10.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">6379</span><span class="o">&gt;</span> <span class="n">RAFT</span><span class="o">.</span><span class="n">NODE</span> <span class="n">REMOVE</span> <span class="mi">1739451728</span>
+<span class="n">OK</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id6">
+<h2>RedisRaft 的发布状态<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h2>
+<p>作为 RedisRaft 开发工作的一部分，
+我们一直在与 Kyle Kingsbury（又名<a class="reference external" href="https://aphyr.com/about">Aphyr</a>） 合作，
+使用<a class="reference external" href="https://jepsen.io/">Jepsen</a>（一个测试分布式系统安全性和正确性的著名框架）分析和测试 RedisRaft 。
+到目前为止，
+这次合作已经形成了<a class="reference external" href="https://jepsen.io/analyses/redis-raft-1b3fbf6">一份已发表的分析报告</a>。</p>
+<p>虽然仍然处于开发当中，
+但 RedisRaft 的大部分基本功能已经到位。
+目前，
+我们正在为第一个预览版而努力，
+预计几个月后就会推出。
+至于正式版（GA）的 RedisRaft 则会以 GNU AGPLv3 和 Redis 源码可用许可证（RSAL）双重许可证的形式发布。</p>
+<div class="line-block">
+<div class="line">文/Yossi Gottlieb · 译/黄健宏</div>
+<div class="line">2020.6.28</div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>如果你对 Redis 感兴趣，
+那么请不要错过我即将推出的 <a class="reference external" href="http://learnredis.com/">《Redis入门与实战》</a>以及<a class="reference external" href="http://huangz.me/">其他 Redis 书</a>。</p>
+</div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2020, 黄健宏.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
